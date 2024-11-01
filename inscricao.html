@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Inscrição</title>
+</head>
+<body>
+   <header>
+    <div class="top-bar">
+        <div class="logo-gov">
+            <a href="https://www.saopaulo.sp.gov.br/" target="_blank"><img src="imagens/logo-governo-do-estado-sp.png" alt="Logo Governo SP"></a>
+        </div>
+        <div class="social-media">
+            <a href="http://bit.ly/govspnozap" target="_blank"><img src="imagens/i-whatsapp-governo.png" alt="Whatsapp Governo SP"></a>
+            <a href="https://www.flickr.com/governosp/" target="_blank"><img src="imagens/i-flickr-governo.png" alt="Flickr Governo SP"></a>
+            <a href="https://www.linkedin.com/company/governosp/" target="_blank"><img src="imagens/i-linkedin-governo.png" alt="Linkedin Governo SP"></a>
+            <a href="https://www.tiktok.com/@governosp" target="_blank"><img src="imagens/i-tiktok-governo.png" alt="TikTok Governo SP"></a>
+            <a href="https://www.youtube.com/governosp/" target="_blank"><img src="imagens/i-youtube-governo.png" alt="YouTube Governo SP"></a>
+            <a href="https://www.threads.net/@governosp" target="_blank"><img src="imagens/i-threades_p-governo.png" alt="Threads Governo SP"></a>
+            <a href="https://www.instagram.com/governosp/" target="_blank"><img src="imagens/i-insta-governo.png" alt="Instagram Governo SP"></a>
+            <a href="https://www.facebook.com/governosp/" target="_blank"><img src="imagens/i-facebook-governo.png" alt="Facebook Governo SP"></a>
+            <a href="https://www.twitter.com/governosp/" target="_blank"><img src="imagens/i-twitter-governo.png" alt="X (Twitter) Governo SP"></a>
+            <p>\governosp</p>
+        </div>
+    </div>
+    <hr>
+    <div class="header-content">
+        <div class="institutions">
+            <div class="fatec">
+                <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img src="imagens/logo-fatec_itapira.png"></a>
+            </div>
+            <div class="cps">
+                <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="imagens/logo-cps.png"></a>
+            </div>
+        </div>
+        <nav class="menu">
+            <a href="index.html">Home</a>
+            <a href="inscricao.html">Inscrição</a>
+            <a href="relatorio.html">Relatório</a>
+            <a href="aprovacao.html">Aprovação</a>
+        </nav>
+    </div>
+   </header> 
+
+   <main>
+    <div class="container">
+        <h1>Anexo I</h1>
+        <h2>Projeto de Hora Atividade Específica – H.A.E.</h2>
+        <p>2º Semestre 2024 – 1° Chamada</p>
+
+        <h3>Fatec de Itapira - "Ogari de Castro Pacheco"</h3>
+        <p>Município: ITAPIRA</p>
+
+        <form action="#" method="POST">
+            <label for="professor">Professor(a):</label>
+            <input type="text" id="professor" name="professor" required>
+
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="rg">R.G.:</label>
+            <input type="text" id="rg" name="rg" required>
+
+            <label for="matricula">Matrícula:</label>
+            <input type="text" id="matricula" name="matricula" required>
+
+            <h4>Hora-aula semanal na Fatec de Itapira "Ogari de Castro Pacheco"</h4>
+
+            <label>Tem aula atribuída em outra(s) Fatec(s)?</label>
+            <input type="radio" id="sim" name="outra_fatec" value="sim">
+            <label for="sim">Sim</label>
+            <input type="radio" id="nao" name="outra_fatec" value="nao">
+            <label for="nao">Não</label>
+
+            <h4>Tipo de HAE que está solicitando:</h4>
+            <select name="tipo_hae">
+                <option value="estagio_supervisionado">Estágio Supervisionado</option>
+                <option value="trabalho_graduacao">Trabalho de Graduação</option>
+            </select>
+
+            <h4>Quantidade de H.A.E.s solicitadas Inciso de I à IV</h4>
+            <input type="number" name="hae_quantidade_i_iv" min="0">
+
+            <h4>Quantidade de H.A.E. para Trabalho de Graduação</h4>
+            <label for="gti">CST em GTI:</label>
+            <input type="number" id="gti" name="hae_trabalho_gti" min="0">
+
+            <label for="gpi">CST em GPI:</label>
+            <input type="number" id="gpi" name="hae_trabalho_gpi" min="0">
+
+            <label for="ge">CST em GE:</label>
+            <input type="number" id="ge" name="hae_trabalho_ge" min="0">
+
+            <h4>Quantidade de H.A.E. para Estágio Supervisionado</h4>
+            <label for="gti_estagio">CST em GTI:</label>
+            <input type="number" id="gti_estagio" name="hae_estagio_gti" min="0" value="6">
+
+            <label for="gpi_estagio">CST em GPI:</label>
+            <input type="number" id="gpi_estagio" name="hae_estagio_gpi" min="0">
+
+            <label for="ge_estagio">CST em GE:</label>
+            <input type="number" id="ge_estagio" name="hae_estagio_ge" min="0">
+
+            <label for="dsm_estagio">CST em DSM:</label>
+            <input type="number" id="dsm_estagio" name="hae_estagio_dsm" min="0">
+
+            <h4>Projeto de Interesse da Unidade</h4>
+            <label for="titulo_interesse">Título do projeto de interesse conforme Edital:</label>
+            <input type="text" id="titulo_interesse" name="titulo_interesse" required>
+
+            <label for="titulo_projeto">Título do projeto:</label>
+            <input type="text" id="titulo_projeto" name="titulo_projeto" required>
+
+            <label for="inicio_projeto">Início do projeto:</label>
+            <input type="date" id="inicio_projeto" name="inicio_projeto" value="2024-08-01">
+
+            <label for="termino_projeto">Término previsto:</label>
+            <input type="date" id="termino_projeto" name="termino_projeto" value="2024-12-21">
+
+            <h4>Horário das Aulas</h4>
+            <table border="1">
+                <tr>
+                    <th>Dia da Semana</th>
+                    <th>Em Outra Fatec Matutino</th>
+                    <th>Em Outra Fatec Vespertino</th>
+                    <th>Em Outra Fatec Noturno</th>
+                    <th>Fatec de Itapira "Ogari de Castro Pacheco"</th>
+                </tr>
+                <tr>
+                    <td>Segunda-feira</td>
+                    <td><input type="checkbox" name="segunda_matutino"></td>
+                    <td><input type="checkbox" name="segunda_vespertino"></td>
+                    <td><input type="checkbox" name="segunda_noturno"></td>
+                    <td><input type="checkbox" name="segunda_itapira"></td>
+                </tr>
+                <tr>
+                    <td>Terça-feira</td>
+                    <td><input type="checkbox" name="terca_matutino"></td>
+                    <td><input type="checkbox" name="terca_vespertino"></td>
+                    <td><input type="checkbox" name="terca_noturno"></td>
+                    <td><input type="checkbox" name="terca_itapira"></td>
+                </tr>
+                <tr>
+                    <td>Quarta-feira</td>
+                    <td><input type="checkbox" name="quarta_matutino"></td>
+                    <td><input type="checkbox" name="quarta_vespertino"></td>
+                    <td><input type="checkbox" name="quarta_noturno"></td>
+                    <td><input type="checkbox" name="quarta_itapira"></td>
+                </tr>
+                <tr>
+                    <td>Quinta-feira</td>
+                    <td><input type="checkbox" name="quinta_matutino"></td>
+                    <td><input type="checkbox" name="quinta_vespertino"></td>
+                    <td><input type="checkbox" name="quinta_noturno"></td>
+                    <td><input type="checkbox" name="quinta_itapira"></td>
+                </tr>
+                <tr>
+                    <td>Sexta-feira</td>
+                    <td><input type="checkbox" name="sexta_matutino"></td>
+                    <td><input type="checkbox" name="sexta_vespertino"></td>
+                    <td><input type="checkbox" name="sexta_noturno"></td>
+                    <td><input type="checkbox" name="sexta_itapira"></td>
+                </tr>
+                <tr>
+                    <td>Sábado</td>
+                    <td><input type="checkbox" name="sabado_matutino"></td>
+                    <td><input type="checkbox" name="sabado_vespertino"></td>
+                    <td><input type="checkbox" name="sabado_noturno"></td>
+                    <td><input type="checkbox" name="sabado_itapira"></td>
+                </tr>
+            </table>
+            <h4>Horário de Execução do Projeto</h4>
+            <table border="1">
+                <tr>
+                    <th>Dia da Semana</th>
+                    <th>Horário(s) de Trabalho</th>
+                </tr>
+                <tr>
+                    <td>Segunda-feira</td>
+                    <td><input type="text" name="horario_sexecucao_segunda" placeholder="Ex: 15:00 às 19:00"></td>
+                </tr>
+                <tr>
+                    <td>Terça-feira</td>
+                    <td><input type="text" name="horario_sexecucao_terca" placeholder="Ex: 14:00 às 17:00"></td>
+                </tr>
+                <tr>
+                    <td>Quarta-feira</td>
+                    <td><input type="text" name="horario_sexecucao_quarta" placeholder="Ex: 14:00 às 17:00"></td>
+                </tr>
+                <tr>
+                    <td>Quinta-feira</td>
+                    <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
+                </tr>
+                <tr>
+                    <td>Sexta-feira</td>
+                    <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
+                </tr>
+                <tr>
+                    <td>Sábado</td>
+                    <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
+                </tr>
+            </table>
+           
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+   </main>
+
+   <footer>
+    <div class="footer-content">
+        <div class="address">
+            <h3>Fatec Ogari de Castro Pacheco</h3>
+            <p>Rua Tereza Lera Paoletti, 570/590 -<br> Jardim Bela Vista - CEP: 13974-080</p>
+        </div>
+        <div class="contact">
+            <h3>Telefone:</h3>
+            <p>(19) 3843-1996 | (19) 3863-<br>5210 (WhatsApp)</p>
+        </div>
+        <div class="hours">
+            <h3>Horário de funcionamento:</h3>
+            <p>Seg. a Sex. 7h - 23h, Sáb 7h - 17h</p>
+        </div>
+        <div class="social-media-fatec">
+            <a href="https://twitter.com/fitapira" target="_blank"><img src="imagens/twitter-fatec.png" alt="X (Twitter) Fatec Itapira"></a>
+            <a href="https://www.facebook.com/fatecitapira" target="_blank"><img src="imagens/facebook-fatec.png" alt="Facebook Fatec Itapira"></a>
+            <a href="https://www.instagram.com/fatecdeitapira/" target="_blank"><img src="imagens/instagram-fatec.png" alt="Instagram Fatec Itapira"></a>
+            <a href="https://api.whatsapp.com/send?phone=5519989336291" target="_blank"><img src="imagens/whatsapp-fatec.png" alt="WhatsApp Fatec Itapira"></a>
+            <a href="https://www.youtube.com/channel/UChyGJgx8OzKqhHJBDaKdOZA" target="_blank"><img src="imagens/youtube-fatec.png" alt="YouTube Fatec Itapira"></a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2024 - Centro Paula Souza - Fatec Itapira - Turma DSM 1° Semestre</p>  
+    </div>
+    <div class="gov-logo-footer">
+        <img src="imagens/logo-governo-do-estado-sp.png" alt="Logo Governo SP">
+    </div>
+</footer>
+
+</body>
+</html>
