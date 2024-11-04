@@ -320,3 +320,36 @@ main{/*todas as paginas*/
     margin-left: 10px;
 }
 
+/*........................
+.tab_aprv_cabeca{
+  
+    background-color: #006270;
+    color: #fff;
+     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 16px;
+    vertical-align: middle;
+     
+}............*/
+
+.tabela_aprovacao_header{
+    text-align: center;
+}
+.tabela_aprovacao {
+    min-height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding:0;
+    outline: 0;
+
+table {
+  border-collapse: collapse;
+}
+th , td {
+    padding: 7px;
+    width: 110px;
+} 
+}
