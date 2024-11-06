@@ -353,3 +353,11 @@ th , td {
     width: 110px;
 } 
 }
+
+#justificativa {
+    resize: none;
+    font-size: 24px;
+}
+#tamanho {
+    font-size: 17px;
+}
