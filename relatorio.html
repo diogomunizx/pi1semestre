@@ -8,24 +8,7 @@
 </head>
 <body>
    <header>
-    <div class="top-bar">
-        <div class="logo-gov">
-            <a href="https://www.saopaulo.sp.gov.br/" target="_blank"><img src="imagens/logo-governo-do-estado-sp.png" alt="Logo Governo SP"></a>
-        </div>
-        <div class="social-media">
-            <a href="http://bit.ly/govspnozap" target="_blank"><img src="imagens/i-whatsapp-governo.png" alt="Whatsapp Governo SP"></a>
-            <a href="https://www.flickr.com/governosp/" target="_blank"><img src="imagens/i-flickr-governo.png" alt="Flickr Governo SP"></a>
-            <a href="https://www.linkedin.com/company/governosp/" target="_blank"><img src="imagens/i-linkedin-governo.png" alt="Linkedin Governo SP"></a>
-            <a href="https://www.tiktok.com/@governosp" target="_blank"><img src="imagens/i-tiktok-governo.png" alt="TikTok Governo SP"></a>
-            <a href="https://www.youtube.com/governosp/" target="_blank"><img src="imagens/i-youtube-governo.png" alt="YouTube Governo SP"></a>
-            <a href="https://www.threads.net/@governosp" target="_blank"><img src="imagens/i-threades_p-governo.png" alt="Threads Governo SP"></a>
-            <a href="https://www.instagram.com/governosp/" target="_blank"><img src="imagens/i-insta-governo.png" alt="Instagram Governo SP"></a>
-            <a href="https://www.facebook.com/governosp/" target="_blank"><img src="imagens/i-facebook-governo.png" alt="Facebook Governo SP"></a>
-            <a href="https://www.twitter.com/governosp/" target="_blank"><img src="imagens/i-twitter-governo.png" alt="X (Twitter) Governo SP"></a>
-            <p>\governosp</p>
-        </div>
-    </div>
-    <hr>
+    
     <div class="header-content">
         <div class="institutions">
             <div class="fatec">
@@ -36,46 +19,91 @@
             </div>
         </div>
         <nav class="menu">
-            <a href="index.html">Home</a>
+            <a href="index.html">Início</a>
             <a href="inscricao.html">Inscrição</a>
             <a href="relatorio.html">Relatório</a>
             <a href="aprovacao.html">Aprovação</a>
-            <div class="dropdown">
-                <a heref="#" class="drop">Download</button>
-                <div class="dropdown-content">
-                    <a href="arquivos/EditalHAE2024-2.pdf" download="edital_2024_2semestre.pdf">Edital 2024 - 2º Semestre</a>
-                </div>
-            </div>
         </nav>
     </div>
    </header> 
 
    <main>
+     <!-- Seção do Relatório do Docente -->
+     <section class="relatorio-envio">
+        <h3>Enviar Relatório de Atividades</h3>
+        <form action="/submit-relatorio" method="POST" enctype="multipart/form-data">
+            <!-- Informações do Projeto -->
+            <label for="nome-docente">Nome do Docente:</label>
+            <input type="text" id="nome-docente" name="nome-docente" required>
 
+            <label for="nome-projeto">Nome do Projeto:</label>
+            <input type="text" id="nome-projeto" name="nome-projeto" required>
+
+            <label for="descricao-projeto">Descrição do Projeto:</label>
+            <textarea id="descricao-projeto" name="descricao-projeto" rows="3" required></textarea>
+
+            <!-- Relatório -->
+            <label for="relatorio-detalhes">Detalhamento das Atividades Realizadas:</label>
+            <textarea id="relatorio-detalhes" name="relatorio-detalhes" rows="5" required></textarea>
+
+            <label for="data-envio">Data de Envio:</label>
+            <input type="date" id="data-envio" name="data-envio" required>
+
+            <label for="documentos-anexos">Anexar Documentos:</label>
+            <input type="file" id="documentos-anexos" name="documentos-anexos" accept=".pdf,.doc,.docx" required>
+
+            <!-- Botão de Envio -->
+            <button type="submit">Enviar Relatório</button>
+        </form>
+    </section>
+
+    <!-- Painel de Avaliação do Relatório -->
+    <section class="relatorio-avaliacao">
+        <h3>Avaliação do Relatório (Coordenador e Diretor)</h3>
+
+        <div class="avaliacao-status">
+            <p>Status Atual: <span id="status-relatorio">Pendente</span></p>
+        </div>
+
+        <!-- Seção do Coordenador -->
+        <div class="avaliacao-coordenador">
+            <h4>Avaliação do Coordenador</h4>
+            <form action="/coordenador-avalia" method="POST">
+                <label for="parecer-coordenador">Parecer:</label>
+                <textarea id="parecer-coordenador" name="parecer-coordenador" rows="3" required></textarea>
+
+                <label for="decisao-coordenador">Decisão:</label>
+                <select id="decisao-coordenador" name="decisao-coordenador" required>
+                    <option value="Aprovado">Aprovado</option>
+                    <option value="Reprovado">Reprovado</option>
+                </select>
+
+                <!-- Botão de Envio -->
+                <button type="submit">Submeter Avaliação do Coordenador</button>
+            </form>
+        </div>
+
+        <!-- Seção do Diretor -->
+        <div class="avaliacao-diretor">
+            <h4>Avaliação do Diretor</h4>
+            <form action="/diretor-avalia" method="POST">
+                <label for="parecer-diretor">Parecer:</label>
+                <textarea id="parecer-diretor" name="parecer-diretor" rows="3" required></textarea>
+
+                <label for="decisao-diretor">Decisão:</label>
+                <select id="decisao-diretor" name="decisao-diretor" required>
+                    <option value="Aprovado">Aprovado</option>
+                    <option value="Reprovado">Reprovado</option>
+                </select>
+
+                <!-- Botão de Envio -->
+                <button type="submit">Submeter Avaliação do Diretor</button>
+            </form>
+        </div>
+    </section>
    </main>
 
    <footer>
-    <div class="footer-content">
-        <div class="address">
-            <h3>Fatec Ogari de Castro Pacheco</h3>
-            <p>Rua Tereza Lera Paoletti, 570/590 -<br> Jardim Bela Vista - CEP: 13974-080</p>
-        </div>
-        <div class="contact">
-            <h3>Telefone:</h3>
-            <p>(19) 3843-1996 | (19) 3863-<br>5210 (WhatsApp)</p>
-        </div>
-        <div class="hours">
-            <h3>Horário de funcionamento:</h3>
-            <p>Seg. a Sex. 7h - 23h, Sáb 7h - 17h</p>
-        </div>
-        <div class="social-media-fatec">
-            <a href="https://twitter.com/fitapira" target="_blank"><img src="imagens/twitter-fatec.png" alt="X (Twitter) Fatec Itapira"></a>
-            <a href="https://www.facebook.com/fatecitapira" target="_blank"><img src="imagens/facebook-fatec.png" alt="Facebook Fatec Itapira"></a>
-            <a href="https://www.instagram.com/fatecdeitapira/" target="_blank"><img src="imagens/instagram-fatec.png" alt="Instagram Fatec Itapira"></a>
-            <a href="https://api.whatsapp.com/send?phone=5519989336291" target="_blank"><img src="imagens/whatsapp-fatec.png" alt="WhatsApp Fatec Itapira"></a>
-            <a href="https://www.youtube.com/channel/UChyGJgx8OzKqhHJBDaKdOZA" target="_blank"><img src="imagens/youtube-fatec.png" alt="YouTube Fatec Itapira"></a>
-        </div>
-    </div>
     <div class="footer-bottom">
         <p>© 2024 - Centro Paula Souza - Fatec Itapira - Turma DSM 1° Semestre</p>  
     </div>

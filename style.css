@@ -1,3 +1,4 @@
+
 /*define para todas as paginas */
 * {
     margin: 0;
@@ -61,8 +62,9 @@ header {
 }
 
 .cps img, .fatec img{
-    height: 88px;
+    height: 75px;
 }
+
 
 .menu {
     display: flex;
