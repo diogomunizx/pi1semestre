@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Inscrição</title>
+</head>
+
+<body>
+    <header>
+        
+        <div class="header-content">
+            <div class="institutions">
+                <div class="fatec">
+                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img
+                            src="imagens/logo-fatec_itapira.png"></a>
+                </div>
+                <div class="cps">
+                    <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="imagens/logo-cps.png"></a>
+                </div>
+            </div>
+            <nav class="menu">
+                <a href="index.html">Início</a>
+                <a href="inscricao.html">Inscrição</a>
+                <a href="relatorio.html">Relatório</a>
+                <a href="aprovacao.html">Aprovação</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container-inscricao">
+            <div class="info-inscricao">
+                <h3>Inscrição</h3>
+                <h3>Projeto de Hora Atividade Específica – H.A.E.</h3>
+                <h3>Fatec de Itapira - "Ogari de Castro Pacheco"</h3>
+            </div>
+            <br>
+            <form class="form-inscricao" action="#" method="POST">
+                <h4>Informações docente</h4>
+                <label for="professor">Nome:</label>
+                <input type="text" id="professor" name="professor" required><br>
+
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required><br>
+
+                <label for="rg">R.G.:</label>
+                <input type="text" id="rg" name="rg" required>
+
+                <label for="matricula">Matrícula:</label>
+                <input type="text" id="matricula" name="matricula" required>
+                <br>
+                <br>
+                <h4>Tipo de HAE que está solicitando:</h4>
+                <select name="tipo_hae">
+                    <option value="estagio_supervisionado">Estágio Supervisionado</option>
+                    <option value="trabalho_graduacao">Trabalho de Graduação</option>
+                </select>
+                <br>
+                <br>
+                <h4>Quantidade de H.A.E.s solicitadas Inciso de I à IV</h4>
+                <input type="number" name="hae_quantidade_i_iv" min="0">
+                <br>
+                <br>
+                <h4>Quantidade de H.A.E. para Trabalho de Graduação</h4>
+                <label for="gti">CST em GTI:</label>
+                <input type="number" id="gti" name="hae_trabalho_gti" min="0" max="7">
+
+                <label for="gpi">CST em GPI:</label>
+                <input type="number" id="gpi" name="hae_trabalho_gpi" min="0" max="7">
+
+                <label for="ge">CST em GE:</label>
+                <input type="number" id="ge" name="hae_trabalho_ge" min="0" max="7">
+                <br>
+                <br>
+
+                <h4>Quantidade de H.A.E. para Estágio Supervisionado</h4>
+                <label for="gti_estagio">CST em GTI:</label>
+                <input type="number" id="gti_estagio" name="hae_estagio_gti" min="0" max="7">
+
+                <label for="gpi_estagio">CST em GPI:</label>
+                <input type="number" id="gpi_estagio" name="hae_estagio_gpi" min="0" max="7">
+
+                <label for="ge_estagio">CST em GE:</label>
+                <input type="number" id="ge_estagio" name="hae_estagio_ge" min="0" max="7">
+
+                <label for="dsm_estagio">CST em DSM:</label>
+                <input type="number" id="dsm_estagio" name="hae_estagio_dsm" min="0" max="7"><br>
+                <br>
+                <h4>Informações do projeto</h4>
+                <label for="titulo_interesse">Título de interesse conforme Edital:</label>
+                <input type="text" id="titulo_interesse" name="titulo_interesse" required><br>
+
+                <label for="titulo_projeto">Título do projeto:</label>
+                <input type="text" id="titulo_projeto" name="titulo_projeto" required><br>
+
+                <label for="inicio_projeto">Início:</label>
+                <input type="date" id="inicio_projeto" name="inicio_projeto"><br>
+
+                <label for="termino_projeto">Término previsto:</label>
+                <input type="date" id="termino_projeto" name="termino_projeto"><br>
+                <br>
+                <br>
+
+                <h4>Horário das Aulas Docente</h4>
+                <br>
+                <table class="tabela-inscricao" border="1">
+                    <tr>
+                        <th>Dia da Semana</th>
+                        <th>Em Outra Fatec Matutino</th>
+                        <th>Em Outra Fatec Vespertino</th>
+                        <th>Em Outra Fatec Noturno</th>
+                        <th>Fatec de Itapira "Ogari de Castro Pacheco"</th>
+                    </tr>
+                    <tr>
+                        <td>Segunda-feira</td>
+                        <td><input type="checkbox" name="segunda_matutino"></td>
+                        <td><input type="checkbox" name="segunda_vespertino"></td>
+                        <td><input type="checkbox" name="segunda_noturno"></td>
+                        <td><input type="checkbox" name="segunda_itapira"></td>
+                    </tr>
+                    <tr>
+                        <td>Terça-feira</td>
+                        <td><input type="checkbox" name="terca_matutino"></td>
+                        <td><input type="checkbox" name="terca_vespertino"></td>
+                        <td><input type="checkbox" name="terca_noturno"></td>
+                        <td><input type="checkbox" name="terca_itapira"></td>
+                    </tr>
+                    <tr>
+                        <td>Quarta-feira</td>
+                        <td><input type="checkbox" name="quarta_matutino"></td>
+                        <td><input type="checkbox" name="quarta_vespertino"></td>
+                        <td><input type="checkbox" name="quarta_noturno"></td>
+                        <td><input type="checkbox" name="quarta_itapira"></td>
+                    </tr>
+                    <tr>
+                        <td>Quinta-feira</td>
+                        <td><input type="checkbox" name="quinta_matutino"></td>
+                        <td><input type="checkbox" name="quinta_vespertino"></td>
+                        <td><input type="checkbox" name="quinta_noturno"></td>
+                        <td><input type="checkbox" name="quinta_itapira"></td>
+                    </tr>
+                    <tr>
+                        <td>Sexta-feira</td>
+                        <td><input type="checkbox" name="sexta_matutino"></td>
+                        <td><input type="checkbox" name="sexta_vespertino"></td>
+                        <td><input type="checkbox" name="sexta_noturno"></td>
+                        <td><input type="checkbox" name="sexta_itapira"></td>
+                    </tr>
+                    <tr>
+                        <td>Sábado</td>
+                        <td><input type="checkbox" name="sabado_matutino"></td>
+                        <td><input type="checkbox" name="sabado_vespertino"></td>
+                        <td><input type="checkbox" name="sabado_noturno"></td>
+                        <td><input type="checkbox" name="sabado_itapira"></td>
+                    </tr>
+                </table>
+                <br>
+
+                <h4>Horário de Execução do Projeto</h4>
+                <br>
+                <p>
+                    Obs.: Os horários propostos para execução das atividades não podem ser fracionados (Ex: das 13h15min
+                    às 14h15min);
+                </p>
+                <br>
+                <table class="tabela-inscricao" border="1">
+                    <tr>
+                        <th>Dia da Semana</th>
+                        <th>Horário(s) de Trabalho</th>
+                    </tr>
+                    <tr>
+                        <td>Segunda-feira</td>
+                        <td><input type="text" name="horario_sexecucao_segunda" placeholder="Ex: 15:00 às 19:00"></td>
+                    </tr>
+                    <tr>
+                        <td>Terça-feira</td>
+                        <td><input type="text" name="horario_sexecucao_terca" placeholder="Ex: 14:00 às 17:00"></td>
+                    </tr>
+                    <tr>
+                        <td>Quarta-feira</td>
+                        <td><input type="text" name="horario_sexecucao_quarta" placeholder="Ex: 14:00 às 17:00"></td>
+                    </tr>
+                    <tr>
+                        <td>Quinta-feira</td>
+                        <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
+                    </tr>
+                    <tr>
+                        <td>Sexta-feira</td>
+                        <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
+                    </tr>
+                    <tr>
+                        <td>Sábado</td>
+                        <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
+                    </tr>
+                </table>
+
+                
+                <table class="tabela-inscricao" border="1">
+                    <tr>
+                        <th colspan="2">1 – METAS RELACIONADAS AO PROJETO</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Definir as metas"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">2 - OBJETIVOS DO PROJETO – DETALHAMENTO</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Definir os objetivos"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">3 - JUSTIFICATIVAS DO PROJETO – DETALHAMENTO</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Justificar o projeto"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">4 - RECURSOS MATERIAIS E HUMANOS - DETALHAMENTO</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Definir os recursos e materiais necessários"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">5 – RESULTADO ESPERADO – PREVISÃO</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Previsão do término e objetivo final"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">6 – METODOLOGIA</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Definir a metodologia"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">7 - CRONOGRAMA DE EXECUÇÃO DAS ATIVIDADES</th>
+                    </tr>
+                    <tr>
+                        <th>Atividades</th>
+                        <th>Mês</th>
+                    </tr>
+                    <tr>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td>Mês 1</td>
+                    </tr>
+                    <tr>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td>Mês 2</td>
+                    </tr>
+                    <tr>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td>Mês 3</td>
+                    </tr>
+                    <tr>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td>Mês 4</td>
+                    </tr>
+                    <tr>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td>Mês 5</td>
+                    </tr>
+                    <tr>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td>Mês 6</td>
+                    </tr>
+
+                </table>
+                <div class="form-obs">
+                    <h4>Obs.: Observar as exigências de ordem legal:</h4>
+                    <br>
+                    <ol>
+                        <li>
+                            Deve haver intervalo de uma hora entre um expediente e outro e, no máximo, 6 horas em cada
+                            expediente no diurno e 5 horas
+                            no noturno (sem ultrapassar 8 horas por dia);
+                        </li>
+                        <li>
+                            Haverá necessidade de apresentar relatório parcial das atividades até o último dia letivo de
+                            cada mês.;
+                        </li>
+                        <li>
+                            Ao enviar este formulário você declara estar ciente que cumprirá as atividades dentro da Fatec
+                            de Itapira “Ogari de Castro Pacheco”.
+                        </li>
+                    </ol>
+                </div>
+                <br>
+                <button class="btn-reset" type="reset">Limpar</button>
+                <button class="btn-enviar" type="submit">Enviar</button>
+
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>© 2024 - Centro Paula Souza - Fatec Itapira - Turma DSM 1° Semestre</p>
+        </div>
+        <div class="gov-logo-footer">
+            <img src="imagens/logo-governo-do-estado-sp.png" alt="Logo Governo SP">
+        </div>
+    </footer>
+
+</body>
+
+</html>
