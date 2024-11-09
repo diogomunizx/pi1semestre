@@ -27,6 +27,117 @@
    </header> 
 
    <main>
+
+    <main class="tabela_aprovacao">
+        <div class=" tabela_aprovacao_header">
+            <h1>Status Inscrições</h1>           
+        <section class="tabela_aprovacao_corpo"> 
+            <table>
+                <thead>
+
+            
+                    <tr>
+                        <th>N° Inscrição</th> 
+                        <th>Professor</th> 
+                        <th>Coordenador</th> 
+                        <th>Status</th> 
+                        <th>Alterar</th> 
+                        <th>Justificativa</th> 
+                        <th>Horas Aprovadas</th> 
+                        <th>PDF</th> 
+                         </tr>
+                </thead>
+                <tbody>
+                    <tr class="tabela-aprov_cabeca2">
+                        <td>001</td>
+                        <td>name_prof</td>
+                        <td>name_coord</td>
+                        <td>Pendente</td>
+                        <td>
+                            <button class = "bnt_alt_status" type="button"> 
+                                <span class="material-symbols-outlined"> visibility</span>
+                        </button>
+                        </td>
+                        <td>
+                            <button class = "bnt_view_just" type="button"> 
+                                <span class="material-symbols-outlined"> visibility</span>
+                        </button>
+                    </td>
+                        <td>0/6</td>
+                        <td>   <a href="" target=""> <img src="imagens/pdf_icon.png" height="
+                            35" alt="Arquivo não suportado" </a>    </td>
+                    
+                    </tr>
+                    
+                </tbody>
+
+                <tbody>
+                    <tr class="tabela-aprov_cabeca2">
+                        <td>002</td>
+                        <td>name_prof</td>
+                        <td>name_coord</td>
+                        <td>Pendente</td>
+                        <td>
+                            <button class = "bnt_alt_status" type="button"> 
+                                <span class="material-symbols-outlined"> visibility</span>
+                        </button>
+                        </td>
+                        <td>
+                            <button class = "bnt_view_just" type="button"> 
+                                <span class="material-symbols-outlined"> visibility</span>
+                        </button>
+                    </td>
+                        <td>0/6</td>
+                        <td>   <a href="" target=""> <img src="imagens/pdf_icon.png" height="
+                            35" alt="Arquivo não suportado" </a>    </td>
+                    
+                    </tr>
+                    
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <br>
+        
+            <table class="container-inscricao">
+               
+                <tr >
+                    <th>N° Inscrição</td>
+                    <th>Status</td>
+                    <th>Horas Aprovadas</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td cosplan ="2">
+                        <select name="Status"  
+                        style="width: 100%"
+                       id = "tamanho" >
+                            <option value="Pendente">Pendente</option>
+                            <option value="Aprovado">Aprovado</option>
+                            <option value="Parcial">Parcial</option>
+                            <option value="Denegado">Denegado</option>
+                    </td> 
+                    <td> <input id = "tamanho" type ="number" min = 0 style="width: 70%"> </td> 
+                </tr>
+                <tr>
+                    <td >Justificativa</td>
+                    <td colspan="3">
+                        <textarea id="justificativatexto" name="justificativa" id="justificativa" 
+                        style="width: 100%; height: 80px; width:500px " 
+                        rows="3" ></textarea>
+                    </td>
+                </tr>
+                        
+                </thead>
+                <thead>
+                    <thead>
+                        <tr>
+                            <th  colspan="3"> <button style="width: 100%" type="submit"  > Alterar Inscrição </button></th>
+                        </tr>
+                    </thead>
+
+             </table>
+        </section>
         
    </main>
 

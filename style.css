@@ -335,12 +335,15 @@ main{/*todas as paginas*/
      
 }............*/
 
+
 .tabela_aprovacao_header{
     text-align: center;
+    margin-bottom: 20px;
 }
 .tabela_aprovacao {
-    min-height: 20vh;
+    min-height: 50vh;
     display: flex;
+    flex-direction:column;  
     justify-content: center;
     align-items: center;
     margin: 0;
@@ -348,10 +351,14 @@ main{/*todas as paginas*/
     outline: 0;
 
 table {
+  margin:0 auto;
   border-collapse: collapse;
+ 
 }
 th , td {
     padding: 7px;
+    text-align:center;
+    border:1px solid #ddd;
     width: 110px;
 } 
 }

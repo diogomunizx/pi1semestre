@@ -28,80 +28,189 @@
    </header> 
 
    <main>
-     <!-- Seção do Relatório do Docente -->
-     <section class="relatorio-envio">
-        <h3>Enviar Relatório de Atividades</h3>
-        <form action="/submit-relatorio" method="POST" enctype="multipart/form-data">
-            <!-- Informações do Projeto -->
-            <label for="nome-docente">Nome do Docente:</label>
-            <input type="text" id="nome-docente" name="nome-docente" required>
+    <main class="tabela_aprovacao">
+        <div class=" tabela_aprovacao_header">
+            <h1>Status Inscrições</h1>           
+        <section > 
+            <table class="tabela_aprovacao_corpo">
+                <thead>
+                    <tr>
+                        <th>N° Inscrição</th> 
+                        <th>Professor</th> 
+                        <th>Coordenador</th> 
+                        <th>Status</th> 
+                        <th>Alterar</th> 
+                        <th>Justificativa</th> 
+                        <th>Horas Aprovadas</th> 
+                        <th>PDF</th> 
+                         </tr>
+                </thead>
+                <tbody>
+                    <tr class="tabela-aprov_cabeca2">
+                        <td>001</td>
+                        <td>name_prof</td>
+                        <td>name_coord</td>
+                        <td>Pendente</td>
+                        <td>
+                            <button class = "bnt_alt_status" type="button"> 
+                                <span class="material-symbols-outlined"> visibility</span>
+                        </button>
+                        </td>
+                        <td>
+                            <button class = "bnt_view_just" type="button"> 
+                                <span class="material-symbols-outlined"> visibility</span>
+                        </button>
+                    </td>
+                        <td>0/6</td>
+                        <td>   <a href="" target=""> <img src="imagens/pdf_icon.png" height="
+                            35" alt="Arquivo não suportado" </a>    </td>
+                    
+                    </tr>
+                    
+                </tbody>
 
-            <label for="nome-projeto">Nome do Projeto:</label>
-            <input type="text" id="nome-projeto" name="nome-projeto" required>
+                <tbody>
+                    <tr class="tabela-aprov_cabeca2">
+                        <td>002</td>
+                        <td>name_prof</td>
+                        <td>name_coord</td>
+                        <td>Pendente</td>
+                        <td>
+                            <button class = "bnt_alt_status" type="button"> 
+                                <span class="material-symbols-outlined"> visibility</span>
+                        </button>
+                        </td>
+                        <td>
+                            <button class = "bnt_view_just" type="button"> 
+                                <span class="material-symbols-outlined"> visibility</span>
+                        </button>
+                    </td>
+                        <td>0/6</td>
+                        <td>   <a href="" target=""> <img src="imagens/pdf_icon.png" height="
+                            35" alt="Arquivo não suportado" </a>    </td>
+                    
+                    </tr>
+                    
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <br>
+        
+            <table class="container-inscricao">
+               
+                <tr >
+                    <th>N° Inscrição</td>
+                    <th>Status</td>
+                    <th>Horas Aprovadas</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td cosplan ="2">
+                        <select name="Status"  
+                        style="width: 100%"
+                       id = "tamanho" >
+                            <option value="Pendente">Pendente</option>
+                            <option value="Aprovado">Aprovado</option>
+                            <option value="Parcial">Parcial</option>
+                            <option value="Denegado">Denegado</option>
+                    </td> 
+                    <td> <input id = "tamanho" type ="number" min = 0 style="width: 70%"> </td> 
+                </tr>
+                <tr>
+                    <td >Justificativa</td>
+                    <td colspan="3">
+                        <textarea id="justificativatexto" name="justificativa" id="justificativa" 
+                        style="width: 100%; height: 80px; width:500px " 
+                        rows="3" ></textarea>
+                    </td>
+                </tr>
+                        
+                </thead>
+                <thead>
+                    <thead>
+                        <tr>
+                            <th  colspan="3"> <button style="width: 100%" type="submit"  > Alterar Inscrição </button></th>
+                        </tr>
+                    </thead>
 
-            <label for="descricao-projeto">Descrição do Projeto:</label>
-            <textarea id="descricao-projeto" name="descricao-projeto" rows="3" required></textarea>
+             </table>
+        </section>
+        <!-- Seção do Relatório do Docente -->
+        <section  class="relatorio-envio">
+            <h3>Enviar Relatório de Atividades</h3>
+            <form action="/submit-relatorio" method="POST" enctype="multipart/form-data">
+                <!-- Informações do Projeto -->
+                <label for="nome-docente">Nome do Docente:</label>
+                <input type="text" id="nome-docente" name="nome-docente" required>
 
-            <!-- Relatório -->
-            <label for="relatorio-detalhes">Detalhamento das Atividades Realizadas:</label>
-            <textarea id="relatorio-detalhes" name="relatorio-detalhes" rows="5" required></textarea>
+                <label for="nome-projeto">Nome do Projeto:</label>
+                <input type="text" id="nome-projeto" name="nome-projeto" required>
 
-            <label for="data-envio">Data de Envio:</label>
-            <input type="date" id="data-envio" name="data-envio" required>
+                <label for="descricao-projeto">Descrição do Projeto:</label>
+                <textarea id="descricao-projeto" name="descricao-projeto" rows="3" required></textarea>
 
-            <label for="documentos-anexos">Anexar Documentos:</label>
-            <input type="file" id="documentos-anexos" name="documentos-anexos" accept=".pdf,.doc,.docx" required>
+                <!-- Relatório -->
+                <label for="relatorio-detalhes">Detalhamento das Atividades Realizadas:</label>
+                <textarea id="relatorio-detalhes" name="relatorio-detalhes" rows="5" required></textarea>
 
-            <!-- Botão de Envio -->
-            <button type="submit">Enviar Relatório</button>
-        </form>
-    </section>
+                <label for="data-envio">Data de Envio:</label>
+                <input type="date" id="data-envio" name="data-envio" required>
 
-    <!-- Painel de Avaliação do Relatório -->
-    <section class="relatorio-avaliacao">
-        <h3>Avaliação do Relatório (Coordenador e Diretor)</h3>
-
-        <div class="avaliacao-status">
-            <p>Status Atual: <span id="status-relatorio">Pendente</span></p>
-        </div>
-
-        <!-- Seção do Coordenador -->
-        <div class="avaliacao-coordenador">
-            <h4>Avaliação do Coordenador</h4>
-            <form action="/coordenador-avalia" method="POST">
-                <label for="parecer-coordenador">Parecer:</label>
-                <textarea id="parecer-coordenador" name="parecer-coordenador" rows="3" required></textarea>
-
-                <label for="decisao-coordenador">Decisão:</label>
-                <select id="decisao-coordenador" name="decisao-coordenador" required>
-                    <option value="Aprovado">Aprovado</option>
-                    <option value="Reprovado">Reprovado</option>
-                </select>
+                <label for="documentos-anexos">Anexar Documentos:</label>
+                <input type="file" id="documentos-anexos" name="documentos-anexos" accept=".pdf,.doc,.docx" required>
 
                 <!-- Botão de Envio -->
-                <button type="submit">Submeter Avaliação do Coordenador</button>
+                <button type="submit">Enviar Relatório</button>
             </form>
-        </div>
+        </section>
 
-        <!-- Seção do Diretor -->
-        <div class="avaliacao-diretor">
-            <h4>Avaliação do Diretor</h4>
-            <form action="/diretor-avalia" method="POST">
-                <label for="parecer-diretor">Parecer:</label>
-                <textarea id="parecer-diretor" name="parecer-diretor" rows="3" required></textarea>
+        <!-- Painel de Avaliação do Relatório -->
+        <section class="relatorio-avaliacao">
+            <h3>Avaliação do Relatório (Coordenador e Diretor)</h3>
 
-                <label for="decisao-diretor">Decisão:</label>
-                <select id="decisao-diretor" name="decisao-diretor" required>
-                    <option value="Aprovado">Aprovado</option>
-                    <option value="Reprovado">Reprovado</option>
-                </select>
+            <div class="avaliacao-status">
+                <p>Status Atual: <span id="status-relatorio">Pendente</span></p>
+            </div>
 
-                <!-- Botão de Envio -->
-                <button type="submit">Submeter Avaliação do Diretor</button>
-            </form>
-        </div>
-    </section>
-   </main>
+            <!-- Seção do Coordenador -->
+            <div class="avaliacao-coordenador">
+                <h4>Avaliação do Coordenador</h4>
+                    <form action="/coordenador-avalia" method="POST">
+                    <label for="parecer-coordenador">Parecer:</label>
+                    <textarea id="parecer-coordenador" name="parecer-coordenador" rows="3" required></textarea>
+
+                    <label for="decisao-coordenador">Decisão:</label>
+                    <select id="decisao-coordenador" name="decisao-coordenador" required>
+                        <option value="Aprovado">Aprovado</option>
+                        <option value="Reprovado">Reprovado</option>
+                    </select>
+
+                    <!-- Botão de Envio -->
+                    <button type="submit">Submeter Avaliação do Coordenador</button>
+                </form>
+            </div>
+
+            <!-- Seção do Diretor -->
+            <div class="avaliacao-diretor">
+                <h4>Avaliação do Diretor</h4>
+                <form action="/diretor-avalia" method="POST">
+                    <label for="parecer-diretor">Parecer:</label>
+                    <textarea id="parecer-diretor" name="parecer-diretor" rows="3" required></textarea>
+
+                    <label for="decisao-diretor">Decisão:</label>
+                    <select id="decisao-diretor" name="decisao-diretor" required>
+                        <option value="Aprovado">Aprovado</option>
+                        <option value="Reprovado">Reprovado</option>
+                    </select>
+
+                    <!-- Botão de Envio -->
+                    <button type="submit">Submeter Avaliação do Diretor</button>
+                </form>
+            </div>
+        </section>
+            
+    </main>
 
    <footer>
     <div class="footer-bottom">
