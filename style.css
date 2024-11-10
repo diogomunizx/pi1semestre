@@ -363,10 +363,61 @@ th , td {
 } 
 }
 
+
+
 #justificativa {
     resize: none;
     font-size: 24px;
 }
 #tamanho {
     font-size: 17px;
+}
+
+.tabela_conteudo th{
+   position:sticky;
+   white-space: nowrap;
+   border-collapse: collapse;
+   vertical-align: middle;
+   top: 0;
+   height:70px;
+   width: 100px;
+   color: #dadcff;
+   background-color: #006270;
+   overflow-y: auto;
+   z-index: 1;
+   border: 1px solid #333;
+
+}
+
+.tabela_status th{
+    position:sticky;
+    border-collapse: collapse;
+    top: 0;
+    height:35px;
+    color: #dadcff;
+    background-color: #006270;
+    overflow-y: auto;
+    z-index: 1;
+    border: 1px solid #333;
+ 
+ }
+
+.botaosalvar {
+    color: #dadcff;
+    font-size: 18px;
+    padding: 1px;
+    border: none;
+    background: none;
+}
+
+.botaosalvar:active {
+    transform: scale (0,80);
+    background-color: #dadcff;;
+}
+
+.tabela_aprovacao_corpo {
+    height:330px;
+    border-collapse: collapse;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
