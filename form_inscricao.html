@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="estilos/style.css">
     <title>Inscrição</title>
 </head>
 
 <body>
     <header>
-        
+
         <div class="header-content">
             <div class="institutions">
                 <div class="fatec">
@@ -24,8 +24,8 @@
             <nav class="menu">
                 <a href="index.html">Início</a>
                 <a href="inscricao.html">Inscrição</a>
-                <a href="relatorio.html">Relatório</a>
                 <a href="aprovacao.html">Aprovação</a>
+                <a href="relatorio.html">Relatório</a>   
             </nav>
         </div>
     </header>
@@ -35,7 +35,6 @@
             <div class="info-inscricao">
                 <h3>Inscrição</h3>
                 <h3>Projeto de Hora Atividade Específica – H.A.E.</h3>
-                <h3>Fatec de Itapira - "Ogari de Castro Pacheco"</h3>
             </div>
             <br>
             <form class="form-inscricao" action="#" method="POST">
@@ -54,45 +53,40 @@
                 <br>
                 <br>
                 <h4>Tipo de HAE que está solicitando:</h4>
-                <select name="tipo_hae">
-                    <option value="estagio_supervisionado">Estágio Supervisionado</option>
-                    <option value="trabalho_graduacao">Trabalho de Graduação</option>
-                </select>
+                <input type="text" id="tipohae" name="tipohae" required>
                 <br>
                 <br>
-                <h4>Quantidade de H.A.E.s solicitadas Inciso de I à IV</h4>
-                <input type="number" name="hae_quantidade_i_iv" min="0">
+                <h4>Quantidade de H.A.E. para Trabalho de Graduação:</h4>
                 <br>
-                <br>
-                <h4>Quantidade de H.A.E. para Trabalho de Graduação</h4>
-                <label for="gti">CST em GTI:</label>
-                <input type="number" id="gti" name="hae_trabalho_gti" min="0" max="7">
+                <div class="hae-projeto-linha">
+                    <label for="gti">CST em GTI:</label>
+                    <input type="number" id="gti" name="hae_trabalho_gti" min="0" max="7">
 
-                <label for="gpi">CST em GPI:</label>
-                <input type="number" id="gpi" name="hae_trabalho_gpi" min="0" max="7">
+                    <label for="gpi">CST em GPI:</label>
+                    <input type="number" id="gpi" name="hae_trabalho_gpi" min="0" max="7">
 
-                <label for="ge">CST em GE:</label>
-                <input type="number" id="ge" name="hae_trabalho_ge" min="0" max="7">
+                    <label for="ge">CST em GE:</label>
+                    <input type="number" id="ge" name="hae_trabalho_ge" min="0" max="7">
+                </div>
                 <br>
                 <br>
-
                 <h4>Quantidade de H.A.E. para Estágio Supervisionado</h4>
-                <label for="gti_estagio">CST em GTI:</label>
-                <input type="number" id="gti_estagio" name="hae_estagio_gti" min="0" max="7">
+                <br>
+                <div class="hae-projeto-linha">
+                    <label for="gti_estagio">CST em GTI:</label>
+                    <input type="number" id="gti_estagio" name="hae_estagio_gti" min="0" max="7">
 
-                <label for="gpi_estagio">CST em GPI:</label>
-                <input type="number" id="gpi_estagio" name="hae_estagio_gpi" min="0" max="7">
+                    <label for="gpi_estagio">CST em GPI:</label>
+                    <input type="number" id="gpi_estagio" name="hae_estagio_gpi" min="0" max="7">
 
-                <label for="ge_estagio">CST em GE:</label>
-                <input type="number" id="ge_estagio" name="hae_estagio_ge" min="0" max="7">
+                    <label for="ge_estagio">CST em GE:</label>
+                    <input type="number" id="ge_estagio" name="hae_estagio_ge" min="0" max="7">
 
-                <label for="dsm_estagio">CST em DSM:</label>
-                <input type="number" id="dsm_estagio" name="hae_estagio_dsm" min="0" max="7"><br>
+                    <label for="dsm_estagio">CST em DSM:</label>
+                    <input type="number" id="dsm_estagio" name="hae_estagio_dsm" min="0" max="7"><br>
+                </div>
                 <br>
                 <h4>Informações do projeto</h4>
-                <label for="titulo_interesse">Título de interesse conforme Edital:</label>
-                <input type="text" id="titulo_interesse" name="titulo_interesse" required><br>
-
                 <label for="titulo_projeto">Título do projeto:</label>
                 <input type="text" id="titulo_projeto" name="titulo_projeto" required><br>
 
@@ -197,43 +191,49 @@
                     </tr>
                 </table>
 
-                
+
                 <table class="tabela-inscricao" border="1">
                     <tr>
                         <th colspan="2">1 – METAS RELACIONADAS AO PROJETO</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Definir as metas"></textarea></td>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Definir as metas"></textarea></td>
                     </tr>
                     <tr>
                         <th colspan="2">2 - OBJETIVOS DO PROJETO – DETALHAMENTO</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Definir os objetivos"></textarea></td>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Definir os objetivos"></textarea></td>
                     </tr>
                     <tr>
                         <th colspan="2">3 - JUSTIFICATIVAS DO PROJETO – DETALHAMENTO</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Justificar o projeto"></textarea></td>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Justificar o projeto"></textarea></td>
                     </tr>
                     <tr>
                         <th colspan="2">4 - RECURSOS MATERIAIS E HUMANOS - DETALHAMENTO</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Definir os recursos e materiais necessários"></textarea></td>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Definir os recursos e materiais necessários"></textarea></td>
                     </tr>
                     <tr>
                         <th colspan="2">5 – RESULTADO ESPERADO – PREVISÃO</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Previsão do término e objetivo final"></textarea></td>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Previsão do término e objetivo final"></textarea></td>
                     </tr>
                     <tr>
                         <th colspan="2">6 – METODOLOGIA</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Definir a metodologia"></textarea></td>
+                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Definir a metodologia"></textarea></td>
                     </tr>
                     <tr>
                         <th colspan="2">7 - CRONOGRAMA DE EXECUÇÃO DAS ATIVIDADES</th>
@@ -243,27 +243,33 @@
                         <th>Mês</th>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Descrição atividades"></textarea></td>
                         <td>Mês 1</td>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Descrição atividades"></textarea></td>
                         <td>Mês 2</td>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Descrição atividades"></textarea></td>
                         <td>Mês 3</td>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Descrição atividades"></textarea></td>
                         <td>Mês 4</td>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Descrição atividades"></textarea></td>
                         <td>Mês 5</td>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste" placeholder="Descrição atividades"></textarea></td>
+                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
+                                placeholder="Descrição atividades"></textarea></td>
                         <td>Mês 6</td>
                     </tr>
 
@@ -282,15 +288,15 @@
                             cada mês.;
                         </li>
                         <li>
-                            Ao enviar este formulário você declara estar ciente que cumprirá as atividades dentro da Fatec
+                            Ao enviar este formulário você declara estar ciente que cumprirá as atividades dentro da
+                            Fatec
                             de Itapira “Ogari de Castro Pacheco”.
                         </li>
                     </ol>
                 </div>
                 <br>
                 <button class="btn-reset" type="reset">Limpar</button>
-                <button class="btn-enviar" type="submit">Enviar</button>
-
+                <a href="inscricao.html"><button class="btn-enviar" type="button">Enviar</button></a>
             </form>
         </div>
     </main>

@@ -7,47 +7,22 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+body, html {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+main{/*todas as paginas*/
+    flex: 1;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+
 /*header*/
 header {
     width: 100%;
-}
-
-.top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;  
-}
-
-.logo-gov {
-    display: flex;
-    align-items: center;
-    background-color: #000000;
-    padding: 20px 45px; /* aumenta o espaço interno para dar mais destaque ao fundo */
-    border-top-right-radius: 100px;
-    border-bottom-right-radius: 100px;   
-}
-
-.logo-gov img {
-    margin-right: 10px;
-}
-
-.social-media {
-    display: flex;
-    align-items: center;
-    margin-right: 25px;
-}
-
-.social-media a {
-    margin-right: 5px; /* Espaçamento entre os ícones */
-}
-
-.social-media img{
-    width: 28px;
-    height: 28px;
-}
-
-.social-media p{
-    color: #838383;
 }
 
 .institutions {
@@ -85,74 +60,7 @@ header {
 }
 
 
-/* Estilo do dropdown de downloads*/
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    min-width: 200px;
-    box-shadow: 1px 8px 16px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content a {
-    color: #333;
-    text-decoration: none;
-    display: block;
-    padding: 0%;
-    margin-top: 5px;
-}
-
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
-/* Exibe o dropdown ao passar o mouse ou clicar no botão */
-.dropdown:hover .dropdown-content,
-.dropdown:focus-within .dropdown-content {
-    display: block;
-}
-
-
 /*footer*/
-
-.footer-content {
-    display: flex;
-    justify-content: space-around;
-    text-align: justify;
-    flex-wrap: wrap;
-    padding: 20px;
-    background-color:#005C6D;
-    color: #fff;
-}
-
-.footer-content div {
-    margin: 10px;
-    padding: 0 10px; /* Espaçamento entre as colunas */
-}
-
-.footer-content h3 {
-    font-size: 15px;
-    margin-bottom: 10px;
-}
-
-.footer-content p {
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-.social-media-fatec a img {
-    margin: 0 5px;
-    margin-top: 10px;
-    width: 38px;
-    height: 38px;
-}
-
 .footer-bottom {
     display: flex;
     justify-content: center;
@@ -214,13 +122,7 @@ header {
 }
 
 
-/*main da página de inscrição*/
 
-main{/*todas as paginas*/
-    flex: 1;
-    padding: 25px;
-    background-color: #f5f5f5;
-}
 
 .info-inscricao{
     text-align: center;
@@ -299,6 +201,22 @@ main{/*todas as paginas*/
     margin-left: 20px;
 }
 
+.hae-projeto-linha {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaçamento entre os grupos de label e input */
+}
+
+.hae-projeto-linha label {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.hae-projeto-linha input[type="number"] {
+    width: 60px; /* Ajuste a largura conforme necessário */
+}
+
+
 /* Botões de ação específicos da página de inscrição */
 .btn-reset,
 .btn-enviar {
@@ -316,108 +234,77 @@ main{/*todas as paginas*/
     color: #333;
 }
 
+.btn-reset:hover {
+    background-color: #969292
+}
+
 .btn-enviar {
     background-color: #0b8948;
     color: #fff;
     margin-left: 10px;
 }
 
-/*........................
-.tab_aprv_cabeca{
-  
-    background-color: #006270;
-    color: #fff;
-     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-size: 16px;
-    vertical-align: middle;
-     
-}............*/
+.btn-enviar:hover {
+    background-color: #044021;
+}
 
+/*pagina inscrição tbl professor e btn nova inscricao*/
+/* Estilos para a Tabela */
 
-.tabela_aprovacao_header{
+#titulos{
     text-align: center;
-    margin-bottom: 20px;
-}
-.tabela_aprovacao {
-    min-height: 50vh;
-    display: flex;
-    flex-direction:column;  
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding:0;
-    outline: 0;
-
-table {
-  margin:0 auto;
-  border-collapse: collapse;
- 
-}
-th , td {
-    padding: 7px;
-    text-align:center;
-    border:1px solid #ddd;
-    width: 110px;
-} 
+    margin-top: 25px;
 }
 
-
-
-#justificativa {
-    resize: none;
-    font-size: 24px;
-}
-#tamanho {
-    font-size: 17px;
-}
-
-.tabela_conteudo th{
-   position:sticky;
-   white-space: nowrap;
-   border-collapse: collapse;
-   vertical-align: middle;
-   top: 0;
-   height:70px;
-   width: 100px;
-   color: #dadcff;
-   background-color: #006270;
-   overflow-y: auto;
-   z-index: 1;
-   border: 1px solid #333;
-
-}
-
-.tabela_status th{
-    position:sticky;
+.tbls{
+    width: 100%;
+    max-width: 800px;
+    margin: 5px auto;
     border-collapse: collapse;
-    top: 0;
-    height:35px;
-    color: #dadcff;
-    background-color: #006270;
-    overflow-y: auto;
-    z-index: 1;
-    border: 1px solid #333;
- 
- }
-
-.botaosalvar {
-    color: #dadcff;
-    font-size: 18px;
-    padding: 1px;
-    border: none;
-    background: none;
+    font-size: 16px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.botaosalvar:active {
-    transform: scale (0,80);
-    background-color: #dadcff;;
+.tbls thead tr {
+    background-color: #0f8b94;
+    color: white;
 }
 
-.tabela_aprovacao_corpo {
-    height:330px;
-    border-collapse: collapse;
-    overflow-y: auto;
-    overflow-x: hidden;
+.tbls th, 
+.tbls td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
 }
+
+.tbls tbody tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+.tbls tbody tr:hover {
+    background-color: #f0e6e6;
+}
+
+/* Estilos para o Botão de Nova Inscrição */
+.nova-inscricao {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.btn-nova-inscricao {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #0b8948;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-nova-inscricao:hover {
+    background-color: #044021;
+}
+
+
