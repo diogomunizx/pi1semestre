@@ -37,7 +37,7 @@
 
     <main>
 
-        <h3 id="titulos">Inscrições de Projetos HAE</h3>
+        <h3 id="titulos">Inscrições pendentes de Projetos HAE</h3>
         <br>
         <table class="tbls">
             <thead>
@@ -61,7 +61,7 @@
                     <td>5</td>
                     <td>Pendente</td>
                     <td>Aguardando atualização Coordenador</td>
-                    <td><button type="button" onclick="editarInscricao()">Editar</button></td> <!-- Botão de editar -->
+                    <td class="destaque"><img class="img-edit" src="imagens/editar.png" onclick="editarInscricao()"></td> <!-- Botão de editar -->
                 </tr>
             </tbody>
         </table>
@@ -92,7 +92,7 @@
                 <input type="text" id="tipohae" name="tipohae" value="Estágio"  required>
                 <br>
                 <br>
-                <h4>Quantidade de H.A.E. para Trabalho de Graduação:</h4>
+                <!--<h4>Quantidade de H.A.E. para Trabalho de Graduação:</h4>
                 <br>
                 <div class="hae-projeto-linha">
                     <label for="gti">CST em GTI:</label>
@@ -105,18 +105,18 @@
                     <input type="number" id="ge" name="hae_trabalho_ge" min="0" max="7">
                 </div>
                 <br>
-                <br>
+                <br>-->
                 <h4>Quantidade de H.A.E. para Estágio Supervisionado</h4>
                 <br>
                 <div class="hae-projeto-linha">
-                    <label for="gti_estagio">CST em GTI:</label>
+                    <!--<label for="gti_estagio">CST em GTI:</label>
                     <input type="number" id="gti_estagio" name="hae_estagio_gti" min="0" max="7">
 
                     <label for="gpi_estagio">CST em GPI:</label>
                     <input type="number" id="gpi_estagio" name="hae_estagio_gpi" min="0" max="7">
 
                     <label for="ge_estagio">CST em GE:</label>
-                    <input type="number" id="ge_estagio" name="hae_estagio_ge" min="0" max="7">
+                    <input type="number" id="ge_estagio" name="hae_estagio_ge" min="0" max="7">-->
 
                     <label for="dsm_estagio">CST em DSM:</label>
                     <input type="number" id="dsm_estagio" name="hae_estagio_dsm" min="0" max="7" value="6"><br>
@@ -146,22 +146,22 @@
                     </tr>
                     <tr>
                         <td>Segunda-feira</td>
-                        <td><input type="checkbox" name="segunda_matutino"></td>
+                        <td><input type="checkbox" name="segunda_matutino" checked></td>
                         <td><input type="checkbox" name="segunda_vespertino"></td>
-                        <td><input type="checkbox" name="segunda_noturno"></td>
+                        <td><input type="checkbox" name="segunda_noturno" checked></td>
                         <td><input type="checkbox" name="segunda_itapira"></td>
                     </tr>
                     <tr>
                         <td>Terça-feira</td>
                         <td><input type="checkbox" name="terca_matutino"></td>
-                        <td><input type="checkbox" name="terca_vespertino"></td>
+                        <td><input type="checkbox" name="terca_vespertino" checked></td>
                         <td><input type="checkbox" name="terca_noturno"></td>
                         <td><input type="checkbox" name="terca_itapira"></td>
                     </tr>
                     <tr>
                         <td>Quarta-feira</td>
-                        <td><input type="checkbox" name="quarta_matutino"></td>
-                        <td><input type="checkbox" name="quarta_vespertino"></td>
+                        <td><input type="checkbox" name="quarta_matutino" checked></td>
+                        <td><input type="checkbox" name="quarta_vespertino" checked></td>
                         <td><input type="checkbox" name="quarta_noturno"></td>
                         <td><input type="checkbox" name="quarta_itapira"></td>
                     </tr>
@@ -170,11 +170,11 @@
                         <td><input type="checkbox" name="quinta_matutino"></td>
                         <td><input type="checkbox" name="quinta_vespertino"></td>
                         <td><input type="checkbox" name="quinta_noturno"></td>
-                        <td><input type="checkbox" name="quinta_itapira"></td>
+                        <td><input type="checkbox" name="quinta_itapira" checked></td>
                     </tr>
                     <tr>
                         <td>Sexta-feira</td>
-                        <td><input type="checkbox" name="sexta_matutino"></td>
+                        <td><input type="checkbox" name="sexta_matutino" checked></td>
                         <td><input type="checkbox" name="sexta_vespertino"></td>
                         <td><input type="checkbox" name="sexta_noturno"></td>
                         <td><input type="checkbox" name="sexta_itapira"></td>
@@ -184,24 +184,24 @@
                         <td><input type="checkbox" name="sabado_matutino"></td>
                         <td><input type="checkbox" name="sabado_vespertino"></td>
                         <td><input type="checkbox" name="sabado_noturno"></td>
-                        <td><input type="checkbox" name="sabado_itapira"></td>
+                        <td><input type="checkbox" name="sabado_itapira" checked></td>
                     </tr>
                 </table>
                 <br>
 
                 <h4>Horário de Execução do Projeto</h4>
                 <br>
-                <p>
+                <!--<p>
                     Obs.: Os horários propostos para execução das atividades não podem ser fracionados (Ex: das 13h15min
                     às 14h15min);
                 </p>
-                <br>
+                <br>-->
                 <table class="tabela-inscricao" border="1">
                     <tr>
                         <th>Dia da Semana</th>
                         <th>Horário(s) de Trabalho</th>
                     </tr>
-                    <tr>
+                    <!--<tr>
                         <td>Segunda-feira</td>
                         <td><input type="text" name="horario_sexecucao_segunda" placeholder="Ex: 15:00 às 19:00"></td>
                     </tr>
@@ -216,15 +216,15 @@
                     <tr>
                         <td>Quinta-feira</td>
                         <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
-                    </tr>
+                    </tr>-->
                     <tr>
                         <td>Sexta-feira</td>
-                        <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
+                        <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00" value="19h às 20h"></td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                         <td>Sábado</td>
                         <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
-                    </tr>
+                    </tr>-->
                 </table>
 
 
@@ -234,7 +234,7 @@
                     </tr>
                     <tr>
                         <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Definir as metas"></textarea></td>
+                            placeholder="Definir as metas"></textarea></td>
                     </tr>
                     <tr>
                         <th colspan="2">2 - OBJETIVOS DO PROJETO – DETALHAMENTO</th>
