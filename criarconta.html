@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Criar Conta - Fatec Itapira</title>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Criar Conta</h1>
+        <form action="#" method="post">
+            <div class="input-group">
+                <label for="role">Tipo de Usuário</label>
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>Selecione seu cargo</option>
+                    <option value="docente">Docente</option>
+                    <option value="diretor">Diretor</option>
+                    <option value="coordenador">Coordenador</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="matricula">Matrícula</label>
+                <input type="text" id="matricula" name="matricula" required autocomplete="username">
+            </div>
+
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required autocomplete="new-password">
+            </div>
+
+            <div class="input-group">
+                <label for="confirm-password">Confirmar Senha</label>
+                <input type="password" id="confirm-password" name="confirm-password" required autocomplete="new-password">
+            </div>
+            
+            <div class="footer">
+                <button class="secondary-button" onclick="window.location.href='telalogin.html';">Criar conta</button>
+            </div>
+        
+
+        </form>
+ 
+    </div>
+</body>
+</html>
