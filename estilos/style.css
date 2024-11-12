@@ -53,7 +53,7 @@ header {
 
 .menu a {
     color: #fff;
-    padding: 10px 20px;
+    padding: 8px 10px;
     text-decoration: none;
     font-weight: lighter;
     align-items: center;
@@ -252,7 +252,7 @@ header {
 /*pagina inscrição tbl professor e btn nova inscricao*/
 /* Estilos para a Tabela */
 
-#titulos{
+.titulos{
     text-align: center;
     margin-top: 25px;
 }
