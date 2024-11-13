@@ -11,53 +11,114 @@ body, html {
     height: 100%;
     display: flex;
     flex-direction: column;
-}
-
-main{/*todas as paginas*/
-    flex: 1;
-    padding: 20px;
     background-color: #f5f5f5;
 }
 
-/*header*/
-header {
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 60px; /* Largura inicial */
+    background-color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+    transition: width 0.3s ease; /* Expansão suave */
+    z-index: 2;
+}
+
+.sidebar:hover {
+    width: 200px; /* Largura expandida */
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    color: #c3c3c3;
+    text-decoration: none;
+    padding: 15px;
     width: 100%;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar a:hover {
+    background-color: #444;
+}
+
+.sidebar img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.sidebar span {
+    display: none;
+    white-space: nowrap;
+}
+
+.sidebar:hover span {
+    display: inline;
+}
+
+/* Header */
+.header-content {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 60px; /* Espaço inicial da sidebar */
+    width: calc(100% - 60px); /* Largura ajustada */
+    background-color: #f3f3f3;
+    padding: 10px;
+    z-index: 1;
+    border-bottom: 2px solid #444;
+    transition: left 0.3s ease, width 0.3s ease; /* Movimentação suave */
+}
+
+/* Ajusta o header para a expansão da sidebar */
+.sidebar:hover ~ .header-content {
+    left: 200px;
+    width: calc(100% - 200px);
+}
+
+/* Main */
+main {
+    margin-left: 60px; /* Compensa a largura inicial da sidebar */
+    padding: 20px;
+    padding-top: 80px; /* Compensa a altura do header */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Centraliza verticalmente o conteúdo */
+    min-height: calc(100vh - 120px); /* Altura da tela menos header e footer */
+    transition: margin-left 0.3s ease; /* Movimentação suave */
+    background-color: #f3f3f3;
+}
+
+.sidebar:hover ~ main {
+    margin-left: 200px;
+    width: calc(100% - 200px); /* Largura ajustada */
 }
 
 
-/*header*/
+/* Ajuste de layout para o header e footer */
 .institutions {
     display: flex;
     align-items: center;
-    margin-left: 35px;
+    margin-right: 35px;
     margin-top: 10px;
 }
 
-.cps{
+.cps {
     margin-left: 70px;
 }
 
-.cps img, .fatec img{
+.cps img, .fatec img {
     height: 75px;
-}
-
-
-.menu {
-    display: flex;
-    gap: 60px;
-    background-color: #AE0C0D;
-    margin-top: 6px;
-    justify-content: center;
-    align-items: center;
-}
-
-.menu a {
-    color: #fff;
-    padding: 8px 10px;
-    text-decoration: none;
-    font-weight: lighter;
-    align-items: center;
-    font-size: large;
 }
 
 
@@ -66,7 +127,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #006270;
+    background-color: #000000;
     padding: 10px 20px;
 }
 
@@ -175,7 +236,7 @@ header {
 }
 
 .tabela-inscricao th {
-    background-color: #006270;
+    background-color: #AE0C0D;
     color: #fff;
     font-weight: bold;
 }
@@ -267,7 +328,7 @@ header {
 }
 
 .tbls thead tr {
-    background-color: #0f8b94;
+    background-color: #AE0C0D;
     color: white;
 }
 
