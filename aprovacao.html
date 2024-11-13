@@ -16,30 +16,37 @@
         <div class="header-content">
             <div class="institutions">
                 <div class="fatec">
-                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank">
-                        <img src="imagens/logo-fatec_itapira.png" alt="Logo Fatec Itapira">
-                    </a>
+                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img
+                            src="imagens/logo-fatec_itapira.png"></a>
                 </div>
                 <div class="cps">
-                    <a href="https://www.cps.sp.gov.br/" target="_blank">
-                        <img src="imagens/logo-cps.png" alt="Logo CPS">
-                    </a>
+                    <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="imagens/logo-cps.png"></a>
                 </div>
             </div>
-            <nav class="menu">
-                <a href="index.html">Início</a>
-                <a href="inscricao.html">Inscrição</a>
-                <a href="aprovacao.html">Aprovação</a>
-                <a href="relatorio.html">Relatório</a>   
-            </nav>
         </div>
     </header>
 
+
+    <nav class="sidebar">
+        <a href="index.html">
+            <img src="imagens/home.png" alt="Início"> <span>Início</span>
+        </a>
+        <a href="inscricao.html">
+            <img src="imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
+        </a>
+        <a href="aprovacao.html">
+            <img src="imagens/aprovacao.png" alt="Aprovação"> <span>Aprovação</span>
+        </a>
+        <a href="relatorio.html">
+            <img src="imagens/relat.png" alt="Relatório"> <span>Relatório</span>
+        </a>
+    </nav>
+
     <main>
 
-        <h3 class="titulos">Inscrições pendentes de Projetos HAE</h3>
+        <h3 class="titulos" id="tituloInscricao">Inscrições pendentes de Projetos HAE</h3>
         <br>
-        <table class="tbls">
+        <table class="tbls" id="tableInscricao">
             <thead>
                 <tr>
                     <td>Inscrição</td>
@@ -61,7 +68,8 @@
                     <td>5</td>
                     <td>Pendente</td>
                     <td>Aguardando atualização Coordenador</td>
-                    <td class="destaque"><img class="img-edit" src="imagens/editar.png" onclick="editarInscricao()"></td> <!-- Botão de editar -->
+                    <td class="destaque"><img class="img-edit" src="imagens/editar.png" onclick="editarInscricao()">
+                    </td> <!-- Botão de editar -->
                 </tr>
             </tbody>
         </table>
@@ -89,7 +97,7 @@
                 <br>
                 <br>
                 <h4>Tipo de HAE que está solicitando:</h4>
-                <input type="text" id="tipohae" name="tipohae" value="Estágio"  required>
+                <input type="text" id="tipohae" name="tipohae" value="Estágio" required>
                 <br>
                 <br>
                 <!--<h4>Quantidade de H.A.E. para Trabalho de Graduação:</h4>
@@ -219,7 +227,8 @@
                     </tr>-->
                     <tr>
                         <td>Sexta-feira</td>
-                        <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00" value="19h às 20h"></td>
+                        <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"
+                                value="19h às 20h"></td>
                     </tr>
                     <!--<tr>
                         <td>Sábado</td>
@@ -234,7 +243,7 @@
                     </tr>
                     <tr>
                         <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                            placeholder="Definir as metas"></textarea></td>
+                                placeholder="Definir as metas"></textarea></td>
                     </tr>
                     <tr>
                         <th colspan="2">2 - OBJETIVOS DO PROJETO – DETALHAMENTO</th>
@@ -326,29 +335,22 @@
                 </select><br>
 
                 <label for="justificativa">Justificativa:</label>
-                <textarea class="textarea-auto-ajuste" name="justificativa" rows="4" placeholder="Digite a justificativa..."></textarea><br>
+                <textarea class="textarea-auto-ajuste" name="justificativa" rows="4"
+                    placeholder="Digite a justificativa..."></textarea><br>
 
                 <!-- Botões de ação -->
-                <button class="btn-reset" type="button" onclick="cancelarEdicao()">Cancelar</button>
+                <a href="aprovacao.html"><button class="btn-reset" type="button">Cancelar</button></a>
                 <a href="aprovacao.html"><button class="btn-enviar" type="button">Salvar Alterações</button></a>
 
-                
+
             </form>
         </div>
-        
+
     </main>
 
     <!-- Script para exibir e ocultar o formulário de edição -->
-    <script src="aprovacao.js" defer></script>
+    <script src="script.js" defer></script>
 
-    <footer>
-        <div class="footer-bottom">
-            <p>© 2024 - Centro Paula Souza - Fatec Itapira - Turma DSM 1° Semestre</p>
-        </div>
-        <div class="gov-logo-footer">
-            <img src="imagens/logo-governo-do-estado-sp.png" alt="Logo Governo SP">
-        </div>
-    </footer>
 </body>
 
 </html>

@@ -17,10 +17,10 @@ body, html {
 /* Sidebar */
 .sidebar {
     position: fixed;
-    top: 0;
+    top: 0;;
     left: 0;
     height: 100vh;
-    width: 60px; /* Largura inicial */
+    width: 75px; /* Largura inicial */
     background-color: #333;
     display: flex;
     flex-direction: column;
@@ -37,11 +37,12 @@ body, html {
 .sidebar a {
     display: flex;
     align-items: center;
-    color: #c3c3c3;
+    color: #fff;
     text-decoration: none;
-    padding: 15px;
+    padding: 25px;
     width: 100%;
     transition: background-color 0.2s ease;
+    margin-top: 50px;
 }
 
 .sidebar a:hover {
@@ -51,7 +52,7 @@ body, html {
 .sidebar img {
     width: 24px;
     height: 24px;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 .sidebar span {
@@ -122,29 +123,6 @@ main {
 }
 
 
-/*footer*/
-.footer-bottom {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000000;
-    padding: 10px 20px;
-}
-
-.footer-bottom p {
-    font-size: 14px;
-    color: #fff;
-}
-
-
-.gov-logo-footer{
-    background-color: #000000;
-    padding: 20px 45px; /* aumenta o espaço interno para dar mais destaque ao fundo */
-    display: flex;
-    justify-content: center;
-}
-
-
   
 .cece{
     text-align: center;
@@ -159,27 +137,56 @@ main {
 
 /* Container principal do formulário */
 .container-inscricao {
-    max-width: 70%;
+    max-width: 80%;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 8px;
+    overflow-y: auto;
+    min-height: 70vh;
+    margin-top: 40px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* Container do formulário */
+.container-relatorio {
+    padding: 20px;
+    background-color: #fff; 
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 70%; 
+    margin: 0px auto; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
 
 
 /* Estilo para labels e inputs dentro do formulário de inscrição */
-.form-inscricao label {
+.form-inscricao label{
     display: block;
     margin: 10px 0 5px;
-    color: #333;
+    color: #000000;
+}
+
+.form-relatorio label {
+    display: block;
+    margin: 10px 0 5px; 
+    color: #000000;
+    font-weight: bold;
 }
 
 .form-inscricao input[type="text"],
+.form-relatorio input[type="text"],
 .form-inscricao input[type="email"],
+.form-relatorio input[type="email"],
 .form-inscricao input[type="number"],
 .form-inscricao input[type="date"],
-.form-inscricao select {
+.form-relatorio input[type="date"],
+.form-inscricao select,
+.form-relatorio select {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
@@ -187,6 +194,7 @@ main {
     border-radius: 4px;
     font-size: 16px;
 }
+
 
 /* Tabela específica da página de inscrição */
 .tabela-inscricao {

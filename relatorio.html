@@ -10,7 +10,6 @@
 
 <body>
     <header>
-
         <div class="header-content">
             <div class="institutions">
                 <div class="fatec">
@@ -21,17 +20,26 @@
                     <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="imagens/logo-cps.png"></a>
                 </div>
             </div>
-            <nav class="menu">
-                <a href="index.html">Início</a>
-                <a href="inscricao.html">Inscrição</a>
-                <a href="aprovacao.html">Aprovação</a>
-                <a href="relatorio.html">Relatório</a>
-            </nav>
         </div>
     </header>
 
+
+    <nav class="sidebar">
+        <a href="index.html">
+            <img src="imagens/home.png" alt="Início"> <span>Início</span>
+        </a>
+        <a href="inscricao.html">
+            <img src="imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
+        </a>
+        <a href="aprovacao.html">
+            <img src="imagens/aprovacao.png" alt="Aprovação"> <span>Aprovação</span>
+        </a>
+        <a href="relatorio.html">
+            <img src="imagens/relat.png" alt="Relatório"> <span>Relatório</span>
+        </a>
+    </nav>
     <main>
-        
+
         <table class="tbls" id="tableProfessor">
             <h3 class="titulos" id="tituloProfessor">Seus projetos para envios de relátórios</h3>
             <br>
@@ -58,8 +66,8 @@
                 </tr>
             </tbody>
         </table>
-        <div id="formularioProfessor" class="container-inscricao" style="display: none;">
-            <form class="form-inscricao" action="#" method="POST">
+        <div id="formularioProfessor" class="container-relatorio" style="display: none;">
+            <form class="form-relatorio" action="#" method="POST">
 
                 <label for="professor">Nome:</label>
                 <input type="text" id="professor" name="professor" value="Ana Celia" required><br>
@@ -118,8 +126,8 @@
             </tbody>
         </table>
 
-        <div id="formularioCoordenador" class="container-inscricao" style="display: none;">
-            <form class="form-inscricao" action="#" method="POST">
+        <div id="formularioCoordenador" class="container-relatorio" style="display: none;">
+            <form class="form-relatorio" action="#" method="POST">
 
                 <label for="professor">Nome:</label>
                 <input type="text" id="professor" name="professor" value="Ana Celia" required><br>
@@ -142,8 +150,7 @@
 
                 <label for="inicio_projeto">Data envio:</label>
                 <input type="date" id="envio_relatorio" name="envio_relatorio"><br>
-
-                <h4>Status e Justificativa</h4>
+                <br>
 
                 <label for="status">Status:</label>
                 <select name="status" id="status" required>
@@ -158,7 +165,7 @@
                     placeholder="Digite a justificativa..."></textarea><br>
 
                 <!-- Botões de ação -->
-                
+
                 <a href="relatorio.html"><button class="btn-reset" type="button">Cancelar</button></a>
                 <a href="relatorio.html"><button class="btn-enviar" type="button">Salvar Alterações</button></a>
 
@@ -167,14 +174,6 @@
 
     </main>
     <script src="script.js" defer></script>
-    <footer>
-        <div class="footer-bottom">
-            <p>© 2024 - Centro Paula Souza - Fatec Itapira - Turma DSM 1° Semestre</p>
-        </div>
-        <div class="gov-logo-footer">
-            <img src="imagens/logo-governo-do-estado-sp.png" alt="Logo Governo SP">
-        </div>
-    </footer>
 
 </body>
 

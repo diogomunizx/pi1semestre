@@ -34,3 +34,19 @@ function deferirRelatorio() {
     }
 }
 
+function editarInscricao() {
+    // Seleciona a tabela e o formulário de edição pelo ID ou classe específicos
+    const tabelaInscricoes = document.getElementById("tableInscricao");
+    const formularioEditar = document.getElementById("formulario-editar");
+    const tituloInscricao = document.getElementById("tituloInscricao");
+    
+    // Verifica se ambos os elementos existem antes de tentar exibir ou ocultar
+    if (tabelaInscricoes && formularioEditar && tituloInscricao ) {
+        tabelaInscricoes.style.display = "none";   // Esconde a tabela de inscrições
+        formularioEditar.style.display = "block";   // Exibe o formulário de edição
+        tituloInscricao.style.display = "none";
+    } else {
+        console.error("Erro: Elemento de tabela ou formulário não encontrado.");
+    }
+}
+
