@@ -144,40 +144,7 @@ main {
     justify-content: center;
 }
 
-.horas {
-    border-collapse: collapse;
-    border: 2px solid rgb(140 140 140);
-    font-family: sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    justify-self: center;
-    margin-top: 50px;
-    margin-bottom: 50px;
-  }
-  
- caption {
-    caption-side: bottom;
-    padding: 10px;
-    font-weight: bold;
-  }
-  
-  thead {
-    background-color: rgb(228 240 245);
-  }
-  
-  th,
-  td {
-    border: 1px solid rgb(160 160 160);
-    padding: 8px 10px;
-  }
-  
-  td:last-of-type {
-    text-align: center;
-  }
-  
-  tbody > tr:nth-of-type(even) {
-    background-color: rgb(237 238 242);
-  }
+
   
 .cece{
     text-align: center;
@@ -330,12 +297,13 @@ main {
 .tbls thead tr {
     background-color: #AE0C0D;
     color: white;
+    white-space: nowrap;
 }
 
 .tbls th, 
 .tbls td {
     padding: 12px;
-    text-align: left;
+    text-align: center;
     border: 1px solid #ddd;
 }
 
@@ -383,6 +351,3 @@ main {
 .btn-nova-inscricao:hover {
     background-color: #044021;
 }
-
-
-
