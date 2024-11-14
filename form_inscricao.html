@@ -11,6 +11,13 @@
 <body>
     <header>
         <div class="header-content">
+            <div class="user-profile" onclick="toggleDropdown()">
+                <span>M</span>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
+                    <a href="#">Ajustes</a>
+                </div>
+            </div>
             <div class="institutions">
                 <div class="fatec">
                     <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img
@@ -24,15 +31,15 @@
     </header>
 
     <nav class="sidebar">
-       
+
         <a href="index.html">
             <img src="imagens/home.png" alt="Início"> <span>Início</span>
         </a>
-        <a href="inscricao.html">
+        <a href="inscricao.html" id="linkInscricao">
             <img src="imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
         </a>
-        <a href="aprovacao.html">
-            <img src="imagens/inscricoes.png" alt="Inscrição"> <span>Inscrições</span>
+        <a href="aprovacao.html" id="linkAprovacao">
+            <img src="imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
         </a>
         <a href="relatorio.html">
             <img src="imagens/relat.png" alt="Relatório"> <span>Relatório</span>
@@ -312,7 +319,7 @@
             </form>
         </div>
     </main>
-
+    <script src="script.js" defer></script>
 
 </body>
 

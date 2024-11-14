@@ -50,3 +50,53 @@ function editarInscricao() {
     }
 }
 
+function toggleDropdown() {
+    const dropdown = document.getElementById("dropdown-menu");
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+}
+
+// Fecha o menu ao clicar fora dele
+document.addEventListener("click", function (event) {
+    const profile = document.querySelector(".user-profile");
+    const dropdown = document.getElementById("dropdown-menu");
+    if (!profile.contains(event.target)) {
+        dropdown.style.display = "none";
+    }
+});
+
+
+// Função para abrir o modal
+function verJustificativa() {
+    // Cria o elemento de overlay e modal
+    const modalOverlay = document.createElement('div');
+    modalOverlay.classList.add('modal-overlay');
+    
+    const modal = document.createElement('div');
+    modal.classList.add('modal');
+  
+    // HTML do conteúdo do modal
+    modal.innerHTML = `
+      <label>Justificativa:</label>
+      <p>Coordenador ainda não visualizou sua inscrição.</p>
+      <span class="modal-close" onclick="fecharModal()">Fechar</span>
+    `;
+  
+    // Adiciona o modal dentro do overlay e exibe na página
+    modalOverlay.appendChild(modal);
+    document.body.appendChild(modalOverlay);
+  
+    // Exibe o modal
+    modalOverlay.style.display = 'flex';
+  }
+  
+  // Função para fechar o modal
+  function fecharModal() {
+    const modalOverlay = document.querySelector('.modal-overlay');
+    if (modalOverlay) {
+      modalOverlay.remove();
+    }
+  }
+  
+
+
+

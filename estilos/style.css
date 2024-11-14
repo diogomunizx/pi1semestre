@@ -20,18 +20,13 @@ body, html {
     top: 0;;
     left: 0;
     height: 100vh;
-    width: 75px; /* Largura inicial */
+    width: 200px;
     background-color: #333;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 60px;
-    transition: width 0.3s ease; /* Expansão suave */
     z-index: 2;
-}
-
-.sidebar:hover {
-    width: 200px; /* Largura expandida */
 }
 
 .sidebar a {
@@ -39,10 +34,12 @@ body, html {
     align-items: center;
     color: #fff;
     text-decoration: none;
-    padding: 20px;
+    padding: 15px;
     width: 100%;
     transition: background-color 0.2s ease;
     margin-top: 50px;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .sidebar a:hover {
@@ -50,13 +47,14 @@ body, html {
 }
 
 .sidebar img {
-    width: 28px;
-    height: 28px;
-    margin-right: 20px;
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+    margin-left: 15px;
 }
 
 .sidebar span {
-    display: none;
+    display: inline;
     white-space: nowrap;
 }
 
@@ -71,24 +69,66 @@ body, html {
     align-items: center;
     position: fixed;
     top: 0;
-    left: 60px; /* Espaço inicial da sidebar */
-    width: calc(100% - 60px); /* Largura ajustada */
+    left: 200px;
+    width: calc(100% - 200px); /* Largura ajustada */
     background-color: #f3f3f3;
     padding: 10px;
     z-index: 1;
     border-bottom: 2px solid #444;
-    transition: left 0.3s ease, width 0.3s ease; /* Movimentação suave */
 }
 
-/* Ajusta o header para a expansão da sidebar */
-.sidebar:hover ~ .header-content {
-    left: 200px;
-    width: calc(100% - 200px);
+/* Estilo para o perfil do usuário */
+.user-profile {
+    position: relative;
+    width: 55px;
+    height: 55px;
+    background-color: #008080;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: bold;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: auto; /* Mantém o perfil no canto esquerdo */
+    margin-left: 20px; /* Margem para distanciar da sidebar */
+    z-index: 3; /* Para manter o perfil acima da sidebar */
 }
+
+/* Estilo do menu suspenso */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 57px;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    overflow: hidden;
+    min-width: 150px;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f0f0;
+}
+
 
 /* Main */
 main {
-    margin-left: 60px; /* Compensa a largura inicial da sidebar */
+    margin-left: 200px; /* Compensa a largura inicial da sidebar */
     padding: 20px;
     padding-top: 80px; /* Compensa a altura do header */
     display: flex;
@@ -96,17 +136,10 @@ main {
     align-items: center;
     justify-content: center; /* Centraliza verticalmente o conteúdo */
     min-height: calc(100vh - 120px); /* Altura da tela menos header e footer */
-    transition: margin-left 0.3s ease; /* Movimentação suave */
     background-color: #f3f3f3;
 }
 
-.sidebar:hover ~ main {
-    margin-left: 200px;
-    width: calc(100% - 200px); /* Largura ajustada */
-}
-
-
-/* Ajuste de layout para o header e footer */
+/* Ajuste de layout para o header*/
 .institutions {
     display: flex;
     align-items: center;
@@ -359,3 +392,45 @@ main {
 .btn-nova-inscricao:hover {
     background-color: #044021;
 }
+
+/* Estilos para o modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+  }
+  
+  .modal label {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .modal p {
+    font-size: 14px;
+    color: #333;
+    margin-top: 8px;
+  }
+  
+  .modal-close {
+    display: inline-block;
+    margin-top: 15px;
+    color: #AE0C0D;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
