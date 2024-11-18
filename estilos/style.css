@@ -212,12 +212,16 @@ main {
 }
 
 .form-inscricao input[type="text"],
+.form-ajuste    input[type="text"],
 .form-relatorio input[type="text"],
 .form-inscricao input[type="email"],
+.form-ajuste    input[type="email"],
 .form-relatorio input[type="email"],
 .form-inscricao input[type="number"],
+.form-ajuste    input[type="tel"],
 .form-inscricao input[type="date"],
 .form-relatorio input[type="date"],
+.form-AlterarSenha input[type="password"],
 .form-inscricao select,
 .form-relatorio select {
     width: 100%;
@@ -434,3 +438,88 @@ main {
     font-weight: bold;
   }
   
+/* Estilos para containet de tela de Cadastro */
+  .containerCadastro{
+    background-color: #ffffff;
+    text-align: center;
+    box-shadow: 10px 10px 25px #b2bec3,
+                -10px -10px 25px #ffffff;
+    
+    width: 60vh;
+    height: auto;
+    margin: auto;
+    align-items: center;
+    padding-left: 40px;
+    padding-right: 40px;
+    label{
+        display: block;
+        margin: 10px 0 5px;
+        color: #000000;
+        text-align: left;
+        
+    }
+    
+  }
+    
+.header-Cadastro ,
+.header-AlterarSenha{ 
+    padding-top: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.btns-Alterar{
+    cursor: pointer;
+}
+/* Botões de ação tela de Cadastro do usuario */
+.btn-salvarAlterarCadastro ,
+.btn-cacelarAlterarCadastro ,
+.btn-salvarAlterarSenha,
+.btn-cancelarAlterarSenha,
+.btn-fecharCadastro {
+    padding: 10px 20px;
+    border: none;
+    margin-bottom: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #ccc ;
+    color:#333;   
+}
+
+.btn-salvarAlterarCadastro,
+.btn-salvarAlterarSenha{
+    background-color: #008080;
+    color:#e6e6e6 ;
+}
+.btn-cacelarAlterarCadastro,
+.btn-cancelarAlterarSenha{
+    background-color: #ca3535;
+    color:#e6e6e6 ;
+}
+.btn-salvarAlterarCadastro:active,
+.btn-salvarAlterarSenha:active,
+.btn-cacelarAlterarCadastro:active,
+.btn-cancelarAlterarSenha:active,
+.btn-fecharCadastro:active {
+    background-color: #7f7f7f; /* Cor cinza */
+    color: #333; /* Cor do texto pode ser ajustada para contrastar */
+}
+
+
+.popup-overlay {
+    display: none; /* Inicialmente o popup está oculto */
+    position: fixed; /* Fixa o popup sobre a página */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+

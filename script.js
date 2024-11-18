@@ -97,6 +97,78 @@ function verJustificativa() {
     }
   }
   
+function liberarCampoCadastro () {
+
+    const nome = document.getElementById('professor');
+    const email = document.getElementById('email');
+    const telefone = document.getElementById('telefone');
+    const btnCancelar = document.querySelector('.btn-salvarAlterarCadastro');
+    const btnSalvar = document.querySelector('.btn-cacelarAlterarCadastro');
+
+      if (nome.disabled) {
+        // Se estiverem desabilitado
+        nome.disabled = false;
+        email.disabled = false;
+        telefone.disabled = false;
+
+        btnCancelar.style.display = 'inline-block';
+        btnSalvar.style.display = 'inline-block';
+
+    } else {
+        // Se estiverem habilitados cria Alerta
+        alert("Cancele ou conclua a operação!");
+    
+    
+    }
+}
+
+// Função para o botão de Salvar
+function salvarAlteracao() {
+    // Aqui você pode adicionar a lógica para salvar as alterações
+    alert("Cadastro salvo com sucesso!");
+
+    cancelarAlteracaoCadastro(); 
+}
+
+function cancelarAlteracaoCadastro () {
+    const nome = document.getElementById('professor');
+    const email = document.getElementById('email');
+    const telefone = document.getElementById('telefone');
+    const btnCancelar = document.querySelector('.btn-salvarAlterarCadastro');
+    const btnSalvar = document.querySelector('.btn-cacelarAlterarCadastro');
+    // Desabilitar os campos novamente
+    nome.disabled = true;
+    email.disabled = true;
+    telefone.disabled = true;
+
+    // Esconder o botão de cancelar
+    btnCancelar.style.display = 'none';
+    btnSalvar.style.display = 'none';
+}
 
 
+//Tela Cadastrar nova Senha
 
+function liberarFormAlterarSenha () {
+    const formCadastro = document.querySelector ('.form-ajuste');
+    const formSenha = document.querySelector ('.form-AlterarSenha');
+
+    formCadastro.style.display = 'none';
+    formSenha.style.display = 'block';
+}
+
+function cancelarAlteracao() {
+    const password = document.getElementById ('password');
+    const novaPassword = document.getElementById ('novaPassword');
+    const confirmarPassword = document.getElementById ('confirmarPassword');
+    const formCadastro = document.querySelector ('.form-ajuste');
+    const formSenha = document.querySelector ('.form-AlterarSenha');
+
+    password.value = '';
+    novaPassword.value = '';
+    confirmarPassword.value = '';
+
+    formCadastro.style.display = 'block';
+    formSenha.style.display = 'none';
+
+}

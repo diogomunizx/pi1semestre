@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos/style.css">
+    <title>Cadastro - Fatec Itapira</title>
+</head>
+<body>
+    <div class="containerCadastro">
+        <form class="form-ajuste">
+            <div class="header-Cadastro">
+                <h1>Cadastro</h1>
+            </div>
+
+            <div class="input-grupoCadastro" style="display: block;" >
+                <label for="professor">Nome</label>
+                <input type="text" id="professor" disabled value="Marcia Regioli" >
+            </div>
+
+            <div class="input-grupoCadastro">
+                <label for="matricula">Matrícula</label>
+                <input type="text" id="matricula" disabled value="455234123" >
+            </div>
+
+            <div class="input-grupoCadastro">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" disabled value="marciaregioli@fatec.com.br" >
+            </div>
+
+            <div class="input-grupoCadastro">
+                <label for="telefone">Telefone</label>
+                <input type="tel" id="telefone" disabled value="4002-8922">
+            </div>
+        
+            <div class="btns-Alterar">
+                <a onclick="liberarCampoCadastro()" >
+                Alterar Cadastro
+            </a>
+            |
+            <a onclick="liberarFormAlterarSenha()" >
+                Alterar Senha
+            </a>
+        </div>
+        
+        <br>
+    
+            <button type="button"  class="btn-salvarAlterarCadastro" style="display: none;" onclick="salvarAlteracao()" >Salvar</button>
+        
+            <button type="button"  style="display: none;" class="btn-cacelarAlterarCadastro" onclick="cancelarAlteracaoCadastro()" >Cancelar</button>
+      
+        <div class="btn-FecharTelaCadasdro">
+        <a>
+            <button type="button" class="btn-fecharCadastro" >Fechar</button>
+        </a>
+        </div>
+    </form>
+
+    <form class="form-AlterarSenha" style="display: none;">
+        <div class="header-AlterarSenha">
+            <h1>Alterar Senha</h1>
+        </div>
+
+        <!-- Senha Atual -->
+        <div >
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" required >
+        </div>
+         <!-- Nova Senha -->
+        <div >
+            <label for="novaPassword">Nova Senha</label>
+            <input type="password" id="novaPassword" name="password" required >
+        </div>
+        <div >
+            <label for="confirmarPassword">Confirmar Nova Senha</label>
+            <input type="password" id="confirmarPassword" name="password" required >
+        </div>
+
+        <div class="input-grupo">
+            <button type="submit" class="btn-salvarAlterarSenha">Salvar</button>
+            <button type="button" class="btn-cancelarAlterarSenha" onclick="cancelarAlteracao()">Cancelar</button>
+        </div>
+    </form>
+
+        
+      </div>  
+    </div>
+    <script src="script.js" defer></script>
+</body>
+
+
+
+
+
+</html>
