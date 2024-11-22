@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos/style.css">
+    <title>Relatório</title>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="user-profile" onclick="toggleDropdown()">
+                <span>M</span>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
+                    <a href="perfil_cadastro.html" onclick="alterarVisualizacaoTelaCadastro()">Ajustes</a>
+                </div>
+            </div>
+            <div class="institutions">
+                <div class="fatec">
+                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img
+                            src="imagens/logo-fatec_itapira.png"></a>
+                </div>
+                <div class="cps">
+                    <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="imagens/logo-cps.png"></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sidebar">
+        <div class="logo-container">
+            <a href="#">
+                <img src="imagens/logo-horus.png" alt="Logo HORUS">
+            </a>
+        </div>
+        <a class="inicio" href="index.html">
+            <img src="imagens/home.png" alt="Início"> <span>Início</span>
+        </a>
+        <a href="inscricao.html" id="linkInscricao">
+            <img src="imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
+        </a>
+        <a href="aprovacao.html" id="linkAprovacao">
+            <img src="imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
+        </a>
+        <a href="relatorio_prof.html">
+            <img src="imagens/relat.png" alt="Relatório"> <span>Relatório</span>
+        </a>
+        <a href="relatorio_coord.html">
+            <img src="imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
+        </a>
+        <a href="login.html">
+            <img src="imagens/logout.png" alt="Logout"> <span>Logout</span>
+        </a>
+    </nav>
+
+    <main>
+
+        <table class="tbls" id="tableProfessor">
+            <h3 class="titulos" id="tituloProfessor">Seus projetos para envios de relátórios</h3>
+            <br>
+            <thead>
+                <tr>
+                    <td>Inscrição</td>
+                    <td>Coordenador</td>
+                    <td>Projeto</td>
+                    <td>Tipo HAE</td>
+                    <td>Quantidade HAE</td>
+                    <td>Status</td>
+                    <td>Ações</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>Marcia Regioli</td>
+                    <td>Estágio DSM</td>
+                    <td>Estágio</td>
+                    <td>5</td>
+                    <td>Pendente</td>
+                    <td class="destaque"><img src="imagens/relatorio.png" onclick="prepararRelatorio()"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="formularioProfessor" class="container-relatorio" style="display: none;">
+            <form class="form-relatorio" action="#" method="POST">
+
+                <label for="professor">Nome:</label>
+                <input type="text" id="professor" name="professor" value="Ana Celia" required><br>
+                </td>
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" value="ana@exemplo.com" required><br>
+
+                <label for="rg">R.G.:</label>
+                <input type="text" id="rg" name="rg" value="123456789" required><br>
+
+                <label for="matricula">Matrícula:</label>
+                <input type="text" id="matricula" name="matricula" value="12345" required><br>
+
+                <label for="titulo_projeto">Título do projeto:</label>
+                <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio DSM" required><br>
+
+                <label for="relatorio">Descrição das atividades:</label>
+                <textarea class="textarea-auto-ajuste" name="relatorio" rows="4"
+                    placeholder="Digite as atividades realizadas..."></textarea><br>
+
+                <label for="inicio_projeto">Data envio:</label>
+                <input type="date" id="envio_relatorio" name="envio_relatorio"><br>
+
+                <!-- Botões de ação -->
+                <a href="relatorio_prof.html"><button class="btn-reset" type="button">Cancelar</button></a>
+                <a href="relatorio_prof.html"><button class="btn-enviar" type="button">Enviar</button></a>
+
+            </form>
+
+        </div>
+
+    </main>
+    <script src="script.js" defer></script>
+
+</body>
+
+</html>

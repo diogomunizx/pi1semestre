@@ -15,7 +15,7 @@
         <span>M</span>
         <div class="dropdown-menu" id="dropdown-menu">
           <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
-          <a href="#">Ajustes</a>
+          <a href="perfil_cadastro.html" onclick="alterarVisualizacaoTelaCadastro()">Ajustes</a>
         </div>
       </div>
       <div class="institutions">
@@ -30,8 +30,12 @@
   </header>
 
   <nav class="sidebar">
-
-    <a href="index.html">
+    <div class="logo-container">
+      <a href="#">
+        <img src="imagens/logo-horus.png" alt="Logo HORUS">
+      </a>
+    </div>
+    <a class="inicio" href="index.html">
       <img src="imagens/home.png" alt="Início"> <span>Início</span>
     </a>
     <a href="inscricao.html" id="linkInscricao">
@@ -40,13 +44,17 @@
     <a href="aprovacao.html" id="linkAprovacao">
       <img src="imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
     </a>
-    <a href="relatorio.html">
+    <a href="relatorio_prof.html">
       <img src="imagens/relat.png" alt="Relatório"> <span>Relatório</span>
+    </a>
+    <a href="relatorio_coord.html">
+      <img src="imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
     </a>
     <a href="login.html">
       <img src="imagens/logout.png" alt="Logout"> <span>Logout</span>
     </a>
   </nav>
+
   <main>
     <h3 class="titulos">Suas Inscrições</h3>
     <br>

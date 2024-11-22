@@ -1,15 +1,11 @@
 function prepararRelatorio() {
     // Seleciona a tabela e o formulário de relatório pelo ID correto
     const tabelaProfessor = document.getElementById("tableProfessor");
-    const tabelaCoordenador= document.getElementById("tableCoordenador");
-    const tituloCoordenador = document.getElementById("tituloCoordenador");
     const formularioProfessor = document.getElementById("formularioProfessor");
-    
+
     // Verifica se ambos os elementos existem antes de tentar exibir ou ocultar
-    if (tabelaProfessor && tabelaCoordenador && formularioProfessor && tituloCoordenador) {
+    if (tabelaProfessor &&  formularioProfessor ) {
         tabelaProfessor.style.display = "none";   // Esconde 
-        tabelaCoordenador.style.display = "none";   // Esconde 
-        tituloCoordenador.style.display = "none"; // Esconde 
         formularioProfessor.style.display = "block";   // Exibe o formulário
     } else {
         console.error("Erro: Elemento de tabela ou formulário não encontrado.");
@@ -20,15 +16,11 @@ function deferirRelatorio() {
     // Seleciona a tabela e o formulário de relatório pelo ID correto
     const tabelaCoordenador = document.getElementById("tableCoordenador");
     const formularioCoordenador = document.getElementById("formularioCoordenador");
-    const tabelaProfessor = document.getElementById("tableProfessor");
-    const tituloProfessor = document.getElementById("tituloProfessor");
-    
+
     // Verifica se ambos os elementos existem antes de tentar exibir ou ocultar
-    if (tabelaCoordenador && formularioCoordenador && tabelaProfessor && tituloProfessor) {
+    if (tabelaCoordenador && formularioCoordenador) {
         tabelaCoordenador.style.display = "none";   // Esconde a tabela de inscrições
         formularioCoordenador.style.display = "block";   // Exibe o formulário de edição
-        tabelaProfessor.style.display = "none";   // Esconde 
-        tituloProfessor.style.display = "none"; // Esconde 
     } else {
         console.error("Erro: Elemento de tabela ou formulário não encontrado.");
     }
@@ -39,9 +31,9 @@ function editarInscricao() {
     const tabelaInscricoes = document.getElementById("tableInscricao");
     const formularioEditar = document.getElementById("formulario-editar");
     const tituloInscricao = document.getElementById("tituloInscricao");
-    
+
     // Verifica se ambos os elementos existem antes de tentar exibir ou ocultar
-    if (tabelaInscricoes && formularioEditar && tituloInscricao ) {
+    if (tabelaInscricoes && formularioEditar && tituloInscricao) {
         tabelaInscricoes.style.display = "none";   // Esconde a tabela de inscrições
         formularioEditar.style.display = "block";   // Exibe o formulário de edição
         tituloInscricao.style.display = "none";
@@ -67,37 +59,69 @@ document.addEventListener("click", function (event) {
 
 // Função para abrir o modal
 function verJustificativa() {
+
+    document.body.classList.add('modal-active');
+
     // Cria o elemento de overlay e modal
     const modalOverlay = document.createElement('div');
     modalOverlay.classList.add('modal-overlay');
-    
+
     const modal = document.createElement('div');
     modal.classList.add('modal');
-  
+
     // HTML do conteúdo do modal
     modal.innerHTML = `
       <label>Justificativa:</label>
       <p>Coordenador ainda não visualizou sua inscrição.</p>
       <span class="modal-close" onclick="fecharModal()">Fechar</span>
     `;
-  
+
     // Adiciona o modal dentro do overlay e exibe na página
     modalOverlay.appendChild(modal);
     document.body.appendChild(modalOverlay);
-  
+
     // Exibe o modal
     modalOverlay.style.display = 'flex';
-  }
-  
-  // Função para fechar o modal
-  function fecharModal() {
+}
+
+// Função para fechar o modal
+function fecharModal() {
     const modalOverlay = document.querySelector('.modal-overlay');
     if (modalOverlay) {
-      modalOverlay.remove();
+        modalOverlay.remove();
     }
-  }
-  
-function liberarCampoCadastro () {
+}
+
+function editarData() {
+
+    document.body.classList.add('modal-active');
+
+    // Cria o elemento de overlay e modal
+    const modalOverlay = document.createElement('div');
+    modalOverlay.classList.add('modal-overlay');
+
+    const modal = document.createElement('div');
+    modal.classList.add('modal');
+
+    // HTML do conteúdo do modal
+    modal.innerHTML = `
+      <label for="cronograma">Data início:</label>
+      <input type="date" id="cronograma" name="cronograma"><br>
+      <br>
+      <label for="cronograma">Data final:</label>
+      <input type="date" id="cronograma" name="cronograma"><br>
+      <span class="modal-close" onclick="fecharModal()">Alterar</span>
+    `;
+
+    // Adiciona o modal dentro do overlay e exibe na página
+    modalOverlay.appendChild(modal);
+    document.body.appendChild(modalOverlay);
+
+    // Exibe o modal
+    modalOverlay.style.display = 'flex';
+}
+
+function liberarCampoCadastro() {
 
     const nome = document.getElementById('professor');
     const email = document.getElementById('email');
@@ -105,7 +129,7 @@ function liberarCampoCadastro () {
     const btnCancelar = document.querySelector('.btn-salvarAlterarCadastro');
     const btnSalvar = document.querySelector('.btn-cacelarAlterarCadastro');
 
-      if (nome.disabled) {
+    if (nome.disabled) {
         // Se estiverem desabilitado
         nome.disabled = false;
         email.disabled = false;
@@ -117,8 +141,8 @@ function liberarCampoCadastro () {
     } else {
         // Se estiverem habilitados cria Alerta
         alert("Cancele ou conclua a operação!");
-    
-    
+
+
     }
 }
 
@@ -127,10 +151,10 @@ function salvarAlteracao() {
     // Aqui você pode adicionar a lógica para salvar as alterações
     alert("Cadastro salvo com sucesso!");
 
-    cancelarAlteracaoCadastro(); 
+    cancelarAlteracaoCadastro();
 }
 
-function cancelarAlteracaoCadastro () {
+function cancelarAlteracaoCadastro() {
     const nome = document.getElementById('professor');
     const email = document.getElementById('email');
     const telefone = document.getElementById('telefone');
@@ -149,20 +173,20 @@ function cancelarAlteracaoCadastro () {
 
 //Tela Cadastrar nova Senha
 
-function liberarFormAlterarSenha () {
-    const formCadastro = document.querySelector ('.form-ajuste');
-    const formSenha = document.querySelector ('.form-AlterarSenha');
+function liberarFormAlterarSenha() {
+    const formCadastro = document.querySelector('.form-ajuste');
+    const formSenha = document.querySelector('.form-AlterarSenha');
 
     formCadastro.style.display = 'none';
     formSenha.style.display = 'block';
 }
 
 function cancelarAlteracao() {
-    const password = document.getElementById ('password');
-    const novaPassword = document.getElementById ('novaPassword');
-    const confirmarPassword = document.getElementById ('confirmarPassword');
-    const formCadastro = document.querySelector ('.form-ajuste');
-    const formSenha = document.querySelector ('.form-AlterarSenha');
+    const password = document.getElementById('password');
+    const novaPassword = document.getElementById('novaPassword');
+    const confirmarPassword = document.getElementById('confirmarPassword');
+    const formCadastro = document.querySelector('.form-ajuste');
+    const formSenha = document.querySelector('.form-AlterarSenha');
 
     password.value = '';
     novaPassword.value = '';

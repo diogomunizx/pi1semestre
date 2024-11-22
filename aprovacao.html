@@ -18,7 +18,7 @@
                 <span>M</span>
                 <div class="dropdown-menu" id="dropdown-menu">
                     <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
-                    <a href="#">Ajustes</a>
+                    <a href="perfil_cadastro.html" onclick="alterarVisualizacaoTelaCadastro()">Ajustes</a>
                 </div>
             </div>
             <div class="institutions">
@@ -35,8 +35,12 @@
 
 
     <nav class="sidebar">
-
-        <a href="index.html">
+        <div class="logo-container">
+            <a href="#">
+                <img src="imagens/logo-horus.png" alt="Logo HORUS">
+            </a>
+        </div>
+        <a class="inicio" href="index.html">
             <img src="imagens/home.png" alt="Início"> <span>Início</span>
         </a>
         <a href="inscricao.html" id="linkInscricao">
@@ -45,8 +49,11 @@
         <a href="aprovacao.html" id="linkAprovacao">
             <img src="imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
         </a>
-        <a href="relatorio.html">
+        <a href="relatorio_prof.html">
             <img src="imagens/relat.png" alt="Relatório"> <span>Relatório</span>
+        </a>
+        <a href="relatorio_coord.html">
+            <img src="imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
         </a>
         <a href="login.html">
             <img src="imagens/logout.png" alt="Logout"> <span>Logout</span>
@@ -67,7 +74,7 @@
                     <td>Quantidade HAE</td>
                     <td>Status</td>
                     <td>Justificativa</td>
-                    <td>Ações</td> 
+                    <td>Ações</td>
                 </tr>
             </thead>
             <tbody>
@@ -334,21 +341,19 @@
 
 
 
+                <div class="status-justificativa-section">
+                    <label for="status">Status:</label>
+                    <select name="status" id="status" required>
+                        <option value="Pendente" selected>Pendente</option>
+                        <option value="Deferido">Deferido</option>
+                        <option value="Indeferido">Indeferido</option>
+                        <option value="Parcial">Parcial</option>
+                    </select><br>
 
-                <h4>Status e Justificativa</h4>
-
-                <label for="status">Status:</label>
-                <select name="status" id="status" required>
-                    <option value="Pendente" selected>Pendente</option>
-                    <option value="Deferido">Deferido</option>
-                    <option value="Indeferido">Indeferido</option>
-                    <option value="Parcial">Parcial</option>
-                </select><br>
-
-                <label for="justificativa">Justificativa:</label>
-                <textarea class="textarea-auto-ajuste" name="justificativa" rows="4"
-                    placeholder="Digite a justificativa..."></textarea><br>
-
+                    <label for="justificativa">Justificativa:</label>
+                    <textarea class="textarea-auto-ajuste" name="justificativa" rows="4"
+                        placeholder="Digite a justificativa..."></textarea><br>
+                </div>
                 <!-- Botões de ação -->
                 <a href="aprovacao.html"><button class="btn-reset" type="button">Cancelar</button></a>
                 <a href="aprovacao.html"><button class="btn-enviar" type="button">Salvar Alterações</button></a>
