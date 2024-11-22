@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilos/style.css">
-    <title>Relatório</title>
+    <link rel="icon" type="image/png" href="imagens/icon-horus.png">
+    <title>HORUS - Relatório</title>
 </head>
 
 <body>
@@ -75,9 +76,9 @@
             <tbody>
                 <tr>
                     <td>001</td>
-                    <td>Marcia Regioli</td>
-                    <td>Estágio DSM</td>
-                    <td>Estágio</td>
+                    <td>Coordenador GE</td>
+                    <td>Estágio GE</td>
+                    <td>Estágio Supervisionado</td>
                     <td>5</td>
                     <td>Pendente</td>
                     <td class="destaque"><img src="imagens/relatorio.png" onclick="prepararRelatorio()"></td>
@@ -88,31 +89,39 @@
             <form class="form-relatorio" action="#" method="POST">
 
                 <label for="professor">Nome:</label>
-                <input type="text" id="professor" name="professor" value="Ana Celia" required><br>
+                <input type="text" id="professor" name="professor" disabled value="Marcia Regiolli" required><br>
                 </td>
                 <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" value="ana@exemplo.com" required><br>
+                <input type="email" id="email" name="email" disabled value="marcia.reggiolli@fatec.sp.gov.br"
+                    required><br>
 
                 <label for="rg">R.G.:</label>
-                <input type="text" id="rg" name="rg" value="123456789" required><br>
+                <input type="text" id="rg" name="rg" value="123456" required><br>
 
                 <label for="matricula">Matrícula:</label>
-                <input type="text" id="matricula" name="matricula" value="12345" required><br>
+                <input type="text" id="matricula" name="matricula" value="654321" required><br>
 
                 <label for="titulo_projeto">Título do projeto:</label>
-                <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio DSM" required><br>
+                <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio GE" required><br>
 
-                <label for="relatorio">Descrição das atividades:</label>
-                <textarea class="textarea-auto-ajuste" name="relatorio" rows="4"
-                    placeholder="Digite as atividades realizadas..."></textarea><br>
+                <div class="status-justificativa-section">
+                    <label for="relatorio">Descrição das atividades:</label>
+                    <textarea class="textarea-auto-ajuste" name="relatorio" rows="4"
+                        placeholder="Digite as atividades realizadas..."></textarea><br>
 
-                <label for="inicio_projeto">Data envio:</label>
-                <input type="date" id="envio_relatorio" name="envio_relatorio"><br>
-
+                    <label for="inicio_projeto">Data envio:</label>
+                    <input type="date" id="envio_relatorio" name="envio_relatorio"><br>
+                </div>
                 <!-- Botões de ação -->
-                <a href="relatorio_prof.html"><button class="btn-reset" type="button">Cancelar</button></a>
-                <a href="relatorio_prof.html"><button class="btn-enviar" type="button">Enviar</button></a>
-
+                <div class="button-container">
+                    <div class="button-group-left">
+                        <a href="relatorio_prof.html"><button class="btn-cancelar" type="button">Cancelar</button></a>
+                        <button class="btn-reset" type="reset">Limpar</button>
+                    </div>
+                    <div class="button-group-right">
+                        <a href="relatorio_prof.html"><button class="btn-enviar" type="button">Enviar</button></a>
+                    </div>
+                </div>
             </form>
 
         </div>

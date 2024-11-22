@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilos/style.css">
-    <title>Relatórios</title>
+    <link rel="icon" type="image/png" href="imagens/icon-horus.png">
+    <title>HORUS - Relatórios</title>
 </head>
 
 <body>
@@ -73,7 +74,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>001</td>
+                    <td>005</td>
                     <td>Ana Celia</td>
                     <td>Estágio DSM</td>
                     <td>Estágio</td>
@@ -88,34 +89,33 @@
             <form class="form-relatorio" action="#" method="POST">
 
                 <label for="professor">Nome:</label>
-                <input type="text" id="professor" name="professor" value="Ana Celia" required><br>
+                <input type="text" id="professor" name="professor" disabled value="Ana Celia" required><br>
                 </td>
                 <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" value="ana@exemplo.com" required><br>
+                <input type="email" id="email" name="email" disabled value="ana.portes@fatec.sp.gov.br" required><br>
 
                 <label for="rg">R.G.:</label>
-                <input type="text" id="rg" name="rg" value="123456789" required><br>
+                <input type="text" id="rg" name="rg" disabled value="987654" required><br>
 
                 <label for="matricula">Matrícula:</label>
-                <input type="text" id="matricula" name="matricula" value="12345" required><br>
+                <input type="text" id="matricula" name="matricula" disabled value="456789" required><br>
 
                 <label for="titulo_projeto">Título do projeto:</label>
-                <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio DSM" required><br>
+                <input type="text" id="titulo_projeto" name="titulo_projeto" disabled value="Estágio DSM" required><br>
 
                 <label for="relatorio">Descrição das atividades:</label>
-                <textarea class="textarea-auto-ajuste" name="relatorio" rows="4"
-                    placeholder="Digite as atividades realizadas..."></textarea><br>
+                <textarea class="textarea-auto-ajuste" name="relatorio"
+                    rows="4">Foi realizado.... alunos entregaram...</textarea><br>
 
                 <label for="inicio_projeto">Data envio:</label>
-                <input type="date" id="envio_relatorio" name="envio_relatorio"><br>
+                <input type="date" id="envio_relatorio" name="envio_relatorio" disabled value="2024-06-27"><br>
                 <br>
 
                 <div class="status-justificativa-section">
                     <label for="status">Status:</label>
                     <select name="status" id="status" required>
-                        <option value="Pendente" selected>Pendente</option>
+                        <option value="Pendente" disabled selected>Pendente</option>
                         <option value="Deferido">Deferido</option>
-                        <option value="Indeferido">Indeferido</option>
                         <option value="Correcao">Fazer correção</option>
                     </select><br>
 
@@ -124,10 +124,15 @@
                         placeholder="Digite a justificativa..."></textarea><br>
                 </div>
                 <!-- Botões de ação -->
-
-                <a href="relatorio_coord.html"><button class="btn-reset" type="button">Cancelar</button></a>
-                <a href="relatorio_coord.html"><button class="btn-enviar" type="button">Salvar Alterações</button></a>
-
+                <div class="button-container">
+                    <div class="button-group-left">
+                        <a href="relatorio_coord.html"><button class="btn-cancelar" type="button">Cancelar</button></a>
+                        <button class="btn-reset" type="reset">Limpar</button>
+                    </div>
+                    <div class="button-group-right">
+                        <a href="relatorio_coord.html"><button class="btn-enviar" type="button">Salvar</button></a>
+                    </div>
+                </div>
             </form>
         </div>
 

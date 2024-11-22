@@ -295,13 +295,13 @@ main {
 
 .textarea-auto-ajuste {
     width: 100%;
-    min-height: 40px; /* Altura mínima */
+    min-height: 50px; 
     padding: 8px;
+    font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    resize: none; /* Remove o "risquinho" de redimensionamento */
-    overflow: hidden;
-    font-size: 16px;
+    resize: none;
+    overflow-y: hidden; 
 }
 
 .form-obs{
@@ -324,36 +324,71 @@ main {
 }
 
 
-/* Botões de ação específicos da página de inscrição */
-.btn-reset,
-.btn-enviar {
-    padding: 10px 20px;
+
+/* Contêiner de botões */
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Divide os grupos entre esquerda e direita */
+    align-items: center;
     margin-top: 20px;
+    width: 100%; /* Garante que ocupe toda a largura */
+}
+
+/* Grupo de botões alinhados à esquerda */
+.button-group-left {
+    display: flex;
+    gap: 10px; /* Espaçamento entre os botões "Cancelar" e "Limpar" */
+}
+
+/* Grupo de botões alinhados à direita */
+.button-group-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Botões de ação */
+.btn-reset,
+.btn-enviar,
+.btn-cancelar {
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
+/* Botão Reset (Limpar) */
 .btn-reset {
     background-color: #ccc;
     color: #333;
 }
 
 .btn-reset:hover {
-    background-color: #969292
+    background-color: #969292;
 }
 
+/* Botão Enviar (Salvar) */
 .btn-enviar {
     background-color: #0b8948;
     color: #fff;
-    margin-left: 10px;
 }
 
 .btn-enviar:hover {
     background-color: #044021;
 }
+
+/* Botão Cancelar */
+.btn-cancelar {
+    background-color: #d64d4d;
+    color: #fff;
+}
+
+.btn-cancelar:hover {
+    background-color: #a23232;
+}
+
 
 /*pagina inscrição tbl professor e btn nova inscricao*/
 /* Estilos para a Tabela */
@@ -606,6 +641,12 @@ main {
     outline: none;
     border-color: #ae0c0d; /* Destaque ao focar */
     box-shadow: 0 0 5px rgba(174, 12, 13, 0.5);
+}
+
+.input-dimmed {
+    background-color: #f0f0f0; /* Cor de fundo mais clara */
+    color: #999; /* Cor do texto mais clara */
+    border-color: #ccc; /* Cor da borda mais clara */
 }
 
 

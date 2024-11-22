@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilos/style.css">
-    <title>Inscrição</title>
+    <link rel="icon" type="image/png" href="imagens/icon-horus.png">
+    <title>HORUS - Inscrição</title>
 </head>
 
 <body>
@@ -66,33 +67,47 @@
             <form class="form-inscricao" action="#" method="POST">
                 <h4>Informações docente</h4>
                 <label for="professor">Nome:</label>
-                <input type="text" id="professor" name="professor" required><br>
+                <input type="text" id="professor" name="professor" disabled value="Marcia Regioli" required><br>
 
                 <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" required><br>
+                <input type="email" id="email" name="email" disabled value="marcia.reggiolli@fatec.sp.gov.br"
+                    required><br>
 
                 <label for="rg">R.G.:</label>
-                <input type="text" id="rg" name="rg" required>
+                <input type="text" id="rg" name="rg" disabled value="123456" required>
 
                 <label for="matricula">Matrícula:</label>
-                <input type="text" id="matricula" name="matricula" required>
+                <input type="text" id="matricula" name="matricula" disabled value="654321" required>
                 <br>
                 <br>
                 <h4>Tipo de HAE que está solicitando:</h4>
-                <input type="text" id="tipohae" name="tipohae" required>
+                <br>
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>Selecione o tipo de HAE</option>
+                    <option value="estudoss">Estudos e Projetos</option>
+                    <option value="servicos">Extensão de serviços à comunidade</option>
+                    <option value="administracao">Administração acadêmica</option>
+                    <option value="plantao">Plantão didático</option>
+                    <option value="estagio">Estágio Supervisionado</option>
+                    <option value="tcc">Orientação de Trabalho de Graduação</option>
+                    <option value="projeto-cientifico">Projeto de iniciação científica</option>
+                    <option value="revista">Revista Prospectus</option>
+                    <option value="divulgacao">Divulgação Cursos</option>
+                    <option value="enade">ENADE</option>
+                </select>
                 <br>
                 <br>
                 <h4>Quantidade de H.A.E. para Trabalho de Graduação:</h4>
                 <br>
                 <div class="hae-projeto-linha">
                     <label for="gti">CST em GTI:</label>
-                    <input type="number" id="gti" name="hae_trabalho_gti" min="0" max="7">
+                    <input type="number" id="gti" name="hae_trabalho_gti" min="0" max="12">
 
                     <label for="gpi">CST em GPI:</label>
-                    <input type="number" id="gpi" name="hae_trabalho_gpi" min="0" max="7">
+                    <input type="number" id="gpi" name="hae_trabalho_gpi" min="0" max="12">
 
                     <label for="ge">CST em GE:</label>
-                    <input type="number" id="ge" name="hae_trabalho_ge" min="0" max="7">
+                    <input type="number" id="ge" name="hae_trabalho_ge" min="0" max="12">
                 </div>
                 <br>
                 <br>
@@ -100,27 +115,27 @@
                 <br>
                 <div class="hae-projeto-linha">
                     <label for="gti_estagio">CST em GTI:</label>
-                    <input type="number" id="gti_estagio" name="hae_estagio_gti" min="0" max="7">
+                    <input type="number" id="gti_estagio" name="hae_estagio_gti" min="0" max="12">
 
                     <label for="gpi_estagio">CST em GPI:</label>
-                    <input type="number" id="gpi_estagio" name="hae_estagio_gpi" min="0" max="7">
+                    <input type="number" id="gpi_estagio" name="hae_estagio_gpi" min="0" max="12">
 
                     <label for="ge_estagio">CST em GE:</label>
-                    <input type="number" id="ge_estagio" name="hae_estagio_ge" min="0" max="7">
+                    <input type="number" id="ge_estagio" name="hae_estagio_ge" min="0" max="12">
 
                     <label for="dsm_estagio">CST em DSM:</label>
-                    <input type="number" id="dsm_estagio" name="hae_estagio_dsm" min="0" max="7"><br>
+                    <input type="number" id="dsm_estagio" name="hae_estagio_dsm" min="0" max="12"><br>
                 </div>
                 <br>
                 <h4>Informações do projeto</h4>
                 <label for="titulo_projeto">Título do projeto:</label>
-                <input type="text" id="titulo_projeto" name="titulo_projeto" required><br>
+                <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio GE" required><br>
 
                 <label for="inicio_projeto">Início:</label>
-                <input type="date" id="inicio_projeto" name="inicio_projeto"><br>
+                <input type="date" id="inicio_projeto" name="inicio_projeto" value="2024-02-24"><br>
 
                 <label for="termino_projeto">Término previsto:</label>
-                <input type="date" id="termino_projeto" name="termino_projeto"><br>
+                <input type="date" id="termino_projeto" name="termino_projeto" value="2024-06-20"><br>
                 <br>
                 <br>
 
@@ -139,21 +154,21 @@
                         <td><input type="checkbox" name="segunda_matutino"></td>
                         <td><input type="checkbox" name="segunda_vespertino"></td>
                         <td><input type="checkbox" name="segunda_noturno"></td>
-                        <td><input type="checkbox" name="segunda_itapira"></td>
+                        <td><input type="checkbox" name="segunda_itapira" checked></td>
                     </tr>
                     <tr>
                         <td>Terça-feira</td>
                         <td><input type="checkbox" name="terca_matutino"></td>
                         <td><input type="checkbox" name="terca_vespertino"></td>
                         <td><input type="checkbox" name="terca_noturno"></td>
-                        <td><input type="checkbox" name="terca_itapira"></td>
+                        <td><input type="checkbox" name="terca_itapira" checked></td>
                     </tr>
                     <tr>
                         <td>Quarta-feira</td>
                         <td><input type="checkbox" name="quarta_matutino"></td>
                         <td><input type="checkbox" name="quarta_vespertino"></td>
                         <td><input type="checkbox" name="quarta_noturno"></td>
-                        <td><input type="checkbox" name="quarta_itapira"></td>
+                        <td><input type="checkbox" name="quarta_itapira" checked></td>
                     </tr>
                     <tr>
                         <td>Quinta-feira</td>
@@ -167,7 +182,7 @@
                         <td><input type="checkbox" name="sexta_matutino"></td>
                         <td><input type="checkbox" name="sexta_vespertino"></td>
                         <td><input type="checkbox" name="sexta_noturno"></td>
-                        <td><input type="checkbox" name="sexta_itapira"></td>
+                        <td><input type="checkbox" name="sexta_itapira" checked></td>
                     </tr>
                     <tr>
                         <td>Sábado</td>
@@ -223,43 +238,55 @@
                         <th colspan="2">1 – METAS RELACIONADAS AO PROJETO</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Definir as metas"></textarea></td>
+                        <td colspan="2">
+                            <textarea id="metas" name="metas"
+                                class="textarea-auto-ajuste">Garantir que todos os alunos do curso de Gestão Empresarial sejam orientados e supervisionados para a realização do estágio obrigatório.</textarea>
+                        </td>
                     </tr>
                     <tr>
                         <th colspan="2">2 - OBJETIVOS DO PROJETO – DETALHAMENTO</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Definir os objetivos"></textarea></td>
+                        <td colspan="2">
+                            <textarea id="objetivos" name="objetivos"
+                                class="textarea-auto-ajuste">Criar parcerias com empresas, orientar currículos, acompanhar inscrições e monitorar desempenho dos alunos.</textarea>
+                        </td>
                     </tr>
                     <tr>
                         <th colspan="2">3 - JUSTIFICATIVAS DO PROJETO – DETALHAMENTO</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Justificar o projeto"></textarea></td>
+                        <td colspan="2">
+                            <textarea id="justificativas" name="justificativas"
+                                class="textarea-auto-ajuste">Necessidade de apoio para alunos encontrarem estágios e atenderem às exigências acadêmicas.</textarea>
+                        </td>
                     </tr>
                     <tr>
                         <th colspan="2">4 - RECURSOS MATERIAIS E HUMANOS - DETALHAMENTO</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Definir os recursos e materiais necessários"></textarea></td>
+                        <td colspan="2">
+                            <textarea id="recursos" name="recursos"
+                                class="textarea-auto-ajuste">Professores, equipe administrativa, computadores, acesso à internet e uma sala para orientação.</textarea>
+                        </td>
                     </tr>
                     <tr>
                         <th colspan="2">5 – RESULTADO ESPERADO – PREVISÃO</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Previsão do término e objetivo final"></textarea></td>
+                        <td colspan="2">
+                            <textarea id="resultados" name="resultados"
+                                class="textarea-auto-ajuste">100% dos alunos alocados em estágios com documentação regularizada.</textarea>
+                        </td>
                     </tr>
                     <tr>
                         <th colspan="2">6 – METODOLOGIA</th>
                     </tr>
                     <tr>
-                        <td colspan="2"><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Definir a metodologia"></textarea></td>
+                        <td colspan="2">
+                            <textarea id="metodologia" name="metodologia"
+                                class="textarea-auto-ajuste">Contato com empresas, workshops, suporte para entrevistas e acompanhamento do estágio.</textarea>
+                        </td>
                     </tr>
                     <tr>
                         <th colspan="2">7 - CRONOGRAMA DE EXECUÇÃO DAS ATIVIDADES</th>
@@ -269,37 +296,49 @@
                         <th>Mês</th>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Descrição atividades"></textarea></td>
+                        <td>
+                            <textarea id="descricao" name="descricao"
+                                class="textarea-auto-ajuste">Contato com empresas para levantamento de vagas disponíveis.</textarea>
+                        </td>
                         <td>Mês 1</td>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Descrição atividades"></textarea></td>
+                        <td>
+                            <textarea id="descricao" name="descricao"
+                                class="textarea-auto-ajuste">Workshops de orientação e preparação de currículos para os alunos.</textarea>
+                        </td>
                         <td>Mês 2</td>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Descrição atividades"></textarea></td>
+                        <td>
+                            <textarea id="descricao" name="descricao"
+                                class="textarea-auto-ajuste">Candidaturas dos alunos às vagas e acompanhamento do processo seletivo.</textarea>
+                        </td>
                         <td>Mês 3</td>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Descrição atividades"></textarea></td>
+                        <td>
+                            <textarea id="descricao" name="descricao"
+                                class="textarea-auto-ajuste">Início dos estágios supervisionados e entrega da documentação inicial.</textarea>
+                        </td>
                         <td>Mês 4</td>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Descrição atividades"></textarea></td>
+                        <td>
+                            <textarea id="descricao" name="descricao"
+                                class="textarea-auto-ajuste">Acompanhamento contínuo dos estágios e avaliação intermediária.</textarea>
+                        </td>
                         <td>Mês 5</td>
                     </tr>
                     <tr>
-                        <td><textarea id="descricao" name="descricao" class="textarea-auto-ajuste"
-                                placeholder="Descrição atividades"></textarea></td>
+                        <td>
+                            <textarea id="descricao" name="descricao"
+                                class="textarea-auto-ajuste">Finalização dos estágios e entrega dos relatórios finais.</textarea>
+                        </td>
                         <td>Mês 6</td>
                     </tr>
-
                 </table>
+
                 <div class="form-obs">
                     <h4>Obs.: Observar as exigências de ordem legal:</h4>
                     <br>
@@ -321,8 +360,15 @@
                     </ol>
                 </div>
                 <br>
-                <button class="btn-reset" type="reset">Limpar</button>
-                <a href="inscricao.html"><button class="btn-enviar" type="button">Enviar</button></a>
+                <div class="button-container">
+                    <div class="button-group-left">
+                        <a href="inscricao.html"><button class="btn-cancelar" type="button">Cancelar</button></a>
+                        <button class="btn-reset" type="reset">Limpar</button>
+                    </div>
+                    <div class="button-group-right">
+                        <a href="inscricao.html"><button class="btn-enviar" type="button">Enviar</button></a>
+                    </div>
+                </div>
             </form>
         </div>
     </main>

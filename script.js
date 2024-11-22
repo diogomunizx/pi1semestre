@@ -196,3 +196,45 @@ function cancelarAlteracao() {
     formSenha.style.display = 'none';
 
 }
+
+// Seleciona todos os inputs dentro das divs com classe 'hae-projeto-linha'
+const haeInputs = document.querySelectorAll('.hae-projeto-linha input');
+
+// Adiciona um evento a cada input
+haeInputs.forEach(input => {
+    input.addEventListener('input', () => {
+        // Limpa os outros inputs e adiciona a classe 'input-dimmed' neles
+        haeInputs.forEach(otherInput => {
+            if (otherInput !== input) {
+                otherInput.value = ''; // Limpa o valor
+                otherInput.classList.add('input-dimmed'); // Aplica o estilo de destaque claro
+            } else {
+                otherInput.classList.remove('input-dimmed'); // Remove o estilo do input preenchido
+            }
+        });
+
+        // Garante que o valor do input não ultrapasse o máximo permitido
+        if (parseInt(input.value, 10) > 12) {
+            input.value = 12; // Ajusta automaticamente para 12 se ultrapassar
+        }
+    });
+
+    // Remove o estilo ao focar novamente no input
+    input.addEventListener('focus', () => {
+        haeInputs.forEach(otherInput => {
+            otherInput.classList.remove('input-dimmed');
+        });
+    });
+});
+
+// Seleciona todas as textareas com a classe textarea-auto-ajuste
+const textareas = document.querySelectorAll('.textarea-auto-ajuste');
+
+// Adiciona um evento para ajustar a altura ao digitar
+textareas.forEach(textarea => {
+    textarea.addEventListener('input', () => {
+        textarea.style.height = 'auto'; // Reseta a altura
+        textarea.style.height = textarea.scrollHeight + 'px'; // Ajusta para o conteúdo
+    });
+});
+
