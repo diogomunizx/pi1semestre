@@ -97,35 +97,20 @@
                 </select>
                 <br>
                 <br>
-                <h4>Quantidade de H.A.E. para Trabalho de Graduação:</h4>
+                <h4>Curso</h4>
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>Selecione o curso</option>
+                    <option value="estudoss">Desenvolvimento de Software Multiplataforma</option>
+                    <option value="servicos">Gestão empresarial</option>
+                    <option value="administracao">Gestão Produção Industrial</option>
+                </select>
+                <br>
                 <br>
                 <div class="hae-projeto-linha">
-                    <label for="gti">CST em GTI:</label>
+                    <label for="hae">Quantidade de H.A.E:</label>
                     <input type="number" id="gti" name="hae_trabalho_gti" min="0" max="12">
-
-                    <label for="gpi">CST em GPI:</label>
-                    <input type="number" id="gpi" name="hae_trabalho_gpi" min="0" max="12">
-
-                    <label for="ge">CST em GE:</label>
-                    <input type="number" id="ge" name="hae_trabalho_ge" min="0" max="12">
                 </div>
                 <br>
-                <br>
-                <h4>Quantidade de H.A.E. para Estágio Supervisionado</h4>
-                <br>
-                <div class="hae-projeto-linha">
-                    <label for="gti_estagio">CST em GTI:</label>
-                    <input type="number" id="gti_estagio" name="hae_estagio_gti" min="0" max="12">
-
-                    <label for="gpi_estagio">CST em GPI:</label>
-                    <input type="number" id="gpi_estagio" name="hae_estagio_gpi" min="0" max="12">
-
-                    <label for="ge_estagio">CST em GE:</label>
-                    <input type="number" id="ge_estagio" name="hae_estagio_ge" min="0" max="12">
-
-                    <label for="dsm_estagio">CST em DSM:</label>
-                    <input type="number" id="dsm_estagio" name="hae_estagio_dsm" min="0" max="12"><br>
-                </div>
                 <br>
                 <h4>Informações do projeto</h4>
                 <label for="titulo_projeto">Título do projeto:</label>

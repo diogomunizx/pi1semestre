@@ -119,13 +119,11 @@
                 </select>
                 <br>
                 <br>
-                <h4>Quantidade de H.A.E. para Estágio Supervisionado</h4>
-                <br>
                 <div class="hae-projeto-linha">
-                    <label for="dsm_estagio">CST em DSM:</label>
-                    <input type="number" id="dsm_estagio" name="hae_estagio_dsm" min="0" max="12" disabled
-                        value="6"><br>
+                    <label for="hae">Quantidade de H.A.E:</label>
+                    <input type="number" id="gti" name="hae_trabalho_gti" min="0" max="12" disabled value="6">
                 </div>
+                <br>
                 <br>
                 <h4>Informações do projeto</h4>
                 <label for="titulo_projeto">Título do projeto:</label>
@@ -345,13 +343,18 @@
 
                 <div class="status-justificativa-section">
                     <label for="status">Status:</label>
-                    <select name="status" id="status" required>
+                    <select name="status" id="status" required onchange="verificarParcial()">
                         <option value="Pendente" disabled selected>Pendente</option>
                         <option value="Deferido">Deferido</option>
                         <option value="Indeferido">Indeferido</option>
                         <option value="Parcial">Parcial</option>
                     </select><br>
-
+                    <br>
+                    <div class="hae-projeto-linha" id="hae-quantidade" style="display: none;">
+                        <label for="hae">Quantidade de H.A.E:</label>
+                        <input type="number" id="gti" name="hae_trabalho_gti" min="0" max="12">
+                    </div>
+                    <br>
                     <label for="justificativa">Justificativa:</label>
                     <textarea class="textarea-auto-ajuste" name="justificativa" rows="4"
                         placeholder="Digite a justificativa..."></textarea><br>

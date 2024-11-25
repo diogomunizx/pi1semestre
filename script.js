@@ -4,7 +4,7 @@ function prepararRelatorio() {
     const formularioProfessor = document.getElementById("formularioProfessor");
 
     // Verifica se ambos os elementos existem antes de tentar exibir ou ocultar
-    if (tabelaProfessor &&  formularioProfessor ) {
+    if (tabelaProfessor && formularioProfessor) {
         tabelaProfessor.style.display = "none";   // Esconde 
         formularioProfessor.style.display = "block";   // Exibe o formulário
     } else {
@@ -237,4 +237,12 @@ textareas.forEach(textarea => {
         textarea.style.height = textarea.scrollHeight + 'px'; // Ajusta para o conteúdo
     });
 });
+
+function verificarParcial() {
+    const status = document.getElementById("status").value;
+    const haeQuantidade = document.getElementById("hae-quantidade");
+
+    // Exibe o campo de H.A.E. apenas se a opção "Parcial" for selecionada
+    haeQuantidade.style.display = (status === "Parcial") ? "block" : "none";
+}
 
