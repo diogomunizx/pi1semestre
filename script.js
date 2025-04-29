@@ -122,57 +122,64 @@ function editarData() {
 }
 
 function liberarCampoCadastro() {
-
     const nome = document.getElementById('professor');
     const email = document.getElementById('email');
     const telefone = document.getElementById('telefone');
-    const btnCancelar = document.querySelector('.btn-salvarAlterarCadastro');
-    const btnSalvar = document.querySelector('.btn-cacelarAlterarCadastro');
+    const btnSalvar = document.querySelector('.btn-salvarAlterarCadastro');
+    const btnCancelar = document.querySelector('.btn-cancelarAlterarCadastro');
+    const campoSenha = document.getElementById('campo-senha');
+    const botoesAlterar = document.querySelector('.btns-Alterar');
 
     if (nome.disabled) {
-        // Se estiverem desabilitado
         nome.disabled = false;
         email.disabled = false;
         telefone.disabled = false;
-
-        btnCancelar.style.display = 'inline-block';
+        campoSenha.style.display = 'block';
         btnSalvar.style.display = 'inline-block';
-
+        btnCancelar.style.display = 'inline-block';
+        botoesAlterar.style.display = 'none';
     } else {
-        // Se estiverem habilitados cria Alerta
-        alert("Cancele ou conclua a operação!");
-
-
+        alert("Cancele ou conclua a operação atual antes de alterar novamente.");
     }
 }
 
-// Função para o botão de Salvar
+// Função para salvar alterações de cadastro
 function salvarAlteracao() {
-    // Aqui você pode adicionar a lógica para salvar as alterações
-    alert("Cadastro salvo com sucesso!");
+    const senha = document.getElementById('senha').value;
 
+    if (senha.trim() === "") {
+        alert("Por favor, informe sua senha para confirmar as alterações.");
+        return;
+    }
+
+    // Aqui você enviaria as alterações para o backend
+
+    alert("Cadastro alterado com sucesso!");
+    document.getElementById('senha').value = '';
     cancelarAlteracaoCadastro();
 }
 
+// Função para cancelar alteração do cadastro
 function cancelarAlteracaoCadastro() {
     const nome = document.getElementById('professor');
     const email = document.getElementById('email');
     const telefone = document.getElementById('telefone');
-    const btnCancelar = document.querySelector('.btn-salvarAlterarCadastro');
-    const btnSalvar = document.querySelector('.btn-cacelarAlterarCadastro');
-    // Desabilitar os campos novamente
+    const btnSalvar = document.querySelector('.btn-salvarAlterarCadastro');
+    const btnCancelar = document.querySelector('.btn-cancelarAlterarCadastro');
+    const campoSenha = document.getElementById('campo-senha');
+    const botoesAlterar = document.querySelector('.btns-Alterar');
+
     nome.disabled = true;
     email.disabled = true;
     telefone.disabled = true;
-
-    // Esconder o botão de cancelar
-    btnCancelar.style.display = 'none';
+    campoSenha.style.display = 'none';
     btnSalvar.style.display = 'none';
+    btnCancelar.style.display = 'none';
+    botoesAlterar.style.display = 'block';
+    document.getElementById('senha').value = '';
 }
 
-
-//Tela Cadastrar nova Senha
-
+// Função para abrir o formulário de alteração de senha
 function liberarFormAlterarSenha() {
     const formCadastro = document.querySelector('.form-ajuste');
     const formSenha = document.querySelector('.form-AlterarSenha');
@@ -181,7 +188,30 @@ function liberarFormAlterarSenha() {
     formSenha.style.display = 'block';
 }
 
-function cancelarAlteracao() {
+// Função para salvar alteração de senha
+function salvarAlteracaoSenha() {
+    const password = document.getElementById('password').value;
+    const novaPassword = document.getElementById('novaPassword').value;
+    const confirmarPassword = document.getElementById('confirmarPassword').value;
+
+    if (!password || !novaPassword || !confirmarPassword) {
+        alert("Preencha todos os campos de senha.");
+        return;
+    }
+
+    if (novaPassword !== confirmarPassword) {
+        alert("A nova senha e a confirmação não coincidem.");
+        return;
+    }
+
+    // Aqui você enviaria as senhas para o backend para validação e atualização
+
+    alert("Senha alterada com sucesso!");
+    cancelarAlteracaoSenha();
+}
+
+// Função para cancelar alteração de senha
+function cancelarAlteracaoSenha() {
     const password = document.getElementById('password');
     const novaPassword = document.getElementById('novaPassword');
     const confirmarPassword = document.getElementById('confirmarPassword');
@@ -194,8 +224,8 @@ function cancelarAlteracao() {
 
     formCadastro.style.display = 'block';
     formSenha.style.display = 'none';
-
 }
+
 
 // Seleciona todos os inputs dentro das divs com classe 'hae-projeto-linha'
 const haeInputs = document.querySelectorAll('.hae-projeto-linha input');

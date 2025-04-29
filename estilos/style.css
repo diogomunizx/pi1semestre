@@ -228,7 +228,29 @@ main {
     overflow-y: auto;
 }
 
-
+/* Estilos para containet de tela de Cadastro */
+  .containerCadastro{
+    padding: 20px;
+    background-color: #fff; 
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 70%; 
+    margin: 0px auto; 
+    min-height: 70vh;
+    margin-top: 40px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    text-align: center;
+    padding-left: 40px;
+    padding-right: 40px;
+    label{
+        display: block;
+        margin: 10px 0 5px;
+        color: #000000;
+        text-align: left; 
+    }  
+  }
 
 /* Estilo para labels e inputs dentro do formulário de inscrição */
 .form-inscricao label{
@@ -247,6 +269,7 @@ main {
 .form-inscricao input[type="text"],
 .form-ajuste    input[type="text"],
 .form-relatorio input[type="text"],
+.form-AlterarSenha input[type="text"],
 .form-inscricao input[type="email"],
 .form-ajuste    input[type="email"],
 .form-relatorio input[type="email"],
@@ -255,6 +278,7 @@ main {
 .form-inscricao input[type="date"],
 .form-relatorio input[type="date"],
 .form-AlterarSenha input[type="password"],
+.form-ajuste    input[type="password"],
 .form-inscricao select,
 .form-relatorio select {
     width: 100%;
@@ -512,29 +536,7 @@ main {
 }
 
   
-/* Estilos para containet de tela de Cadastro */
-  .containerCadastro{
-    background-color: #ffffff;
-    text-align: center;
-    box-shadow: 10px 10px 25px #b2bec3,
-                -10px -10px 25px #ffffff;
-    
-    width: 60vh;
-    height: auto;
-    margin: auto;
-    align-items: center;
-    padding-left: 40px;
-    padding-right: 40px;
-    label{
-        display: block;
-        margin: 10px 0 5px;
-        color: #000000;
-        text-align: left;
-        
-    }
-    
-  }
-    
+
 .header-Cadastro ,
 .header-AlterarSenha{ 
     padding-top: 13px;
@@ -542,6 +544,7 @@ main {
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
+    
 }
 
 .btns-Alterar{
@@ -549,10 +552,10 @@ main {
 }
 /* Botões de ação tela de Cadastro do usuario */
 .btn-salvarAlterarCadastro ,
-.btn-cacelarAlterarCadastro ,
+.btn-cancelarAlterarCadastro ,
 .btn-salvarAlterarSenha,
-.btn-cancelarAlterarSenha,
-.btn-fecharCadastro {
+.btn-cancelarAlterarSenha
+ {
     padding: 10px 20px;
     border: none;
     margin-bottom: 13px;
@@ -569,7 +572,7 @@ main {
     background-color: #008080;
     color:#e6e6e6 ;
 }
-.btn-cacelarAlterarCadastro,
+.btn-cancelarAlterarCadastro,
 .btn-cancelarAlterarSenha{
     background-color: #ca3535;
     color:#e6e6e6 ;
@@ -577,8 +580,8 @@ main {
 .btn-salvarAlterarCadastro:active,
 .btn-salvarAlterarSenha:active,
 .btn-cacelarAlterarCadastro:active,
-.btn-cancelarAlterarSenha:active,
-.btn-fecharCadastro:active {
+.btn-cancelarAlterarSenha:active
+{
     background-color: #7f7f7f; /* Cor cinza */
     color: #333; /* Cor do texto pode ser ajustada para contrastar */
 }
@@ -648,5 +651,4 @@ main {
     color: #999; /* Cor do texto mais clara */
     border-color: #ccc; /* Cor da borda mais clara */
 }
-
 
