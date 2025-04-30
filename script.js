@@ -276,3 +276,18 @@ function verificarParcial() {
     haeQuantidade.style.display = (status === "Parcial") ? "block" : "none";
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    flatpickr(".hora-inteira", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+        minTime: "07:00",
+        maxTime: "22:00",
+        minuteIncrement: 60,
+        onChange: function(selectedDates, dateStr, instance) {
+            // Dá um pequeno tempo (400ms) antes de fechar
+            setTimeout(() => instance.close(), 3000);
+        }
+    });
+});

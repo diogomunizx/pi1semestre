@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilos/style.css">
+    //
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="icon" type="image/png" href="imagens/icon-horus.png">
     <title>HORUS - Inscrição</title>
 </head>
@@ -124,96 +127,43 @@
                 <br>
                 <br>
 
-                <h4>Horário das Aulas Docente</h4>
-                <br>
-                <table class="tabela-inscricao" border="1">
-                    <tr>
-                        <th>Dia da Semana</th>
-                        <th>Em Outra Fatec Matutino</th>
-                        <th>Em Outra Fatec Vespertino</th>
-                        <th>Em Outra Fatec Noturno</th>
-                        <th>Fatec de Itapira "Ogari de Castro Pacheco"</th>
-                    </tr>
-                    <tr>
-                        <td>Segunda-feira</td>
-                        <td><input type="checkbox" name="segunda_matutino"></td>
-                        <td><input type="checkbox" name="segunda_vespertino"></td>
-                        <td><input type="checkbox" name="segunda_noturno"></td>
-                        <td><input type="checkbox" name="segunda_itapira" checked></td>
-                    </tr>
-                    <tr>
-                        <td>Terça-feira</td>
-                        <td><input type="checkbox" name="terca_matutino"></td>
-                        <td><input type="checkbox" name="terca_vespertino"></td>
-                        <td><input type="checkbox" name="terca_noturno"></td>
-                        <td><input type="checkbox" name="terca_itapira" checked></td>
-                    </tr>
-                    <tr>
-                        <td>Quarta-feira</td>
-                        <td><input type="checkbox" name="quarta_matutino"></td>
-                        <td><input type="checkbox" name="quarta_vespertino"></td>
-                        <td><input type="checkbox" name="quarta_noturno"></td>
-                        <td><input type="checkbox" name="quarta_itapira" checked></td>
-                    </tr>
-                    <tr>
-                        <td>Quinta-feira</td>
-                        <td><input type="checkbox" name="quinta_matutino"></td>
-                        <td><input type="checkbox" name="quinta_vespertino"></td>
-                        <td><input type="checkbox" name="quinta_noturno"></td>
-                        <td><input type="checkbox" name="quinta_itapira"></td>
-                    </tr>
-                    <tr>
-                        <td>Sexta-feira</td>
-                        <td><input type="checkbox" name="sexta_matutino"></td>
-                        <td><input type="checkbox" name="sexta_vespertino"></td>
-                        <td><input type="checkbox" name="sexta_noturno"></td>
-                        <td><input type="checkbox" name="sexta_itapira" checked></td>
-                    </tr>
-                    <tr>
-                        <td>Sábado</td>
-                        <td><input type="checkbox" name="sabado_matutino"></td>
-                        <td><input type="checkbox" name="sabado_vespertino"></td>
-                        <td><input type="checkbox" name="sabado_noturno"></td>
-                        <td><input type="checkbox" name="sabado_itapira"></td>
-                    </tr>
-                </table>
-                <br>
-
                 <h4>Horário de Execução do Projeto</h4>
                 <br>
-                <p>
-                    Obs.: Os horários propostos para execução das atividades não podem ser fracionados (Ex: das 13h15min
-                    às 14h15min);
-                </p>
-                <br>
                 <table class="tabela-inscricao" border="1">
                     <tr>
                         <th>Dia da Semana</th>
-                        <th>Horário(s) de Trabalho</th>
+                        <th>Horário Ínicio</th>
+                        <th>Horário Final</th>
                     </tr>
                     <tr>
                         <td>Segunda-feira</td>
-                        <td><input type="text" name="horario_sexecucao_segunda" placeholder="Ex: 15:00 às 19:00"></td>
+                        <td><input type="time" name="horario_inicio_segunda" class="hora-inteira"></td>
+                        <td><input type="time" name="horario_final_segunda" class="hora-inteira"></td>
                     </tr>
                     <tr>
                         <td>Terça-feira</td>
-                        <td><input type="text" name="horario_sexecucao_terca" placeholder="Ex: 14:00 às 17:00"></td>
+                        <td><input type="time" name="horario_inicio_terca" class="hora-inteira"></td>
+                        <td><input type="time" name="horario_final_terca" class="hora-inteira"></td>
                     </tr>
                     <tr>
                         <td>Quarta-feira</td>
-                        <td><input type="text" name="horario_sexecucao_quarta" placeholder="Ex: 14:00 às 17:00"></td>
+                        <td><input type="time" name="horario_inicio_quarta" class="hora-inteira"></td>
+                        <td><input type="time" name="horario_final_quarta" class="hora-inteira"></td>
                     </tr>
                     <tr>
                         <td>Quinta-feira</td>
-                        <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
+                        <td><input type="time" name="horario_inicio_quinta" class="hora-inteira"></td>
+                        <td><input type="time" name="horario_final_quinta" class="hora-inteira"></td>
                     </tr>
                     <tr>
                         <td>Sexta-feira</td>
-                        <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
+                        <td><input type="time" name="horario_inicio_sexta" class="hora-inteira"></td>
+                        <td><input type="time" name="horario_final_sexta" class="hora-inteira"></td>
                     </tr>
                     <tr>
                         <td>Sábado</td>
-                        <td><input type="text" name="horario_sexecucao_quinta" placeholder="Ex: 13:00 às 18:00"></td>
+                        <td><input type="time" name="horario_inicio_sabado" class="hora-inteira"></td>
+                        <td><input type="time" name="horario_final_sabado" class="hora-inteira"></td>
                     </tr>
                 </table>
 
