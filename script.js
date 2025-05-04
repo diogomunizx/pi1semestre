@@ -291,3 +291,57 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+// Function Imprimir
+function imprimirInscricao() {
+    const linha = event.target.closest("tr");
+    const colunas = linha.querySelectorAll("td");
+
+    const dados = `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+            <h2 style="text-align: center;">Resumo da Inscrição</h2>
+            <p><strong>Inscrição:</strong> ${colunas[0].innerText}</p>
+            <p><strong>Professor/Coordenador:</strong> ${colunas[1].innerText}</p>
+            <p><strong>Projeto:</strong> ${colunas[2].innerText}</p>
+            <p><strong>Tipo HAE:</strong> ${colunas[3].innerText}</p>
+            <p><strong>Quantidade HAE:</strong> ${colunas[4].innerText}</p>
+            <p><strong>Status:</strong> ${colunas[5].innerText}</p>
+        </div>
+    `;
+
+    const janela = window.open('', '_blank', 'width=800,height=600');
+    janela.document.write(`
+        <html>
+            <head>
+                <title>Impressão de Inscrição</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 40px;
+                        text-align: center;
+                    }
+                    h1 {
+                        font-size: 24px;
+                        margin-bottom: 10px;
+                    }
+                    p {
+                        font-size: 18px;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Título Imprimir</h1>
+                <p>Está sendo processado...</p>
+            </body>
+        </html>
+    `);
+
+    janela.document.close();
+
+    // Aguarda um curto período para exibir a mensagem antes de imprimir o conteúdo final
+    setTimeout(() => {
+        janela.document.body.innerHTML = dados;
+        janela.print();
+        janela.close();
+    }, 1000);
+}
