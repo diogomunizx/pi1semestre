@@ -651,6 +651,7 @@ main {
     color: #999; /* Cor do texto mais clara */
     border-color: #ccc; /* Cor da borda mais clara */
 }
+/* Estilos para o body */
 body {
     margin: 0;
     padding: 0;
@@ -661,6 +662,7 @@ body {
     align-items: center;
 }
 
+/* Estilos da caixa de login (tanto para login quanto para recuperação de senha) */
 .login-container, .info-container {
     background-color: #fff;
     padding: 20px 40px;
@@ -671,14 +673,13 @@ body {
     text-align: center;
 }
 
-.login-container h1,
-.info-container h2,
-.welcome-container h2 {
+.login-container h1, .info-container h2, .welcome-container h2 {
     font-size: 22px;
     color: #333;
     margin-bottom: 10px;
 }
 
+/* Estilos dos campos de entrada (inputs) */
 .input-group {
     margin-bottom: 15px;
     text-align: left;
@@ -690,8 +691,7 @@ body {
     font-weight: bold;
 }
 
-.input-group input,
-.input-group select {
+.input-group input, .input-group select {
     width: 100%;
     padding: 8px;
     font-size: 14px;
@@ -705,13 +705,14 @@ body {
     cursor: pointer;
 }
 
-.input-group input:focus,
-.input-group select:focus {
+/* Efeito de foco nos campos de entrada */
+.input-group input:focus, .input-group select:focus {
     border-color: #008080;
     box-shadow: 0 0 5px rgba(0, 128, 128, 0.5);
 }
 
-button, .secondary-button {
+/* Estilo dos botões */
+#botaoentrar {
     width: 100%;
     padding: 10px;
     color: white;
@@ -723,23 +724,17 @@ button, .secondary-button {
     transition: background-color 0.3s ease;
 }
 
-button {
+/* Estilo do botão de login e do botão de recuperação de senha (ID aplicado no botão de recuperação) */
+#botaoentrar, #recover-btn {
     background-color: red;
 }
 
-button:hover {
+#botaoentrar:hover, #recover-btn:hover {
     background-color: red;
 }
 
-.secondary-button {
-    margin-top: 10px;
-    background-color: #8a9a5b;
-}
 
-.secondary-button:hover {
-    background-color: #5a6438;
-}
-
+/* Rodapé */
 .footer {
     margin-top: 20px;
 }
@@ -753,6 +748,7 @@ button:hover {
     text-decoration: underline;
 }
 
+/* Caixa principal contendo os formulários */
 .main-container {
     display: flex;
     justify-content: center;
@@ -763,14 +759,14 @@ button:hover {
     margin: auto;
 }
 
-.welcome-container p,
-.info-container p {
+/* Texto dentro da área de boas-vindas e outros textos informativos */
+.welcome-container p, .info-container p {
     font-size: 14px;
     color: #555;
     margin: 5px 0;
 }
 
-/* Cabeçalho fixo com imagens no topo direito */
+/* Cabeçalho fixo com as imagens no topo direito */
 .top-header {
     position: fixed;
     top: 10px;
@@ -786,6 +782,7 @@ button:hover {
     object-fit: contain;
 }
 
+/* Linha divisória do topo */
 .top-divider {
     position: fixed;
     top: 100px;
@@ -796,6 +793,7 @@ button:hover {
     z-index: 9;
 }
 
+/* Logo fixo no canto inferior esquerdo */
 .bottom-left-logo {
     position: fixed;
     bottom: 10px;
@@ -807,4 +805,23 @@ button:hover {
     width: 330px;
     height: auto;
     object-fit: contain;
+}
+
+/* Estilo do botão "Enviar Link de Recuperação" - ID aplicado no botão */
+#recover-btn2 {
+    width: 100%;
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: red; /* Cor do botão */
+}
+
+/* Efeito hover no botão de recuperação */
+#recover-btn:hover {
+    background-color: #e60000; /* Cor ao passar o mouse */
 }
