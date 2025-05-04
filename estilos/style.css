@@ -651,3 +651,160 @@ main {
     color: #999; /* Cor do texto mais clara */
     border-color: #ccc; /* Cor da borda mais clara */
 }
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container, .info-container {
+    background-color: #fff;
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-container h1,
+.info-container h2,
+.welcome-container h2 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    box-sizing: border-box;
+}
+
+.input-group select {
+    cursor: pointer;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: #008080;
+    box-shadow: 0 0 5px rgba(0, 128, 128, 0.5);
+}
+
+button, .secondary-button {
+    width: 100%;
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button {
+    background-color: red;
+}
+
+button:hover {
+    background-color: red;
+}
+
+.secondary-button {
+    margin-top: 10px;
+    background-color: #8a9a5b;
+}
+
+.secondary-button:hover {
+    background-color: #5a6438;
+}
+
+.footer {
+    margin-top: 20px;
+}
+
+.footer a {
+    color: #005a9c;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.welcome-container p,
+.info-container p {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+}
+
+/* Cabeçalho fixo com imagens no topo direito */
+.top-header {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.top-header img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.top-divider {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    z-index: 9;
+}
+
+.bottom-left-logo {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 10;
+}
+
+.bottom-left-logo img {
+    width: 330px;
+    height: auto;
+    object-fit: contain;
+}
