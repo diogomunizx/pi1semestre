@@ -21,7 +21,7 @@ body, html {
     left: 0;
     height: 100vh;
     width: 200px;
-    background-color: #333;
+    background-color: #840a0a;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,7 +42,7 @@ body, html {
 }
 
 .sidebar a:hover {
-    background-color: #444;
+    background-color: #580707;
 }
 
 .sidebar img {
@@ -67,7 +67,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 95px; /* Mesmo que a altura do header */
-    background-color: #333; /* Garante consistência com o menu */
+    background-color: #840a0a; /* Garante consistência com o menu */
     display: flex;
     align-items: center;
     justify-content: center;
