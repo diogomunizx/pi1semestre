@@ -345,3 +345,150 @@ function imprimirInscricao() {
         janela.close();
     }, 1000);
 }
+
+const { DateTime, Interval } = luxon;
+
+const diasDaSemana = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+const contadores = Object.fromEntries(diasDaSemana.map(dia => [dia, 0]));
+
+function adicionarLinha(dia) {
+  contadores[dia]++;
+  const num = contadores[dia];
+  const container = document.querySelector(`#linhas-${dia}`);
+
+  const novaLinha = document.createElement('div');
+  novaLinha.classList.add('linha-horario');
+  novaLinha.setAttribute('data-dia', dia);
+
+  novaLinha.innerHTML = `
+    <input type="time" name="horario_${dia}_${num}_inicio" onchange="ordenarLinhas('${dia}')">
+    <input type="time" name="horario_${dia}_${num}_fim" onchange="ordenarLinhas('${dia}')">
+    <select name="origem_${dia}_${num}">
+      <option value="fatec">Fatec</option>
+      <option value="outra_fatec">Aula em outra Fatec</option>
+      <option value="outra_instituicao">Aula em outra instituição</option>
+    </select>
+    <button type="button" onclick="removerLinha(this)">Remover</button>
+  `;
+
+  container.appendChild(novaLinha);
+  ordenarLinhas(dia);
+}
+
+function removerLinha(botao) {
+  const linha = botao.closest('.linha-horario');
+  linha.remove();
+}
+
+function ordenarLinhas(dia) {
+  const container = document.querySelector(`#linhas-${dia}`);
+  const linhas = Array.from(container.querySelectorAll('.linha-horario'));
+
+  linhas.sort((a, b) => {
+    const aVal = a.querySelector('input[type="time"]')?.value || "99:99";
+    const bVal = b.querySelector('input[type="time"]')?.value || "99:99";
+    return aVal.localeCompare(bVal);
+  });
+
+  linhas.forEach(l => container.appendChild(l));
+
+  verificarSobreposicao(dia);
+  verificarDiferencaEntreDias(); // Novo
+}
+
+function verificarSobreposicao(dia) {
+  const container = document.querySelector(`#linhas-${dia}`);
+  const linhas = Array.from(container.querySelectorAll('.linha-horario'));
+
+  const intervalos = [];
+
+  for (let linha of linhas) {
+    const inputs = linha.querySelectorAll('input[type="time"]');
+    const inicioInput = inputs[0];
+    const fimInput = inputs[1];
+
+    const inicio = inicioInput?.value;
+    const fim = fimInput?.value;
+
+    if (!inicio || !fim) continue;
+
+    const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
+    const fimTime = DateTime.fromFormat(fim, "HH:mm");
+
+    if (!inicioTime.isValid || !fimTime.isValid || fimTime <= inicioTime) {
+      alert("Horário inválido ou fim menor/igual ao início.");
+      inicioInput.value = "";
+      fimInput.value = "";
+      return;
+    }
+
+    const novoIntervalo = Interval.fromDateTimes(inicioTime, fimTime);
+
+    for (let intervalo of intervalos) {
+      if (novoIntervalo.overlaps(intervalo)) {
+        alert("Conflito detectado: horários sobrepostos em " + dia + ".");
+        inicioInput.value = "";
+        fimInput.value = "";
+        return;
+      }
+    }
+
+    intervalos.push(novoIntervalo);
+  }
+}
+
+function verificarDiferencaEntreDias() {
+  for (let i = 0; i < diasDaSemana.length - 1; i++) {
+    const diaAtual = diasDaSemana[i];
+    const diaSeguinte = diasDaSemana[i + 1];
+
+    // Ignora sábado para segunda
+    if (diaAtual === "sabado") continue;
+
+    const containerAtual = document.querySelector(`#linhas-${diaAtual}`);
+    const containerSeguinte = document.querySelector(`#linhas-${diaSeguinte}`);
+
+    const linhasAtual = Array.from(containerAtual.querySelectorAll('.linha-horario'));
+    const linhasSeguinte = Array.from(containerSeguinte.querySelectorAll('.linha-horario'));
+
+    if (linhasAtual.length === 0 || linhasSeguinte.length === 0) continue;
+
+    // Último horário de fim do dia atual
+    const fimMaisTarde = linhasAtual.reduce((ultimo, linha) => {
+      const fim = linha.querySelectorAll('input[type="time"]')[1]?.value;
+      const fimTime = DateTime.fromFormat(fim, "HH:mm");
+      return (!ultimo || fimTime > ultimo) ? fimTime : ultimo;
+    }, null);
+
+    // Primeiro horário de início do dia seguinte
+    const inicioMaisCedo = linhasSeguinte.reduce((primeiro, linha) => {
+      const inicio = linha.querySelectorAll('input[type="time"]')[0]?.value;
+      const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
+      return (!primeiro || inicioTime < primeiro) ? inicioTime : primeiro;
+    }, null);
+
+    if (fimMaisTarde && inicioMaisCedo) {
+      // Simula continuidade de dias
+      const fimComData = DateTime.fromObject({ hour: fimMaisTarde.hour, minute: fimMaisTarde.minute });
+      const inicioComData = DateTime.fromObject({ hour: inicioMaisCedo.hour, minute: inicioMaisCedo.minute }).plus({ days: 1 });
+
+      const diff = inicioComData.diff(fimComData, 'hours').hours;
+
+      if (diff < 8) {
+        alert(`Conflito entre ${diaAtual} e ${diaSeguinte}: deve haver pelo menos 8 horas de intervalo.`);
+
+        // Limpa o campo do início do dia seguinte
+        for (let linha of linhasSeguinte) {
+          const inicioInput = linha.querySelectorAll('input[type="time"]')[0];
+          const inicioTime = DateTime.fromFormat(inicioInput.value, "HH:mm");
+          if (inicioTime.equals(inicioMaisCedo)) {
+            inicioInput.value = "";
+            break;
+          }
+        }
+
+        return;
+      }
+    }
+  }
+}
