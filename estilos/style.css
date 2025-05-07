@@ -724,6 +724,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
+
 /* Estilo do botão de login e do botão de recuperação de senha (ID aplicado no botão de recuperação) */
 #botaoentrar, #recover-btn {
     background-color: red;
@@ -825,3 +826,4 @@ body {
 #recover-btn:hover {
     background-color: #e60000; /* Cor ao passar o mouse */
 }
+
