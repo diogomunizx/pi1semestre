@@ -1,44 +1,52 @@
-/* Estilos para o body */
+/* Estilos gerais para o body */
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     height: 100vh;
     display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    background-color: #f0f0f0;
+  }
+  
+  /* Conteúdo principal */
+  .main-content {
+    display: flex;
     justify-content: center;
     align-items: center;
-}
-
-/* Estilos da caixa de login (tanto para login quanto para recuperação de senha) */
-.login-container, .info-container {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Caixa de login */
+  .login-container {
     background-color: #fff;
     padding: 20px 40px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 0px; /* Cantos retos como na tabela */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra discreta igual da tabela */
     max-width: 400px;
     width: 100%;
     text-align: center;
+    border: 1px solid #ddd; /* Borda sutil para dar efeito de contorno */
 }
 
-.login-container h1, .info-container h2, .welcome-container h2 {
-    font-size: 22px;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-/* Estilos dos campos de entrada (inputs) */
-.input-group {
+  
+  /* Estilos dos campos de entrada (inputs) */
+  .input-group {
     margin-bottom: 15px;
     text-align: left;
-}
-
-.input-group label {
+  }
+  
+  .input-group label {
     font-size: 14px;
     color: #333;
     font-weight: bold;
-}
-
-.input-group input, .input-group select {
+  }
+  
+  .input-group input {
     width: 100%;
     padding: 8px;
     font-size: 14px;
@@ -46,20 +54,10 @@ body {
     border-radius: 5px;
     margin-top: 5px;
     box-sizing: border-box;
-}
-
-.input-group select {
-    cursor: pointer;
-}
-
-/* Efeito de foco nos campos de entrada */
-.input-group input:focus, .input-group select:focus {
-    border-color: #008080;
-    box-shadow: 0 0 5px rgba(0, 128, 128, 0.5);
-}
-
-/* Estilo dos botões */
-#botaoentrar {
+  }
+  
+  /* Estilo do botão de envio */
+  #recover-btn2 {
     width: 100%;
     padding: 10px;
     color: white;
@@ -68,109 +66,80 @@ body {
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
+    background-color: red;
     transition: background-color 0.3s ease;
-}
 
-
-/* Estilo do botão de login e do botão de recuperação de senha (ID aplicado no botão de recuperação) */
-#botaoentrar, #recover-btn {
+  }
+  #botaoentrar {
+    width: 100%;
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
     background-color: red;
-}
-
-#botaoentrar:hover, #recover-btn:hover {
-    background-color: red;
-}
-
-
-/* Rodapé */
-.footer {
+    transition: background-color 0.3s ease;
+    }
+  
+  
+  /* Efeito hover no botão */
+  #recover-btn2:hover {
+    background-color: #e60000;
+  }
+  
+  /* Rodapé */
+  .footer {
     margin-top: 20px;
-}
-
-.footer a {
+  }
+  
+  .footer a {
     color: #005a9c;
     text-decoration: none;
-}
-
-.footer a:hover {
+  }
+  
+  .footer a:hover {
     text-decoration: underline;
-}
-
-/* Caixa principal contendo os formulários */
-.main-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-    max-width: 1000px;
-    margin: auto;
-}
-
-/* Texto dentro da área de boas-vindas e outros textos informativos */
-.welcome-container p, .info-container p {
-    font-size: 14px;
-    color: #555;
-    margin: 5px 0;
-}
-
-/* Cabeçalho fixo com as imagens no topo direito */
-.top-header {
-    position: fixed;
-    top: 10px;
-    right: 20px;
-    display: flex;
-    gap: 10px;
-    z-index: 10;
-}
-
-.top-header img {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-}
-
-/* Linha divisória do topo */
-.top-divider {
-    position: fixed;
-    top: 100px;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: #ccc;
-    z-index: 9;
-}
-
-/* Logo fixo no canto inferior esquerdo */
-.bottom-left-logo {
+  }
+  
+  /* Logo fixo no canto inferior esquerdo */
+  .bottom-left-logo {
     position: fixed;
     bottom: 10px;
     left: 10px;
     z-index: 10;
-}
-
-.bottom-left-logo img {
+  }
+  
+  .bottom-left-logo img {
     width: 330px;
     height: auto;
     object-fit: contain;
-}
-
-/* Estilo do botão "Enviar Link de Recuperação" - ID aplicado no botão */
-#recover-btn2 {
+  }
+  
+  /* Cabeçalho superior */
+  .top-header {
+    position: fixed;
+    top: 8px;
+    right: 45px;
+    display: flex;
+    align-items: center;
+    gap: 70px;
+    z-index: 100;
+  }
+  
+  .top-header img {
+    height: 75px;
+    object-fit: contain;
+  }
+  
+  /* Linha divisória do topo */
+  .top-divider {
+    position: fixed;
+    top: 93px;
+    left: 0;
     width: 100%;
-    padding: 10px;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    background-color: red; /* Cor do botão */
-}
-
-/* Efeito hover no botão de recuperação */
-#recover-btn:hover {
-    background-color: #e60000; /* Cor ao passar o mouse */
-}
-
+    height: 2px;
+    background-color: #333;
+    z-index: 9;
+  }
