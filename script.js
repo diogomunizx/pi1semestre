@@ -1,28 +1,32 @@
 function prepararRelatorio() {
-    // Seleciona a tabela e o formulário de relatório pelo ID correto
+    // Seleciona a tabela, o título e o formulário de relatório pelo ID correto
     const tabelaProfessor = document.getElementById("tableProfessor");
+    const tituloProfessor = document.getElementById("tituloProfessor");
     const formularioProfessor = document.getElementById("formularioProfessor");
 
-    // Verifica se ambos os elementos existem antes de tentar exibir ou ocultar
-    if (tabelaProfessor && formularioProfessor) {
-        tabelaProfessor.style.display = "none";   // Esconde 
+    // Verifica se os elementos existem antes de tentar exibir ou ocultar
+    if (tabelaProfessor && formularioProfessor && tituloProfessor) {
+        tabelaProfessor.style.display = "none";   // Esconde a tabela
+        tituloProfessor.style.display = "none";   // Esconde o título
         formularioProfessor.style.display = "block";   // Exibe o formulário
     } else {
-        console.error("Erro: Elemento de tabela ou formulário não encontrado.");
+        console.error("Erro: Elemento de tabela, título ou formulário não encontrado.");
     }
 }
 
 function deferirRelatorio() {
-    // Seleciona a tabela e o formulário de relatório pelo ID correto
+    // Seleciona a tabela, o título e o formulário de relatório pelo ID correto
     const tabelaCoordenador = document.getElementById("tableCoordenador");
+    const tituloCoordenador = document.getElementById("tituloCoordenador");
     const formularioCoordenador = document.getElementById("formularioCoordenador");
 
-    // Verifica se ambos os elementos existem antes de tentar exibir ou ocultar
-    if (tabelaCoordenador && formularioCoordenador) {
-        tabelaCoordenador.style.display = "none";   // Esconde a tabela de inscrições
-        formularioCoordenador.style.display = "block";   // Exibe o formulário de edição
+    // Verifica se os elementos existem antes de tentar exibir ou ocultar
+    if (tabelaCoordenador && formularioCoordenador && tituloCoordenador) {
+        tabelaCoordenador.style.display = "none";   // Esconde a tabela
+        tituloCoordenador.style.display = "none";   // Esconde o título
+        formularioCoordenador.style.display = "block";   // Exibe o formulário
     } else {
-        console.error("Erro: Elemento de tabela ou formulário não encontrado.");
+        console.error("Erro: Elemento de tabela, título ou formulário não encontrado.");
     }
 }
 
@@ -57,10 +61,15 @@ document.addEventListener("click", function (event) {
 });
 
 
-// Função para abrir o modal
+// Função para abrir o modal de justificativa
 function verJustificativa() {
-
     document.body.classList.add('modal-active');
+
+    // Remove qualquer modal existente antes de criar um novo
+    const modalExistente = document.querySelector('.modal-overlay');
+    if (modalExistente) {
+        modalExistente.remove();
+    }
 
     // Cria o elemento de overlay e modal
     const modalOverlay = document.createElement('div');
@@ -71,17 +80,45 @@ function verJustificativa() {
 
     // HTML do conteúdo do modal
     modal.innerHTML = `
-      <label>Justificativa:</label>
-      <p>Coordenador ainda não visualizou sua inscrição.</p>
-      <span class="modal-close" onclick="fecharModal()">Fechar</span>
+        <label>Justificativa:</label>
+        <p>Coordenador ainda não visualizou sua inscrição.</p>
+        <span class="modal-close" onclick="fecharModal()">Fechar</span>
     `;
 
     // Adiciona o modal dentro do overlay e exibe na página
     modalOverlay.appendChild(modal);
     document.body.appendChild(modalOverlay);
+}
 
-    // Exibe o modal
-    modalOverlay.style.display = 'flex';
+// Função para editar data
+function editarData() {
+    document.body.classList.add('modal-active');
+
+    // Remove qualquer modal existente antes de criar um novo
+    const modalExistente = document.querySelector('.modal-overlay');
+    if (modalExistente) {
+        modalExistente.remove();
+    }
+
+    // Cria o elemento de overlay e modal
+    const modalOverlay = document.createElement('div');
+    modalOverlay.classList.add('modal-overlay');
+
+    const modal = document.createElement('div');
+    modal.classList.add('modal');
+
+    // HTML do conteúdo do modal
+    modal.innerHTML = `
+        <label for="data_inicio">Data início:</label>
+        <input type="date" id="data_inicio" name="data_inicio"><br>
+        <label for="data_fim">Data final:</label>
+        <input type="date" id="data_fim" name="data_fim"><br>
+        <span class="modal-close" onclick="fecharModal()">Alterar</span>
+    `;
+
+    // Adiciona o modal dentro do overlay e exibe na página
+    modalOverlay.appendChild(modal);
+    document.body.appendChild(modalOverlay);
 }
 
 // Função para fechar o modal
@@ -89,37 +126,17 @@ function fecharModal() {
     const modalOverlay = document.querySelector('.modal-overlay');
     if (modalOverlay) {
         modalOverlay.remove();
+        document.body.classList.remove('modal-active');
     }
 }
 
-function editarData() {
-
-    document.body.classList.add('modal-active');
-
-    // Cria o elemento de overlay e modal
-    const modalOverlay = document.createElement('div');
-    modalOverlay.classList.add('modal-overlay');
-
-    const modal = document.createElement('div');
-    modal.classList.add('modal');
-
-    // HTML do conteúdo do modal
-    modal.innerHTML = `
-      <label for="cronograma">Data início:</label>
-      <input type="date" id="cronograma" name="cronograma"><br>
-      <br>
-      <label for="cronograma">Data final:</label>
-      <input type="date" id="cronograma" name="cronograma"><br>
-      <span class="modal-close" onclick="fecharModal()">Alterar</span>
-    `;
-
-    // Adiciona o modal dentro do overlay e exibe na página
-    modalOverlay.appendChild(modal);
-    document.body.appendChild(modalOverlay);
-
-    // Exibe o modal
-    modalOverlay.style.display = 'flex';
-}
+// Fecha o modal ao clicar fora dele
+document.addEventListener('click', function(event) {
+    const modalOverlay = document.querySelector('.modal-overlay');
+    if (modalOverlay && event.target === modalOverlay) {
+        fecharModal();
+    }
+});
 
 function liberarCampoCadastro() {
     const nome = document.getElementById('professor');

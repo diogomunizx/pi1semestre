@@ -1,4 +1,3 @@
-
 /*define para todas as paginas */
 * {
     margin: 0;
@@ -6,13 +5,13 @@
     box-sizing: border-box;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-
 body, html {
     height: 100%;
     display: flex;
     flex-direction: column;
     background-color: #f5f5f5;
 }
+
 
 /* Sidebar */
 .sidebar {
@@ -28,7 +27,6 @@ body, html {
     padding-top: 60px;
     z-index: 2;
 }
-
 .sidebar a {
     display: flex;
     align-items: center;
@@ -40,26 +38,21 @@ body, html {
     font-weight: bold;
     font-size: 16px;
 }
-
 .sidebar a:hover {
     background-color: #580707;
 }
-
 .sidebar img {
     width: 30px;
     height: 30px;
     margin-right: 15px;
 }
-
 .sidebar span {
     display: inline;
     white-space: nowrap;
 }
-
 .sidebar:hover span {
     display: inline;
 }
-
 /* Estilo para o container da logo */
 .sidebar .logo-container {
     position: absolute; /* Coloca no topo do menu */
@@ -76,21 +69,17 @@ body, html {
     margin-bottom: 10px;
     padding: 15px 0;
 }
-
 .sidebar .logo-container img {
     width: 90px; /* Ajuste o tamanho da logo */
     height: auto;
     margin-left: 18px;
     margin-top: 5px;
 }
-
-
 /* Impede que hover afete a logo */
 .sidebar .logo-container a:hover {
     background-color: transparent; /* Garante que não muda de cor */
     cursor: default; /* Remove o ponteiro de link */
 }
-
 .sidebar .inicio{
     margin-top: 30px;
 }
@@ -111,6 +100,7 @@ body, html {
     height: 95px; /* Altura fixa do header */
 }
 
+
 /* Estilo para o perfil do usuário */
 .user-profile {
     position: relative;
@@ -130,6 +120,7 @@ body, html {
     z-index: 3; /* Para manter o perfil acima da sidebar */
 }
 
+
 /* Estilo do menu suspenso */
 .dropdown-menu {
     display: none;
@@ -144,7 +135,6 @@ body, html {
     overflow: hidden;
     min-width: 150px;
 }
-
 .dropdown-menu a {
     display: block;
     padding: 10px;
@@ -154,7 +144,6 @@ body, html {
     font-weight: bold;
     font-size: 18px;
 }
-
 .dropdown-menu a:hover {
     background-color: #f0f0f0;
 }
@@ -162,16 +151,17 @@ body, html {
 
 /* Main */
 main {
-    margin-left: 200px; /* Compensa a largura inicial da sidebar */
+    margin-left: 200px;
     padding: 20px;
-    padding-top: 80px; /* Compensa a altura do header */
+    padding-top: 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Centraliza verticalmente o conteúdo */
-    min-height: calc(100vh - 120px); /* Altura da tela menos header e footer */
+    min-height: calc(100vh - 120px);
     background-color: #f3f3f3;
+    width: calc(100% - 200px); /* Importante: define a largura correta considerando a sidebar */
 }
+
 
 /* Ajuste de layout para o header*/
 .institutions {
@@ -179,124 +169,80 @@ main {
     align-items: center;
     margin-right: 35px;
 }
-
 .cps {
     margin-left: 70px;
 }
-
 .cps img, .fatec img {
     height: 75px;
 }
 
 
-  
 .cece{
     text-align: center;
 }
 
 
 
-
-.info-inscricao{
+/* Container principal do formulário */
+.info-inscricao {
     text-align: center;
+    margin-bottom: 30px;
 }
 
-/* Container principal do formulário */
-.container-inscricao {
-    max-width: 95%;
-    min-width: 95%;
-    margin: 0 auto;
-    padding: 20px;
+/* Container base para todos os formulários */
+.form-container {
+    padding: 40px;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 8px;
-    overflow-y: auto;
+    width: 95%;
+    max-width: 1400px;
+    margin: 40px auto;
     min-height: 70vh;
-    margin-top: 40px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Container do formulário */
-.container-relatorio {
-    padding: 20px;
-    min-width: 80%;
-    background-color: #fff; 
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 70%; 
-    margin: 0px auto; 
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
 }
 
-/* Estilos para containet de tela de Cadastro */
-  .containerCadastro{
-    padding: 20px;
-    background-color: #fff; 
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 70%; 
-    margin: 0px auto; 
-    min-height: 70vh;
-    margin-top: 40px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    text-align: center;
-    padding-left: 40px;
-    padding-right: 40px;
-    label{
-        display: block;
-        margin: 10px 0 5px;
-        color: #000000;
-        text-align: left; 
-    }  
-  }
-
-/* Estilo para labels e inputs dentro do formulário de inscrição */
-.form-inscricao label{
-    display: block;
-    margin: 10px 0 5px;
-    color: #000000;
-}
-
-.form-relatorio label {
-    display: block;
-    margin: 10px 0 5px; 
-    color: #000000;
-    font-weight: bold;
-}
-
-.form-inscricao input[type="text"],
-.form-ajuste    input[type="text"],
-.form-relatorio input[type="text"],
-.form-AlterarSenha input[type="text"],
-.form-inscricao input[type="email"],
-.form-ajuste    input[type="email"],
-.form-relatorio input[type="email"],
-.form-inscricao input[type="number"],
-.form-ajuste    input[type="tel"],
-.form-inscricao input[type="date"],
-.form-relatorio input[type="date"],
-.form-AlterarSenha input[type="password"],
-.form-ajuste    input[type="password"],
-.form-inscricao select,
-.form-relatorio select {
+/* Estilos base para todos os formulários */
+.form-inscricao,
+.form-relatorio,
+.form-ajuste {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilos para inputs e textareas dentro dos formulários */
+.form-inscricao input[type="text"],
+.form-inscricao input[type="email"],
+.form-inscricao input[type="number"],
+.form-inscricao input[type="date"],
+.form-inscricao select,
+.form-relatorio input[type="text"],
+.form-relatorio input[type="email"],
+.form-relatorio input[type="date"],
+.form-relatorio select,
+.form-ajuste input[type="text"],
+.form-ajuste input[type="email"],
+.form-ajuste input[type="tel"],
+.form-ajuste input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
+    box-sizing: border-box; /* Importante: garante que padding não afete a largura */
 }
 
-
-/* Tabela específica da página de inscrição */
+/* Estilos para tabelas */
 .tabela-inscricao {
     width: 100%;
+    margin: 20px 0;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    table-layout: fixed; /* Importante: distribui as colunas uniformemente */
 }
 
 .tabela-inscricao th,
@@ -307,310 +253,36 @@ main {
     word-wrap: break-word;
 }
 
-.tabela-inscricao th {
-    background-color: #AE0C0D;
-    color: #fff;
-    font-weight: bold;
-}
-
-/* Inputs dentro da tabela */
+.tabela-inscricao input[type="time"],
 .tabela-inscricao input[type="text"],
-.tabela-inscricao input[type="checkbox"] {
-    width: 90%;
-    padding: 5px;
+.tabela-inscricao textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
 }
 
+/* Ajuste para textareas */
 .textarea-auto-ajuste {
     width: 100%;
-    min-height: 50px; 
-    padding: 8px;
-    font-size: 14px;
+    min-height: 80px;
+    padding: 10px;
+    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    resize: none;
-    overflow-y: hidden; 
-}
-
-.form-obs{
-    margin-left: 20px;
-}
-
-.hae-projeto-linha {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* Espaçamento entre os grupos de label e input */
-}
-
-.hae-projeto-linha label {
-    margin-right: 5px;
-    font-weight: bold;
-}
-
-.hae-projeto-linha input[type="number"] {
-    width: 60px; /* Ajuste a largura conforme necessário */
-}
-
-
-
-/* Contêiner de botões */
-.button-container {
-    display: flex;
-    justify-content: space-between; /* Divide os grupos entre esquerda e direita */
-    align-items: center;
-    margin-top: 20px;
-    width: 100%; /* Garante que ocupe toda a largura */
-}
-
-/* Grupo de botões alinhados à esquerda */
-.button-group-left {
-    display: flex;
-    gap: 10px; /* Espaçamento entre os botões "Cancelar" e "Limpar" */
-}
-
-/* Grupo de botões alinhados à direita */
-.button-group-right {
-    display: flex;
-    justify-content: flex-end;
-}
-
-/* Botões de ação */
-.btn-reset,
-.btn-enviar,
-.btn-cancelar {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
     font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+    resize: vertical;
+    box-sizing: border-box;
 }
 
-/* Botão Reset (Limpar) */
-.btn-reset {
-    background-color: #ccc;
-    color: #333;
-}
-
-.btn-reset:hover {
-    background-color: #969292;
-}
-
-/* Botão Enviar (Salvar) */
-.btn-enviar {
-    background-color: #0b8948;
-    color: #fff;
-}
-
-.btn-enviar:hover {
-    background-color: #044021;
-}
-
-/* Botão Cancelar */
-.btn-cancelar {
-    background-color: #d64d4d;
-    color: #fff;
-}
-
-.btn-cancelar:hover {
-    background-color: #a23232;
-}
-
-
-/*pagina inscrição tbl professor e btn nova inscricao*/
-/* Estilos para a Tabela */
-
-.titulos{
-    text-align: center;
-    margin-top: 25px;
-}
-
-.tbls{
-    width: 100%;
-    max-width: 800px;
-    margin: 5px auto;
-    border-collapse: collapse;
-    font-size: 16px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.tbls thead tr {
-    background-color: #AE0C0D;
-    color: white;
-    white-space: nowrap;
-}
-
-.tbls th, 
-.tbls td {
-    padding: 12px;
-    text-align: center;
-    border: 1px solid #ddd;
-}
-
-.tbls tbody tr:nth-child(even) {
-    background-color: #f5f5f5;
-}
-
-.tbls tbody tr:hover {
-    background-color: #f0e6e6;
-}
-
-.tbls img{
-    width: 30px;
-    height: 30px;
-    text-align: center;
-}
-
-.destaque{
-    transition: transform 0.2s ease;
-    cursor: pointer;
-}
-
-.destaque:hover {
-    transform: scale(1.2); /* Aumenta o tamanho em 10% */
-  }
-
-/* Estilos para o Botão de Nova Inscrição */
-.nova-inscricao {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.btn-nova-inscricao {
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #0b8948;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.btn-nova-inscricao:hover {
-    background-color: #044021;
-}
-
-/* Estilos para o modal */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .modal {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    max-width: 90%;
-    text-align: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-    z-index: 1001;
-  }
-  
-  .modal label {
-    font-size: 16px;
-    margin-bottom: 8px;
-  }
-  
-  .modal p {
-    font-size: 14px;
-    color: #333;
-    margin-top: 8px;
-  }
-  
-  .modal-close {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 15px;
-    background-color: #333;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-  
-
-.header-Cadastro ,
-.header-AlterarSenha{ 
-    padding-top: 13px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    
-}
-
-.btns-Alterar{
-    cursor: pointer;
-}
-/* Botões de ação tela de Cadastro do usuario */
-.btn-salvarAlterarCadastro ,
-.btn-cancelarAlterarCadastro ,
-.btn-salvarAlterarSenha,
-.btn-cancelarAlterarSenha
- {
-    padding: 10px 20px;
-    border: none;
-    margin-bottom: 13px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #ccc ;
-    color:#333;   
-}
-
-.btn-salvarAlterarCadastro,
-.btn-salvarAlterarSenha{
-    background-color: #008080;
-    color:#e6e6e6 ;
-}
-.btn-cancelarAlterarCadastro,
-.btn-cancelarAlterarSenha{
-    background-color: #ca3535;
-    color:#e6e6e6 ;
-}
-.btn-salvarAlterarCadastro:active,
-.btn-salvarAlterarSenha:active,
-.btn-cacelarAlterarCadastro:active,
-.btn-cancelarAlterarSenha:active
-{
-    background-color: #7f7f7f; /* Cor cinza */
-    color: #333; /* Cor do texto pode ser ajustada para contrastar */
-}
-
-
-.popup-overlay {
-    display: none; /* Inicialmente o popup está oculto */
-    position: fixed; /* Fixa o popup sobre a página */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Destaca a seção de status e justificativa */
+/* Seção de status e justificativa */
 .status-justificativa-section {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f9f9f9; /* Cor de fundo clara para contraste */
-    border: 2px solid #ae0c0d; /* Destaque com a cor primária */
-    border-radius: 8px; /* Bordas arredondadas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    width: 100%;
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 2px solid #ae0c0d;
+    border-radius: 8px;
+    box-sizing: border-box;
 }
 
 /* Estilo dos labels dentro da seção */
@@ -827,5 +499,251 @@ body {
 /* Efeito hover no botão de recuperação */
 #recover-btn:hover {
     background-color: #e60000; /* Cor ao passar o mouse */
+}
+
+/* Estilos para labels */
+.form-inscricao label,
+.form-relatorio label,
+.form-ajuste label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #000000;
+    font-weight: bold;
+}
+
+/* Estilos para tabelas */
+.tabela-inscricao th {
+    background-color: #AE0C0D;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+.tabela-inscricao td {
+    text-align: center;
+    word-wrap: break-word;
+}
+
+/* Linha de HAE projeto */
+.hae-projeto-linha {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.hae-projeto-linha input[type="number"] {
+    width: 80px;
+}
+
+/* Container de botões */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.button-group-left {
+    display: flex;
+    gap: 10px;
+}
+
+.button-group-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Botões de ação */
+.btn-reset,
+.btn-enviar,
+.btn-cancelar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-reset {
+    background-color: #ccc;
+    color: #333;
+}
+
+.btn-reset:hover {
+    background-color: #969292;
+}
+
+.btn-enviar {
+    background-color: #0b8948;
+    color: #fff;
+}
+
+.btn-enviar:hover {
+    background-color: #044021;
+}
+
+.btn-cancelar {
+    background-color: #d64d4d;
+    color: #fff;
+}
+
+.btn-cancelar:hover {
+    background-color: #a23232;
+}
+
+/* Estilos para tabelas de listagem */
+.tbls {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    font-size: 16px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tbls thead tr {
+    background-color: #AE0C0D;
+    color: white;
+    white-space: nowrap;
+}
+
+.tbls th,
+.tbls td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.tbls tbody tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+.tbls tbody tr:hover {
+    background-color: #f0e6e6;
+}
+
+.tbls img {
+    width: 30px;
+    height: 30px;
+}
+
+.destaque {
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.destaque:hover {
+    transform: scale(1.2);
+}
+
+/* Títulos */
+.titulos {
+    text-align: center;
+    margin: 25px 0;
+}
+
+/* Ajustes específicos para telas menores */
+@media screen and (max-width: 1200px) {
+    .form-container {
+        width: 98%;
+        padding: 20px;
+    }
+    
+    .tabela-inscricao,
+    .tbls {
+        font-size: 14px;
+    }
+}
+
+/* Estilos para o Botão de Nova Inscrição */
+.nova-inscricao {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-nova-inscricao {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #0b8948;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-nova-inscricao:hover {
+    background-color: #044021;
+}
+
+/* Estilos para o modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.modal label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.modal p {
+    margin: 15px 0;
+    color: #666;
+    line-height: 1.4;
+}
+
+.modal input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.modal-close {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #AE0C0D;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.modal-close:hover {
+    background-color: #8a0a0b;
+}
+
+/* Estilo para quando o modal estiver ativo */
+body.modal-active {
+    overflow: hidden;
 }
 
