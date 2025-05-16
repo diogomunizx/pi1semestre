@@ -492,3 +492,7 @@ function verificarDiferencaEntreDias() {
     }
   }
 }
+
+
+
+//teste
