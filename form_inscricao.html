@@ -10,6 +10,38 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="icon" type="image/png" href="imagens/logo-horus.png">
     <title>HORUS - Inscrição</title>
+    <style>
+        /* Estilos específicos para as etapas do formulário */
+        .form-steps {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .form-steps.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Ajuste do espaçamento entre as seções */
+        .form-steps > h4 {
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Estilos para os botões de navegação */
+        .form-navigation {
+            margin-top: 30px;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-button {
+            min-width: 120px;
+        }
+    </style>
 </head>
 
 <body>
@@ -66,230 +98,315 @@
                 <h3>Inscrição</h3>
                 <h3>Projeto de Hora Atividade Específica – H.A.E.</h3>
             </div>
-            <br>
-            <form class="form-inscricao" action="#" method="POST">
-                <h4>Informações docente</h4>
-                <label for="professor">Nome:</label>
-                <input type="text" id="professor" name="professor" disabled value="Marcia Regioli" required><br>
 
-                <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" disabled value="marcia.reggiolli@fatec.sp.gov.br"
-                    required><br>
+            <!-- Indicadores de Progresso -->
+            <div class="step-indicators">
+                <div class="step-indicator active" data-step="1">1</div>
+                <div class="step-indicator" data-step="2">2</div>
+                <div class="step-indicator" data-step="3">3</div>
+                <div class="step-indicator" data-step="4">4</div>
+            </div>
 
-                <label for="rg">R.G.:</label>
-                <input type="text" id="rg" name="rg" disabled value="123456" required>
-
-                <label for="matricula">Matrícula:</label>
-                <input type="text" id="matricula" name="matricula" disabled value="654321" required>
-                <br>
-                <br>
-                <h4>Tipo de HAE que está solicitando:</h4>
-                <br>
-                <select id="role" name="role" required>
-                    <option value="" disabled selected>Selecione o tipo de HAE</option>
-                    <option value="estudoss">Estudos e Projetos</option>
-                    <option value="servicos">Extensão de serviços à comunidade</option>
-                    <option value="administracao">Administração acadêmica</option>
-                    <option value="plantao">Plantão didático</option>
-                    <option value="estagio">Estágio Supervisionado</option>
-                    <option value="tcc">Orientação de Trabalho de Graduação</option>
-                    <option value="projeto-cientifico">Projeto de iniciação científica</option>
-                    <option value="revista">Revista Prospectus</option>
-                    <option value="divulgacao">Divulgação Cursos</option>
-                    <option value="enade">ENADE</option>
-                </select>
-                <br>
-                <br>
-                <h4>Curso</h4>
-                <select id="role" name="role" required>
-                    <option value="" disabled selected>Selecione o curso</option>
-                    <option value="estudoss">Desenvolvimento de Software Multiplataforma</option>
-                    <option value="servicos">Gestão empresarial</option>
-                    <option value="administracao">Gestão Produção Industrial</option>
-                </select>
-                <br>
-                <br>
-                <div class="hae-projeto-linha">
-                    <label for="hae">Quantidade de H.A.E:</label>
-                    <input type="number" id="gti" name="hae_trabalho_gti" min="0" max="12">
+            <!-- Barra de Progresso -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 25%"></div>
                 </div>
-                <br>
-                <br>
-                <h4>Informações do projeto</h4>
-                <label for="titulo_projeto">Título do projeto:</label>
-                <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio GE" required><br>
+            </div>
 
-                <label for="inicio_projeto">Início:</label>
-                <input type="date" id="inicio_projeto" name="inicio_projeto" value="2024-02-24"><br>
+            <form class="form-inscricao" action="#" method="POST">
+                <!-- Etapa 1: Informações do Docente -->
+                <div class="form-steps active" id="step1">
+                    <h4>Informações docente</h4>
+                    <label for="professor">Nome:</label>
+                    <input type="text" id="professor" name="professor" disabled value="Marcia Regioli" required><br>
 
-                <label for="termino_projeto">Término previsto:</label>
-                <input type="date" id="termino_projeto" name="termino_projeto" value="2024-06-20"><br>
-                <br>
-                <br>
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" disabled value="marcia.reggiolli@fatec.sp.gov.br" required><br>
 
-                <h4>Horário de Execução do Projeto</h4>
-                <br>
-                <table class="tabela-inscricao" border="1">
-                    <tr>
-                        <th>Dia da Semana</th>
-                        <th>Horário Ínicio</th>
-                        <th>Horário Final</th>
-                    </tr>
-                    <tr>
-                        <td>Segunda-feira</td>
-                        <td><input type="time" name="horario_inicio_segunda" class="hora-inteira"></td>
-                        <td><input type="time" name="horario_final_segunda" class="hora-inteira"></td>
-                    </tr>
-                    <tr>
-                        <td>Terça-feira</td>
-                        <td><input type="time" name="horario_inicio_terca" class="hora-inteira"></td>
-                        <td><input type="time" name="horario_final_terca" class="hora-inteira"></td>
-                    </tr>
-                    <tr>
-                        <td>Quarta-feira</td>
-                        <td><input type="time" name="horario_inicio_quarta" class="hora-inteira"></td>
-                        <td><input type="time" name="horario_final_quarta" class="hora-inteira"></td>
-                    </tr>
-                    <tr>
-                        <td>Quinta-feira</td>
-                        <td><input type="time" name="horario_inicio_quinta" class="hora-inteira"></td>
-                        <td><input type="time" name="horario_final_quinta" class="hora-inteira"></td>
-                    </tr>
-                    <tr>
-                        <td>Sexta-feira</td>
-                        <td><input type="time" name="horario_inicio_sexta" class="hora-inteira"></td>
-                        <td><input type="time" name="horario_final_sexta" class="hora-inteira"></td>
-                    </tr>
-                    <tr>
-                        <td>Sábado</td>
-                        <td><input type="time" name="horario_inicio_sabado" class="hora-inteira"></td>
-                        <td><input type="time" name="horario_final_sabado" class="hora-inteira"></td>
-                    </tr>
-                </table>
+                    <label for="rg">R.G.:</label>
+                    <input type="text" id="rg" name="rg" disabled value="123456" required>
 
+                    <label for="matricula">Matrícula:</label>
+                    <input type="text" id="matricula" name="matricula" disabled value="654321" required>
+                </div>
 
-                <table class="tabela-inscricao" border="1">
-                    <tr>
-                        <th colspan="2">1 – METAS RELACIONADAS AO PROJETO</th>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea id="metas" name="metas"
-                                class="textarea-auto-ajuste">Garantir que todos os alunos do curso de Gestão Empresarial sejam orientados e supervisionados para a realização do estágio obrigatório.</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">2 - OBJETIVOS DO PROJETO – DETALHAMENTO</th>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea id="objetivos" name="objetivos"
-                                class="textarea-auto-ajuste">Criar parcerias com empresas, orientar currículos, acompanhar inscrições e monitorar desempenho dos alunos.</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">3 - JUSTIFICATIVAS DO PROJETO – DETALHAMENTO</th>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea id="justificativas" name="justificativas"
-                                class="textarea-auto-ajuste">Necessidade de apoio para alunos encontrarem estágios e atenderem às exigências acadêmicas.</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">4 - RECURSOS MATERIAIS E HUMANOS - DETALHAMENTO</th>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea id="recursos" name="recursos"
-                                class="textarea-auto-ajuste">Professores, equipe administrativa, computadores, acesso à internet e uma sala para orientação.</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">5 – RESULTADO ESPERADO – PREVISÃO</th>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea id="resultados" name="resultados"
-                                class="textarea-auto-ajuste">100% dos alunos alocados em estágios com documentação regularizada.</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">6 – METODOLOGIA</th>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea id="metodologia" name="metodologia"
-                                class="textarea-auto-ajuste">Contato com empresas, workshops, suporte para entrevistas e acompanhamento do estágio.</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">7 - CRONOGRAMA DE EXECUÇÃO DAS ATIVIDADES</th>
-                    </tr>
-                    <tr>
-                        <th>Atividades</th>
-                        <th>Mês</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <textarea id="descricao" name="descricao"
-                                class="textarea-auto-ajuste">Contato com empresas para levantamento de vagas disponíveis.</textarea>
-                        </td>
-                        <td>Mês 1</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <textarea id="descricao" name="descricao"
-                                class="textarea-auto-ajuste">Workshops de orientação e preparação de currículos para os alunos.</textarea>
-                        </td>
-                        <td>Mês 2</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <textarea id="descricao" name="descricao"
-                                class="textarea-auto-ajuste">Candidaturas dos alunos às vagas e acompanhamento do processo seletivo.</textarea>
-                        </td>
-                        <td>Mês 3</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <textarea id="descricao" name="descricao"
-                                class="textarea-auto-ajuste">Início dos estágios supervisionados e entrega da documentação inicial.</textarea>
-                        </td>
-                        <td>Mês 4</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <textarea id="descricao" name="descricao"
-                                class="textarea-auto-ajuste">Acompanhamento contínuo dos estágios e avaliação intermediária.</textarea>
-                        </td>
-                        <td>Mês 5</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <textarea id="descricao" name="descricao"
-                                class="textarea-auto-ajuste">Finalização dos estágios e entrega dos relatórios finais.</textarea>
-                        </td>
-                        <td>Mês 6</td>
-                    </tr>
-                </table>
+                <!-- Etapa 2: Tipo de HAE e Curso -->
+                <div class="form-steps" id="step2">
+                    <h4>Tipo de HAE que está solicitando:</h4>
+                    <select id="role" name="role" required>
+                        <option value="" disabled selected>Selecione o tipo de HAE</option>
+                        <option value="estudoss">Estudos e Projetos</option>
+                        <option value="servicos">Extensão de serviços à comunidade</option>
+                        <option value="administracao">Administração acadêmica</option>
+                        <option value="plantao">Plantão didático</option>
+                        <option value="estagio">Estágio Supervisionado</option>
+                        <option value="tcc">Orientação de Trabalho de Graduação</option>
+                        <option value="projeto-cientifico">Projeto de iniciação científica</option>
+                        <option value="revista">Revista Prospectus</option>
+                        <option value="divulgacao">Divulgação Cursos</option>
+                        <option value="enade">ENADE</option>
+                    </select>
 
-                
-                <br>
-                <div class="button-container">
-                    <div class="button-group-left">
-                        <a href="inscricao.html"><button class="btn-cancelar" type="button">Cancelar</button></a>
-                        <button class="btn-reset" type="reset">Limpar</button>
+                    <h4>Curso</h4>
+                    <select id="curso" name="curso" required>
+                        <option value="" disabled selected>Selecione o curso</option>
+                        <option value="dsm">Desenvolvimento de Software Multiplataforma</option>
+                        <option value="ge">Gestão empresarial</option>
+                        <option value="gpi">Gestão Produção Industrial</option>
+                    </select>
+
+                    <div class="hae-projeto-linha">
+                        <label for="hae">Quantidade de H.A.E:</label>
+                        <input type="number" id="gti" name="hae_trabalho_gti" min="0" max="12">
                     </div>
-                    <div class="button-group-right">
-                        <a href="inscricao.html"><button class="btn-enviar" type="button">Enviar</button></a>
-                    </div>
+                </div>
+
+                <!-- Etapa 3: Informações do Projeto -->
+                <div class="form-steps" id="step3">
+                    <h4>Informações do projeto</h4>
+                    <label for="titulo_projeto">Título do projeto:</label>
+                    <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio GE" required><br>
+
+                    <label for="inicio_projeto">Início:</label>
+                    <input type="date" id="inicio_projeto" name="inicio_projeto" value="2024-02-24"><br>
+
+                    <label for="termino_projeto">Término previsto:</label>
+                    <input type="date" id="termino_projeto" name="termino_projeto" value="2024-06-20"><br>
+
+                    <h4>Horário de Execução do Projeto</h4>
+                    <table class="tabela-inscricao" border="1">
+                        <tr>
+                            <th>Dia da Semana</th>
+                            <th>Horário Ínicio</th>
+                            <th>Horário Final</th>
+                        </tr>
+                        <tr>
+                            <td>Segunda-feira</td>
+                            <td><input type="time" name="horario_inicio_segunda" class="hora-inteira"></td>
+                            <td><input type="time" name="horario_final_segunda" class="hora-inteira"></td>
+                        </tr>
+                        <tr>
+                            <td>Terça-feira</td>
+                            <td><input type="time" name="horario_inicio_terca" class="hora-inteira"></td>
+                            <td><input type="time" name="horario_final_terca" class="hora-inteira"></td>
+                        </tr>
+                        <tr>
+                            <td>Quarta-feira</td>
+                            <td><input type="time" name="horario_inicio_quarta" class="hora-inteira"></td>
+                            <td><input type="time" name="horario_final_quarta" class="hora-inteira"></td>
+                        </tr>
+                        <tr>
+                            <td>Quinta-feira</td>
+                            <td><input type="time" name="horario_inicio_quinta" class="hora-inteira"></td>
+                            <td><input type="time" name="horario_final_quinta" class="hora-inteira"></td>
+                        </tr>
+                        <tr>
+                            <td>Sexta-feira</td>
+                            <td><input type="time" name="horario_inicio_sexta" class="hora-inteira"></td>
+                            <td><input type="time" name="horario_final_sexta" class="hora-inteira"></td>
+                        </tr>
+                        <tr>
+                            <td>Sábado</td>
+                            <td><input type="time" name="horario_inicio_sabado" class="hora-inteira"></td>
+                            <td><input type="time" name="horario_final_sabado" class="hora-inteira"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Etapa 4: Detalhamento do Projeto -->
+                <div class="form-steps" id="step4">
+                    <h4>Detalhamento do Projeto</h4>
+                    <table class="tabela-inscricao" border="1">
+                        <tr>
+                            <th colspan="2">1 – METAS RELACIONADAS AO PROJETO</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <textarea id="metas" name="metas" class="textarea-auto-ajuste">Garantir que todos os alunos do curso de Gestão Empresarial sejam orientados e supervisionados para a realização do estágio obrigatório.</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">2 - OBJETIVOS DO PROJETO – DETALHAMENTO</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <textarea id="objetivos" name="objetivos"
+                                    class="textarea-auto-ajuste">Criar parcerias com empresas, orientar currículos, acompanhar inscrições e monitorar desempenho dos alunos.</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">3 - JUSTIFICATIVAS DO PROJETO – DETALHAMENTO</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <textarea id="justificativas" name="justificativas"
+                                    class="textarea-auto-ajuste">Necessidade de apoio para alunos encontrarem estágios e atenderem às exigências acadêmicas.</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">4 - RECURSOS MATERIAIS E HUMANOS - DETALHAMENTO</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <textarea id="recursos" name="recursos"
+                                    class="textarea-auto-ajuste">Professores, equipe administrativa, computadores, acesso à internet e uma sala para orientação.</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">5 – RESULTADO ESPERADO – PREVISÃO</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <textarea id="resultados" name="resultados"
+                                    class="textarea-auto-ajuste">100% dos alunos alocados em estágios com documentação regularizada.</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">6 – METODOLOGIA</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <textarea id="metodologia" name="metodologia"
+                                    class="textarea-auto-ajuste">Contato com empresas, workshops, suporte para entrevistas e acompanhamento do estágio.</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">7 - CRONOGRAMA DE EXECUÇÃO DAS ATIVIDADES</th>
+                        </tr>
+                        <tr>
+                            <th>Atividades</th>
+                            <th>Mês</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <textarea id="descricao" name="descricao"
+                                    class="textarea-auto-ajuste">Contato com empresas para levantamento de vagas disponíveis.</textarea>
+                            </td>
+                            <td>Mês 1</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <textarea id="descricao" name="descricao"
+                                    class="textarea-auto-ajuste">Workshops de orientação e preparação de currículos para os alunos.</textarea>
+                            </td>
+                            <td>Mês 2</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <textarea id="descricao" name="descricao"
+                                    class="textarea-auto-ajuste">Candidaturas dos alunos às vagas e acompanhamento do processo seletivo.</textarea>
+                            </td>
+                            <td>Mês 3</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <textarea id="descricao" name="descricao"
+                                    class="textarea-auto-ajuste">Início dos estágios supervisionados e entrega da documentação inicial.</textarea>
+                            </td>
+                            <td>Mês 4</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <textarea id="descricao" name="descricao"
+                                    class="textarea-auto-ajuste">Acompanhamento contínuo dos estágios e avaliação intermediária.</textarea>
+                            </td>
+                            <td>Mês 5</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <textarea id="descricao" name="descricao"
+                                    class="textarea-auto-ajuste">Finalização dos estágios e entrega dos relatórios finais.</textarea>
+                            </td>
+                            <td>Mês 6</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Navegação entre etapas -->
+                <div class="form-navigation">
+                    <button type="button" class="nav-button prev" onclick="prevStep()" disabled>Anterior</button>
+                    <button type="button" class="nav-button next" onclick="nextStep()">Próxima</button>
+                    <button type="submit" class="nav-button submit" style="display: none;">Enviar</button>
                 </div>
             </form>
         </div>
     </main>
     <script src="script.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentStep = 1;
+            const totalSteps = 4;
 
+            function updateProgress() {
+                const progress = (currentStep / totalSteps) * 100;
+                document.querySelector('.progress-fill').style.width = `${progress}%`;
+
+                // Atualiza os indicadores de etapa
+                document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                    indicator.classList.remove('active', 'completed');
+                    if (index + 1 < currentStep) {
+                        indicator.classList.add('completed');
+                    } else if (index + 1 === currentStep) {
+                        indicator.classList.add('active');
+                    }
+                });
+
+                // Atualiza os botões de navegação
+                const prevButton = document.querySelector('.nav-button.prev');
+                const nextButton = document.querySelector('.nav-button.next');
+                const submitButton = document.querySelector('.nav-button.submit');
+
+                prevButton.disabled = currentStep === 1;
+                
+                if (currentStep === totalSteps) {
+                    nextButton.style.display = 'none';
+                    submitButton.style.display = 'block';
+                } else {
+                    nextButton.style.display = 'block';
+                    submitButton.style.display = 'none';
+                }
+            }
+
+            function showStep(step) {
+                // Oculta todas as etapas com transição suave
+                document.querySelectorAll('.form-steps').forEach(formStep => {
+                    formStep.classList.remove('active');
+                });
+
+                // Mostra a etapa atual com transição suave
+                const currentStepElement = document.getElementById(`step${step}`);
+                if (currentStepElement) {
+                    setTimeout(() => {
+                        currentStepElement.classList.add('active');
+                    }, 50);
+                }
+            }
+
+            function nextStep() {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                    updateProgress();
+                }
+            }
+
+            function prevStep() {
+                if (currentStep > 1) {
+                    currentStep--;
+                    showStep(currentStep);
+                    updateProgress();
+                }
+            }
+
+            // Adiciona os event listeners aos botões
+            document.querySelector('.nav-button.next').addEventListener('click', nextStep);
+            document.querySelector('.nav-button.prev').addEventListener('click', prevStep);
+
+            // Inicializa o formulário
+            updateProgress();
+        });
+    </script>
 </body>
 
 </html>

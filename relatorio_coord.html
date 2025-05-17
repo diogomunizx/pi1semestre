@@ -88,55 +88,149 @@
         </table>
 
         <div id="formularioCoordenador" class="form-container" style="display: none;">
-            <form class="form-relatorio" action="#" method="POST">
+            <!-- Indicadores de Progresso -->
+            <div class="step-indicators">
+                <div class="step-indicator active" data-step="1">1</div>
+                <div class="step-indicator" data-step="2">2</div>
+                <div class="step-indicator" data-step="3">3</div>
+            </div>
 
-                <label for="professor">Nome:</label>
-                <input type="text" id="professor" name="professor" disabled value="Ana Celia" required><br>
-                </td>
-                <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" disabled value="ana.portes@fatec.sp.gov.br" required><br>
-
-                <label for="rg">R.G.:</label>
-                <input type="text" id="rg" name="rg" disabled value="987654" required><br>
-
-                <label for="matricula">Matrícula:</label>
-                <input type="text" id="matricula" name="matricula" disabled value="456789" required><br>
-
-                <label for="titulo_projeto">Título do projeto:</label>
-                <input type="text" id="titulo_projeto" name="titulo_projeto" disabled value="Estágio DSM" required><br>
-
-                <label for="relatorio">Descrição das atividades:</label>
-                <textarea class="textarea-auto-ajuste" name="relatorio"
-                    rows="4">Foi realizado.... alunos entregaram...</textarea><br>
-
-                <label for="inicio_projeto">Data envio:</label>
-                <input type="date" id="envio_relatorio" name="envio_relatorio" disabled value="2024-06-27"><br>
-                <br>
-
-                <div class="status-justificativa-section">
-                    <label for="status">Status:</label>
-                    <select name="status" id="status" required>
-                        <option value="Pendente" disabled selected>Pendente</option>
-                        <option value="Deferido">Deferido</option>
-                        <option value="Correcao">Fazer correção</option>
-                    </select><br>
-
-                    <label for="justificativa">Justificativa:</label>
-                    <textarea class="textarea-auto-ajuste" name="justificativa" rows="4"
-                        placeholder="Digite a justificativa..."></textarea><br>
+            <!-- Barra de Progresso -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 33%"></div>
                 </div>
-                <!-- Botões de ação -->
-                <div class="button-container">
-                    <div class="button-group-left">
-                        <a href="relatorio_coord.html"><button class="btn-cancelar" type="button">Cancelar</button></a>
-                        <button class="btn-reset" type="reset">Limpar</button>
+            </div>
+
+            <form class="form-relatorio" action="#" method="POST">
+                <!-- Etapa 1: Informações do Professor -->
+                <div class="form-steps active" id="step1">
+                    <h4>Informações do Professor</h4>
+                    <label for="professor">Nome:</label>
+                    <input type="text" id="professor" name="professor" disabled value="Ana Celia" required><br>
+
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" disabled value="ana.portes@fatec.sp.gov.br" required><br>
+
+                    <label for="rg">R.G.:</label>
+                    <input type="text" id="rg" name="rg" disabled value="987654" required><br>
+
+                    <label for="matricula">Matrícula:</label>
+                    <input type="text" id="matricula" name="matricula" disabled value="456789" required><br>
+                </div>
+
+                <!-- Etapa 2: Informações do Projeto -->
+                <div class="form-steps" id="step2">
+                    <h4>Informações do Projeto</h4>
+                    <label for="titulo_projeto">Título do projeto:</label>
+                    <input type="text" id="titulo_projeto" name="titulo_projeto" disabled value="Estágio DSM" required><br>
+
+                    <label for="relatorio">Descrição das atividades:</label>
+                    <textarea class="textarea-auto-ajuste" name="relatorio" rows="4">Foi realizado.... alunos entregaram...</textarea><br>
+
+                    <label for="inicio_projeto">Data envio:</label>
+                    <input type="date" id="envio_relatorio" name="envio_relatorio" disabled value="2024-06-27"><br>
+                </div>
+
+                <!-- Etapa 3: Status e Justificativa -->
+                <div class="form-steps" id="step3">
+                    <h4>Status e Justificativa</h4>
+                    <div class="status-justificativa-section">
+                        <label for="status">Status:</label>
+                        <select name="status" id="status" required>
+                            <option value="Pendente" disabled selected>Pendente</option>
+                            <option value="Deferido">Deferido</option>
+                            <option value="Correcao">Fazer correção</option>
+                        </select><br>
+
+                        <label for="justificativa">Justificativa:</label>
+                        <textarea class="textarea-auto-ajuste" name="justificativa" rows="4" placeholder="Digite a justificativa..."></textarea><br>
                     </div>
-                    <div class="button-group-right">
-                        <a href="relatorio_coord.html"><button class="btn-enviar" type="button">Salvar</button></a>
-                    </div>
+                </div>
+
+                <!-- Navegação entre etapas -->
+                <div class="form-navigation">
+                    <button type="button" class="nav-button prev" onclick="prevStep()" disabled>Anterior</button>
+                    <button type="button" class="nav-button next" onclick="nextStep()">Próxima</button>
+                    <button type="submit" class="nav-button submit" style="display: none;">Enviar</button>
                 </div>
             </form>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let currentStep = 1;
+                const totalSteps = 3;
+
+                function updateProgress() {
+                    const progress = (currentStep / totalSteps) * 100;
+                    document.querySelector('.progress-fill').style.width = `${progress}%`;
+
+                    // Atualiza os indicadores de etapa
+                    document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                        indicator.classList.remove('active', 'completed');
+                        if (index + 1 < currentStep) {
+                            indicator.classList.add('completed');
+                        } else if (index + 1 === currentStep) {
+                            indicator.classList.add('active');
+                        }
+                    });
+
+                    // Atualiza os botões de navegação
+                    const prevButton = document.querySelector('.nav-button.prev');
+                    const nextButton = document.querySelector('.nav-button.next');
+                    const submitButton = document.querySelector('.nav-button.submit');
+
+                    prevButton.disabled = currentStep === 1;
+                    
+                    if (currentStep === totalSteps) {
+                        nextButton.style.display = 'none';
+                        submitButton.style.display = 'block';
+                    } else {
+                        nextButton.style.display = 'block';
+                        submitButton.style.display = 'none';
+                    }
+                }
+
+                function showStep(step) {
+                    // Oculta todas as etapas com transição suave
+                    document.querySelectorAll('.form-steps').forEach(formStep => {
+                        formStep.classList.remove('active');
+                    });
+
+                    // Mostra a etapa atual com transição suave
+                    const currentStepElement = document.getElementById(`step${step}`);
+                    if (currentStepElement) {
+                        setTimeout(() => {
+                            currentStepElement.classList.add('active');
+                        }, 50);
+                    }
+                }
+
+                function nextStep() {
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        showStep(currentStep);
+                        updateProgress();
+                    }
+                }
+
+                function prevStep() {
+                    if (currentStep > 1) {
+                        currentStep--;
+                        showStep(currentStep);
+                        updateProgress();
+                    }
+                }
+
+                // Adiciona os event listeners aos botões
+                document.querySelector('.nav-button.next').addEventListener('click', nextStep);
+                document.querySelector('.nav-button.prev').addEventListener('click', prevStep);
+
+                // Inicializa o formulário
+                updateProgress();
+            });
+        </script>
 
     </main>
     <script src="script.js" defer></script>

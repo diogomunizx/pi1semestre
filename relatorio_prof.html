@@ -88,45 +88,134 @@
             </tbody>
         </table>
         <div id="formularioProfessor" class="form-container" style="display: none;">
-            <form class="form-relatorio" action="#" method="POST">
+            <!-- Indicadores de Progresso -->
+            <div class="step-indicators">
+                <div class="step-indicator active" data-step="1">1</div>
+                <div class="step-indicator" data-step="2">2</div>
+            </div>
 
-                <label for="professor">Nome:</label>
-                <input type="text" id="professor" name="professor" disabled value="Marcia Regiolli" required><br>
-                </td>
-                <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" disabled value="marcia.reggiolli@fatec.sp.gov.br"
-                    required><br>
-
-                <label for="rg">R.G.:</label>
-                <input type="text" id="rg" name="rg" value="123456" required><br>
-
-                <label for="matricula">Matrícula:</label>
-                <input type="text" id="matricula" name="matricula" value="654321" required><br>
-
-                <label for="titulo_projeto">Título do projeto:</label>
-                <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio GE" required><br>
-
-                <div class="status-justificativa-section">
-                    <label for="relatorio">Descrição das atividades:</label>
-                    <textarea class="textarea-auto-ajuste" name="relatorio" rows="4"
-                        placeholder="Digite as atividades realizadas..."></textarea><br>
-
-                    <label for="inicio_projeto">Data envio:</label>
-                    <input type="date" id="envio_relatorio" name="envio_relatorio"><br>
+            <!-- Barra de Progresso -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 50%"></div>
                 </div>
-                <!-- Botões de ação -->
-                <div class="button-container">
-                    <div class="button-group-left">
-                        <a href="relatorio_prof.html"><button class="btn-cancelar" type="button">Cancelar</button></a>
-                        <button class="btn-reset" type="reset">Limpar</button>
+            </div>
+
+            <form class="form-relatorio" action="#" method="POST">
+                <!-- Etapa 1: Informações do Professor -->
+                <div class="form-steps active" id="step1">
+                    <h4>Informações do Professor</h4>
+                    <label for="professor">Nome:</label>
+                    <input type="text" id="professor" name="professor" disabled value="Marcia Regiolli" required><br>
+
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" disabled value="marcia.reggiolli@fatec.sp.gov.br" required><br>
+
+                    <label for="rg">R.G.:</label>
+                    <input type="text" id="rg" name="rg" value="123456" required><br>
+
+                    <label for="matricula">Matrícula:</label>
+                    <input type="text" id="matricula" name="matricula" value="654321" required><br>
+
+                    <label for="titulo_projeto">Título do projeto:</label>
+                    <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio GE" required><br>
+                </div>
+
+                <!-- Etapa 2: Relatório e Data -->
+                <div class="form-steps" id="step2">
+                    <h4>Relatório de Atividades</h4>
+                    <div class="status-justificativa-section">
+                        <label for="relatorio">Descrição das atividades:</label>
+                        <textarea class="textarea-auto-ajuste" name="relatorio" rows="4" placeholder="Digite as atividades realizadas..."></textarea><br>
+
+                        <label for="inicio_projeto">Data envio:</label>
+                        <input type="date" id="envio_relatorio" name="envio_relatorio"><br>
                     </div>
-                    <div class="button-group-right">
-                        <a href="relatorio_prof.html"><button class="btn-enviar" type="button">Enviar</button></a>
-                    </div>
+                </div>
+
+                <!-- Navegação entre etapas -->
+                <div class="form-navigation">
+                    <button type="button" class="nav-button prev" onclick="prevStep()" disabled>Anterior</button>
+                    <button type="button" class="nav-button next" onclick="nextStep()">Próxima</button>
+                    <button type="submit" class="nav-button submit" style="display: none;">Enviar</button>
                 </div>
             </form>
-
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let currentStep = 1;
+                const totalSteps = 2;
+
+                function updateProgress() {
+                    const progress = (currentStep / totalSteps) * 100;
+                    document.querySelector('.progress-fill').style.width = `${progress}%`;
+
+                    // Atualiza os indicadores de etapa
+                    document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                        indicator.classList.remove('active', 'completed');
+                        if (index + 1 < currentStep) {
+                            indicator.classList.add('completed');
+                        } else if (index + 1 === currentStep) {
+                            indicator.classList.add('active');
+                        }
+                    });
+
+                    // Atualiza os botões de navegação
+                    const prevButton = document.querySelector('.nav-button.prev');
+                    const nextButton = document.querySelector('.nav-button.next');
+                    const submitButton = document.querySelector('.nav-button.submit');
+
+                    prevButton.disabled = currentStep === 1;
+                    
+                    if (currentStep === totalSteps) {
+                        nextButton.style.display = 'none';
+                        submitButton.style.display = 'block';
+                    } else {
+                        nextButton.style.display = 'block';
+                        submitButton.style.display = 'none';
+                    }
+                }
+
+                function showStep(step) {
+                    // Oculta todas as etapas com transição suave
+                    document.querySelectorAll('.form-steps').forEach(formStep => {
+                        formStep.classList.remove('active');
+                    });
+
+                    // Mostra a etapa atual com transição suave
+                    const currentStepElement = document.getElementById(`step${step}`);
+                    if (currentStepElement) {
+                        setTimeout(() => {
+                            currentStepElement.classList.add('active');
+                        }, 50);
+                    }
+                }
+
+                function nextStep() {
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        showStep(currentStep);
+                        updateProgress();
+                    }
+                }
+
+                function prevStep() {
+                    if (currentStep > 1) {
+                        currentStep--;
+                        showStep(currentStep);
+                        updateProgress();
+                    }
+                }
+
+                // Adiciona os event listeners aos botões
+                document.querySelector('.nav-button.next').addEventListener('click', nextStep);
+                document.querySelector('.nav-button.prev').addEventListener('click', prevStep);
+
+                // Inicializa o formulário
+                updateProgress();
+            });
+        </script>
 
     </main>
     <script src="script.js" defer></script>
