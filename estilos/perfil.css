@@ -1,0 +1,205 @@
+/* Estilos para os formulários de perfil */
+.form-container--cadastro {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-Cadastro,
+.header-AlterarSenha {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #AE0C0D;
+}
+
+.header-Cadastro h1,
+.header-AlterarSenha h1 {
+    color: #333;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.input-grupoCadastro {
+    margin-bottom: 1.5rem;
+}
+
+.input-grupoCadastro label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.input-grupoCadastro input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-grupoCadastro input:focus {
+    border-color: #AE0C0D;
+    box-shadow: 0 0 0 2px rgba(174, 12, 13, 0.1);
+    outline: none;
+}
+
+.input-grupoCadastro input:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.btns-Alterar {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.btns-Alterar a {
+    padding: 0.8rem 1.5rem;
+    background-color: #AE0C0D;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btns-Alterar a:hover {
+    background-color: #8a0a0b;
+    transform: translateY(-2px);
+}
+
+.btn-salvarAlterarCadastro,
+.btn-cancelarAlterarCadastro,
+.btn-salvarAlterarSenha,
+.btn-cancelarAlterarSenha {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.btn-salvarAlterarCadastro,
+.btn-salvarAlterarSenha {
+    background-color: #0b8948;
+    color: white;
+}
+
+.btn-salvarAlterarCadastro:hover,
+.btn-salvarAlterarSenha:hover {
+    background-color: #076934;
+}
+
+.btn-cancelarAlterarCadastro,
+.btn-cancelarAlterarSenha {
+    background-color: #d64d4d;
+    color: white;
+    margin-top: 0.5rem;
+}
+
+.btn-cancelarAlterarCadastro:hover,
+.btn-cancelarAlterarSenha:hover {
+    background-color: #b33d3d;
+}
+
+.form-AlterarSenha {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.form-ajuste {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Feedback visual para validação de senha */
+.senha-requisitos {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.senha-requisito {
+    display: flex;
+    align-items: center;
+    margin: 0.3rem 0;
+}
+
+.senha-requisito::before {
+    content: "•";
+    margin-right: 0.5rem;
+    color: #ccc;
+}
+
+.senha-requisito.valido::before {
+    content: "✓";
+    color: #0b8948;
+}
+
+/* Estilos para feedback de confirmação de senha */
+.input-grupoCadastro .senha-feedback {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+.input-grupoCadastro .senha-feedback.erro {
+    display: block;
+    color: #d64d4d;
+}
+
+.input-grupoCadastro .senha-feedback.sucesso {
+    display: block;
+    color: #0b8948;
+}
+
+.input-grupoCadastro input.erro {
+    border-color: #d64d4d;
+    box-shadow: 0 0 0 2px rgba(214, 77, 77, 0.1);
+}
+
+.input-grupoCadastro input.sucesso {
+    border-color: #0b8948;
+    box-shadow: 0 0 0 2px rgba(11, 137, 72, 0.1);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .form-container--cadastro {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .btns-Alterar {
+        flex-direction: column;
+    }
+
+    .btns-Alterar a {
+        width: 100%;
+        text-align: center;
+    }
+} 
