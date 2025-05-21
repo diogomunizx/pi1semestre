@@ -930,3 +930,150 @@ body.modal-active {
     border-bottom: 2px solid #AE0C0D;
 }
 
+/* Estilos para a Grade de Horários */
+.grade-semanal {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dia {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dia h3 {
+    color: #AE0C0D;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    border-bottom: 2px solid #AE0C0D;
+    padding-bottom: 10px;
+}
+
+.linhas-horario {
+    margin-bottom: 20px;
+}
+
+.linha-horario {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.linha-horario:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.linha-horario input[type="time"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+    grid-column: span 1;
+}
+
+.linha-horario select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+    background-color: white;
+    grid-column: span 1;
+}
+
+.linha-horario button {
+    padding: 8px 12px;
+    background-color: #d64d4d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    grid-column: span 1;
+}
+
+.linha-horario button:hover {
+    background-color: #a23232;
+}
+
+.dia button[onclick^="adicionarLinha"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #0b8948;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.dia button[onclick^="adicionarLinha"]:hover {
+    background-color: #044021;
+}
+
+#alterar-dados {
+    display: block;
+    margin: 30px auto;
+    padding: 12px 24px;
+    background-color: #AE0C0D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+#alterar-dados:hover {
+    background-color: #8a0a0b;
+    transform: translateY(-2px);
+}
+
+/* Responsividade */
+@media screen and (max-width: 1200px) {
+    .grade-semanal {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .grade-semanal {
+        grid-template-columns: 1fr;
+    }
+
+    .linha-horario {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .linha-horario input[type="time"] {
+        grid-column: span 1;
+    }
+
+    .linha-horario select {
+        grid-column: span 2;
+    }
+
+    .linha-horario button {
+        grid-column: span 2;
+    }
+}
+

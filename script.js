@@ -414,98 +414,135 @@ function ordenarLinhas(dia) {
 }
 
 function verificarSobreposicao(dia) {
-  const container = document.querySelector(`#linhas-${dia}`);
-  const linhas = Array.from(container.querySelectorAll('.linha-horario'));
+    const container = document.querySelector(`#linhas-${dia}`);
+    const linhas = Array.from(container.querySelectorAll('.linha-horario'));
+    const intervalos = [];
+    let horasTotais = 0;
 
-  const intervalos = [];
+    for (let linha of linhas) {
+        const inputs = linha.querySelectorAll('input[type="time"]');
+        const inicioInput = inputs[0];
+        const fimInput = inputs[1];
 
-  for (let linha of linhas) {
-    const inputs = linha.querySelectorAll('input[type="time"]');
-    const inicioInput = inputs[0];
-    const fimInput = inputs[1];
+        const inicio = inicioInput?.value;
+        const fim = fimInput?.value;
 
-    const inicio = inicioInput?.value;
-    const fim = fimInput?.value;
+        if (!inicio || !fim) continue;
 
-    if (!inicio || !fim) continue;
+        const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
+        const fimTime = DateTime.fromFormat(fim, "HH:mm");
 
-    const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
-    const fimTime = DateTime.fromFormat(fim, "HH:mm");
+        if (!inicioTime.isValid || !fimTime.isValid || fimTime <= inicioTime) {
+            alert("Horário inválido ou fim menor/igual ao início.");
+            inicioInput.value = "";
+            fimInput.value = "";
+            return;
+        }
 
-    if (!inicioTime.isValid || !fimTime.isValid || fimTime <= inicioTime) {
-      alert("Horário inválido ou fim menor/igual ao início.");
-      inicioInput.value = "";
-      fimInput.value = "";
-      return;
+        // Calcula as horas trabalhadas neste intervalo
+        const duracaoHoras = fimTime.diff(inicioTime, 'hours').hours;
+        horasTotais += duracaoHoras;
+
+        // Verifica se ultrapassou 8 horas diárias
+        if (horasTotais > 8) {
+            alert("Você não pode trabalhar mais que 8 horas por dia. Limite excedido em " + dia + ".");
+            inicioInput.value = "";
+            fimInput.value = "";
+            return;
+        }
+
+        const novoIntervalo = Interval.fromDateTimes(inicioTime, fimTime);
+
+        for (let intervalo of intervalos) {
+            if (novoIntervalo.overlaps(intervalo)) {
+                alert("Conflito detectado: horários sobrepostos em " + dia + ".");
+                inicioInput.value = "";
+                fimInput.value = "";
+                return;
+            }
+        }
+
+        intervalos.push(novoIntervalo);
     }
-
-    const novoIntervalo = Interval.fromDateTimes(inicioTime, fimTime);
-
-    for (let intervalo of intervalos) {
-      if (novoIntervalo.overlaps(intervalo)) {
-        alert("Conflito detectado: horários sobrepostos em " + dia + ".");
-        inicioInput.value = "";
-        fimInput.value = "";
-        return;
-      }
-    }
-
-    intervalos.push(novoIntervalo);
-  }
 }
 
 function verificarDiferencaEntreDias() {
-  for (let i = 0; i < diasDaSemana.length - 1; i++) {
-    const diaAtual = diasDaSemana[i];
-    const diaSeguinte = diasDaSemana[i + 1];
+    for (let i = 0; i < diasDaSemana.length - 1; i++) {
+        const diaAtual = diasDaSemana[i];
+        const diaSeguinte = diasDaSemana[i + 1];
 
-    // Ignora sábado para segunda
-    if (diaAtual === "sabado") continue;
+        // Ignora sábado para segunda
+        if (diaAtual === "sabado") continue;
 
-    const containerAtual = document.querySelector(`#linhas-${diaAtual}`);
-    const containerSeguinte = document.querySelector(`#linhas-${diaSeguinte}`);
+        const containerAtual = document.querySelector(`#linhas-${diaAtual}`);
+        const containerSeguinte = document.querySelector(`#linhas-${diaSeguinte}`);
 
-    const linhasAtual = Array.from(containerAtual.querySelectorAll('.linha-horario'));
-    const linhasSeguinte = Array.from(containerSeguinte.querySelectorAll('.linha-horario'));
+        const linhasAtual = Array.from(containerAtual.querySelectorAll('.linha-horario'));
+        const linhasSeguinte = Array.from(containerSeguinte.querySelectorAll('.linha-horario'));
 
-    if (linhasAtual.length === 0 || linhasSeguinte.length === 0) continue;
+        if (linhasAtual.length === 0 || linhasSeguinte.length === 0) continue;
 
-    // Último horário de fim do dia atual
-    const fimMaisTarde = linhasAtual.reduce((ultimo, linha) => {
-      const fim = linha.querySelectorAll('input[type="time"]')[1]?.value;
-      const fimTime = DateTime.fromFormat(fim, "HH:mm");
-      return (!ultimo || fimTime > ultimo) ? fimTime : ultimo;
-    }, null);
+        // Último horário de fim do dia atual
+        const fimMaisTarde = linhasAtual.reduce((ultimo, linha) => {
+            const fim = linha.querySelectorAll('input[type="time"]')[1]?.value;
+            const fimTime = DateTime.fromFormat(fim, "HH:mm");
+            return (!ultimo || fimTime > ultimo) ? fimTime : ultimo;
+        }, null);
 
-    // Primeiro horário de início do dia seguinte
-    const inicioMaisCedo = linhasSeguinte.reduce((primeiro, linha) => {
-      const inicio = linha.querySelectorAll('input[type="time"]')[0]?.value;
-      const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
-      return (!primeiro || inicioTime < primeiro) ? inicioTime : primeiro;
-    }, null);
+        // Primeiro horário de início do dia seguinte
+        const inicioMaisCedo = linhasSeguinte.reduce((primeiro, linha) => {
+            const inicio = linha.querySelectorAll('input[type="time"]')[0]?.value;
+            const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
+            return (!primeiro || inicioTime < primeiro) ? inicioTime : primeiro;
+        }, null);
 
-    if (fimMaisTarde && inicioMaisCedo) {
-      // Simula continuidade de dias
-      const fimComData = DateTime.fromObject({ hour: fimMaisTarde.hour, minute: fimMaisTarde.minute });
-      const inicioComData = DateTime.fromObject({ hour: inicioMaisCedo.hour, minute: inicioMaisCedo.minute }).plus({ days: 1 });
+        if (fimMaisTarde && inicioMaisCedo) {
+            // Simula continuidade de dias
+            const fimComData = DateTime.fromObject({ hour: fimMaisTarde.hour, minute: fimMaisTarde.minute });
+            const inicioComData = DateTime.fromObject({ hour: inicioMaisCedo.hour, minute: inicioMaisCedo.minute }).plus({ days: 1 });
 
-      const diff = inicioComData.diff(fimComData, 'hours').hours;
+            const diff = inicioComData.diff(fimComData, 'hours').hours;
 
-      if (diff < 8) {
-        alert(`Conflito entre ${diaAtual} e ${diaSeguinte}: deve haver pelo menos 8 horas de intervalo.`);
+            // Alterado de 8 para 11 horas de intervalo mínimo
+            if (diff < 11) {
+                alert(`Você precisa ter um intervalo mínimo de 11 horas de descanso entre ${diaAtual} e ${diaSeguinte}.`);
 
-        // Limpa o campo do início do dia seguinte
-        for (let linha of linhasSeguinte) {
-          const inicioInput = linha.querySelectorAll('input[type="time"]')[0];
-          const inicioTime = DateTime.fromFormat(inicioInput.value, "HH:mm");
-          if (inicioTime.equals(inicioMaisCedo)) {
-            inicioInput.value = "";
-            break;
-          }
+                // Limpa o campo do início do dia seguinte
+                for (let linha of linhasSeguinte) {
+                    const inicioInput = linha.querySelectorAll('input[type="time"]')[0];
+                    const inicioTime = DateTime.fromFormat(inicioInput.value, "HH:mm");
+                    if (inicioTime.equals(inicioMaisCedo)) {
+                        inicioInput.value = "";
+                        break;
+                    }
+                }
+
+                return;
+            }
         }
-
-        return;
-      }
     }
-  }
+}
+
+// Função auxiliar para calcular total de horas em um dia
+function calcularHorasDia(dia) {
+    const container = document.querySelector(`#linhas-${dia}`);
+    const linhas = Array.from(container.querySelectorAll('.linha-horario'));
+    let horasTotais = 0;
+
+    for (let linha of linhas) {
+        const inputs = linha.querySelectorAll('input[type="time"]');
+        const inicio = inputs[0]?.value;
+        const fim = inputs[1]?.value;
+
+        if (!inicio || !fim) continue;
+
+        const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
+        const fimTime = DateTime.fromFormat(fim, "HH:mm");
+
+        if (inicioTime.isValid && fimTime.isValid) {
+            horasTotais += fimTime.diff(inicioTime, 'hours').hours;
+        }
+    }
+
+    return horasTotais;
 }
