@@ -546,3 +546,31 @@ function calcularHorasDia(dia) {
 
     return horasTotais;
 }
+
+function inicializarContadores() {
+  diasDaSemana.forEach(dia => {
+    const container = document.querySelector(`#linhas-${dia}`);
+    const linhas = Array.from(container.querySelectorAll('.linha-horario'));
+
+    let maxIndex = -1;
+
+    for (let linha of linhas) {
+      const inputs = linha.querySelectorAll('input[type="time"]');
+      for (let input of inputs) {
+        const match = input.name.match(new RegExp(`horario_${dia}_(\\d+)_inicio`));
+        if (match) {
+          const index = parseInt(match[1]);
+          if (index > maxIndex) {
+            maxIndex = index;
+          }
+        }
+      }
+    }
+
+    contadores[dia] = maxIndex + 1;
+  });
+}
+
+window.onload = function () {
+  inicializarContadores(); 
+};
