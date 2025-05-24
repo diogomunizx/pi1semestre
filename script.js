@@ -363,15 +363,76 @@ function imprimirInscricao() {
     }, 1000);
 }
 
+
+/* ===================================================
+   CONFIGURAÇÕES INICIAIS E VARIÁVEIS GLOBAIS
+   =================================================== */
 const { DateTime, Interval } = luxon;
 
+// Dias da semana e contadores de linhas por dia
 const diasDaSemana = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
 const contadores = Object.fromEntries(diasDaSemana.map(dia => [dia, 0]));
 
+// Estado da aplicação
+let diaAtualIndex = 0;
+let emEdicao = false;
+
+/* ===================================================
+   FUNÇÕES DE CONTROLE VISUAL - AO ALTERAR DADOS
+   =================================================== */
+
+function aplicarEstiloCentralizado() {
+  const gradeSemanal = document.querySelector('.grade-semanal');
+  const diaAtual = document.getElementById(diasDaSemana[diaAtualIndex]);
+  
+  gradeSemanal.style.display = 'flex';
+  gradeSemanal.style.justifyContent = 'center';
+  gradeSemanal.style.alignItems = 'flex-start';
+  gradeSemanal.style.flexWrap = 'wrap';
+  
+  diaAtual.style.width = '80%';
+  diaAtual.style.maxWidth = '600px';
+  diaAtual.style.margin = '0 auto';
+}
+
+function removerEstiloCentralizado() {
+  const gradeSemanal = document.querySelector('.grade-semanal');
+  
+  gradeSemanal.style.display = '';
+  gradeSemanal.style.justifyContent = '';
+  gradeSemanal.style.alignItems = '';
+  gradeSemanal.style.flexWrap = '';
+  
+  diasDaSemana.forEach(dia => {
+    const elementoDia = document.getElementById(dia);
+    if (elementoDia) {
+      elementoDia.style.width = '';
+      elementoDia.style.maxWidth = '';
+      elementoDia.style.margin = '';
+    }
+  });
+}
+
+/* ===================================================
+   FUNÇÕES DE GERENCIAMENTO DE HORÁRIOS
+   =================================================== */
+
 function adicionarLinha(dia) {
+  const container = document.querySelector(`#linhas-${dia}`);
+  const linhas = container.querySelectorAll('.linha-horario');
+
+  // Verifica horários incompletos
+  for (let linha of linhas) {
+    const [inicio, fim] = linha.querySelectorAll('input[type="time"]');
+    if (!inicio.value || !fim.value) {
+      alert("Preencha todos os horários antes de adicionar uma nova linha.");
+      return;
+    }
+  }
+
+  // Cria nova linha
   contadores[dia]++;
   const num = contadores[dia];
-  const container = document.querySelector(`#linhas-${dia}`);
 
   const novaLinha = document.createElement('div');
   novaLinha.classList.add('linha-horario');
@@ -393,6 +454,7 @@ function adicionarLinha(dia) {
 }
 
 function removerLinha(botao) {
+  if (!emEdicao) return;
   const linha = botao.closest('.linha-horario');
   linha.remove();
 }
@@ -408,150 +470,131 @@ function ordenarLinhas(dia) {
   });
 
   linhas.forEach(l => container.appendChild(l));
-
   verificarSobreposicao(dia);
-  verificarDiferencaEntreDias(); // Novo
+  verificarDiferencaEntreDias();
 }
 
+/* ===================================================
+   FUNÇÕES DE VALIDAÇÃO
+   =================================================== */
+
 function verificarSobreposicao(dia) {
-    const container = document.querySelector(`#linhas-${dia}`);
-    const linhas = Array.from(container.querySelectorAll('.linha-horario'));
-    const intervalos = [];
-    let horasTotais = 0;
+  const container = document.querySelector(`#linhas-${dia}`);
+  const linhas = Array.from(container.querySelectorAll('.linha-horario'));
+  const intervalos = [];
+  let horasTotais = 0;
 
-    for (let linha of linhas) {
-        const inputs = linha.querySelectorAll('input[type="time"]');
-        const inicioInput = inputs[0];
-        const fimInput = inputs[1];
+  for (let linha of linhas) {
+    const [inicioInput, fimInput] = linha.querySelectorAll('input[type="time"]');
+    const inicio = inicioInput?.value;
+    const fim = fimInput?.value;
 
-        const inicio = inicioInput?.value;
-        const fim = fimInput?.value;
+    if (!inicio || !fim) continue;
 
-        if (!inicio || !fim) continue;
+    const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
+    const fimTime = DateTime.fromFormat(fim, "HH:mm");
 
-        const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
-        const fimTime = DateTime.fromFormat(fim, "HH:mm");
-
-        if (!inicioTime.isValid || !fimTime.isValid || fimTime <= inicioTime) {
-            alert("Horário inválido ou fim menor/igual ao início.");
-            inicioInput.value = "";
-            fimInput.value = "";
-            return;
-        }
-
-        // Calcula as horas trabalhadas neste intervalo
-        const duracaoHoras = fimTime.diff(inicioTime, 'hours').hours;
-        horasTotais += duracaoHoras;
-
-        // Verifica se ultrapassou 8 horas diárias
-        if (horasTotais > 8) {
-            alert("Você não pode trabalhar mais que 8 horas por dia. Limite excedido em " + dia + ".");
-            inicioInput.value = "";
-            fimInput.value = "";
-            return;
-        }
-
-        const novoIntervalo = Interval.fromDateTimes(inicioTime, fimTime);
-
-        for (let intervalo of intervalos) {
-            if (novoIntervalo.overlaps(intervalo)) {
-                alert("Conflito detectado: horários sobrepostos em " + dia + ".");
-                inicioInput.value = "";
-                fimInput.value = "";
-                return;
-            }
-        }
-
-        intervalos.push(novoIntervalo);
+    // Validação básica do horário
+    if (!inicioTime.isValid || !fimTime.isValid || fimTime <= inicioTime) {
+      alert("Horário inválido ou fim menor/igual ao início.");
+      inicioInput.value = "";
+      fimInput.value = "";
+      return;
     }
+
+    // Verificação de horas totais 
+    const duracaoHoras = fimTime.diff(inicioTime, 'hours').hours;
+    horasTotais += duracaoHoras;
+
+    if (horasTotais > 8) {
+      alert(`Você não pode trabalhar mais que 8 horas por dia. Limite excedido em ${dia}.`);
+      inicioInput.value = "";
+      fimInput.value = "";
+      return;
+    }
+
+    // Verificação de sobreposição
+    const novoIntervalo = Interval.fromDateTimes(inicioTime, fimTime);
+    for (let intervalo of intervalos) {
+      if (novoIntervalo.overlaps(intervalo)) {
+        alert(`Conflito detectado: horários sobrepostos em ${dia}.`);
+        inicioInput.value = "";
+        fimInput.value = "";
+        return;
+      }
+    }
+
+    intervalos.push(novoIntervalo);
+  }
 }
 
 function verificarDiferencaEntreDias() {
-    for (let i = 0; i < diasDaSemana.length - 1; i++) {
-        const diaAtual = diasDaSemana[i];
-        const diaSeguinte = diasDaSemana[i + 1];
+  for (let i = 0; i < diasDaSemana.length - 1; i++) {
+    const diaAtual = diasDaSemana[i];
+    const diaSeguinte = diasDaSemana[i + 1];
+    
+    // Não verifica de sábado para segunda
+    if (diaAtual === "sabado") continue;
 
-        // Ignora sábado para segunda
-        if (diaAtual === "sabado") continue;
+    // Obtém containers e linhas
+    const containerAtual = document.querySelector(`#linhas-${diaAtual}`);
+    const containerSeguinte = document.querySelector(`#linhas-${diaSeguinte}`);
+    const linhasAtual = Array.from(containerAtual.querySelectorAll('.linha-horario'));
+    const linhasSeguinte = Array.from(containerSeguinte.querySelectorAll('.linha-horario'));
 
-        const containerAtual = document.querySelector(`#linhas-${diaAtual}`);
-        const containerSeguinte = document.querySelector(`#linhas-${diaSeguinte}`);
+    if (linhasAtual.length === 0 || linhasSeguinte.length === 0) continue;
 
-        const linhasAtual = Array.from(containerAtual.querySelectorAll('.linha-horario'));
-        const linhasSeguinte = Array.from(containerSeguinte.querySelectorAll('.linha-horario'));
+    // Encontra o último horário do dia atual
+    const fimMaisTarde = linhasAtual.reduce((ultimo, linha) => {
+      const fim = linha.querySelectorAll('input[type="time"]')[1]?.value;
+      const fimTime = DateTime.fromFormat(fim, "HH:mm");
+      return (!ultimo || fimTime > ultimo) ? fimTime : ultimo;
+    }, null);
 
-        if (linhasAtual.length === 0 || linhasSeguinte.length === 0) continue;
+    // Encontra o primeiro horário do dia seguinte
+    const inicioMaisCedo = linhasSeguinte.reduce((primeiro, linha) => {
+      const inicio = linha.querySelectorAll('input[type="time"]')[0]?.value;
+      const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
+      return (!primeiro || inicioTime < primeiro) ? inicioTime : primeiro;
+    }, null);
 
-        // Último horário de fim do dia atual
-        const fimMaisTarde = linhasAtual.reduce((ultimo, linha) => {
-            const fim = linha.querySelectorAll('input[type="time"]')[1]?.value;
-            const fimTime = DateTime.fromFormat(fim, "HH:mm");
-            return (!ultimo || fimTime > ultimo) ? fimTime : ultimo;
-        }, null);
+    if (fimMaisTarde && inicioMaisCedo) {
+      const fimComData = DateTime.fromObject({ hour: fimMaisTarde.hour, minute: fimMaisTarde.minute });
+      const inicioComData = DateTime.fromObject({ 
+        hour: inicioMaisCedo.hour, 
+        minute: inicioMaisCedo.minute 
+      }).plus({ days: 1 });
+      
+      const diff = inicioComData.diff(fimComData, 'hours').hours;
 
-        // Primeiro horário de início do dia seguinte
-        const inicioMaisCedo = linhasSeguinte.reduce((primeiro, linha) => {
-            const inicio = linha.querySelectorAll('input[type="time"]')[0]?.value;
-            const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
-            return (!primeiro || inicioTime < primeiro) ? inicioTime : primeiro;
-        }, null);
+      // Verifica intervalo mínimo de 11 horas
+      if (diff < 11) {
+        alert(`Você precisa ter um intervalo mínimo de 11 horas de descanso entre ${diaAtual} e ${diaSeguinte}.`);
 
-        if (fimMaisTarde && inicioMaisCedo) {
-            // Simula continuidade de dias
-            const fimComData = DateTime.fromObject({ hour: fimMaisTarde.hour, minute: fimMaisTarde.minute });
-            const inicioComData = DateTime.fromObject({ hour: inicioMaisCedo.hour, minute: inicioMaisCedo.minute }).plus({ days: 1 });
-
-            const diff = inicioComData.diff(fimComData, 'hours').hours;
-
-            // Alterado de 8 para 11 horas de intervalo mínimo
-            if (diff < 11) {
-                alert(`Você precisa ter um intervalo mínimo de 11 horas de descanso entre ${diaAtual} e ${diaSeguinte}.`);
-
-                // Limpa o campo do início do dia seguinte
-                for (let linha of linhasSeguinte) {
-                    const inicioInput = linha.querySelectorAll('input[type="time"]')[0];
-                    const inicioTime = DateTime.fromFormat(inicioInput.value, "HH:mm");
-                    if (inicioTime.equals(inicioMaisCedo)) {
-                        inicioInput.value = "";
-                        break;
-                    }
-                }
-
-                return;
-            }
+        // Remove o horário problemático
+        for (let linha of linhasSeguinte) {
+          const inicioInput = linha.querySelectorAll('input[type="time"]')[0];
+          const inicioTime = DateTime.fromFormat(inicioInput.value, "HH:mm");
+          if (inicioTime.equals(inicioMaisCedo)) {
+            inicioInput.value = "";
+            break;
+          }
         }
+
+        return;
+      }
     }
+  }
 }
 
-// Função auxiliar para calcular total de horas em um dia
-function calcularHorasDia(dia) {
-    const container = document.querySelector(`#linhas-${dia}`);
-    const linhas = Array.from(container.querySelectorAll('.linha-horario'));
-    let horasTotais = 0;
-
-    for (let linha of linhas) {
-        const inputs = linha.querySelectorAll('input[type="time"]');
-        const inicio = inputs[0]?.value;
-        const fim = inputs[1]?.value;
-
-        if (!inicio || !fim) continue;
-
-        const inicioTime = DateTime.fromFormat(inicio, "HH:mm");
-        const fimTime = DateTime.fromFormat(fim, "HH:mm");
-
-        if (inicioTime.isValid && fimTime.isValid) {
-            horasTotais += fimTime.diff(inicioTime, 'hours').hours;
-        }
-    }
-
-    return horasTotais;
-}
+/* ===================================================
+   FUNÇÕES DE CONTROLE DE EDIÇÃO
+   =================================================== */
 
 function inicializarContadores() {
   diasDaSemana.forEach(dia => {
     const container = document.querySelector(`#linhas-${dia}`);
     const linhas = Array.from(container.querySelectorAll('.linha-horario'));
-
     let maxIndex = -1;
 
     for (let linha of linhas) {
@@ -560,9 +603,7 @@ function inicializarContadores() {
         const match = input.name.match(new RegExp(`horario_${dia}_(\\d+)_inicio`));
         if (match) {
           const index = parseInt(match[1]);
-          if (index > maxIndex) {
-            maxIndex = index;
-          }
+          if (index > maxIndex) maxIndex = index;
         }
       }
     }
@@ -571,6 +612,185 @@ function inicializarContadores() {
   });
 }
 
-window.onload = function () {
-  inicializarContadores(); 
+function habilitarEdicao() {
+  emEdicao = true;
+  diaAtualIndex = 0;
+  
+  // Configura estado inicial da edição
+  document.querySelectorAll('.dia').forEach(div => div.style.display = 'none');
+  document.querySelectorAll('.botao-adicionar').forEach(btn => btn.style.display = 'none');
+  document.querySelectorAll('input, select').forEach(el => el.disabled = false);
+  document.querySelectorAll('.linha-horario button').forEach(botao => {
+    botao.style.display = 'inline-block';
+  });
+
+  // Mostra apenas o dia atual
+  const diaAtual = diasDaSemana[diaAtualIndex];
+  document.getElementById(diaAtual).style.display = 'block';
+  document.querySelector(`#${diaAtual} .botao-adicionar`).style.display = 'inline-block';
+
+  // Configura botões
+  const botaoAlterar = document.getElementById('alterar-dados');
+  botaoAlterar.textContent = 'Avançar';
+  botaoAlterar.onclick = avancarDia;
+  document.getElementById('retornar-dia').style.display = 'none';
+  
+  aplicarEstiloCentralizado();
+}
+
+function avancarDia() {
+  if (!emEdicao) return;
+
+  const diaAtual = diasDaSemana[diaAtualIndex];
+
+  if (existeHorarioIncompleto(diaAtual)) {
+    alert("Por favor, preencha todos os horários antes de continuar.");
+    return;
+  }
+
+  // Esconde dia atual
+  document.getElementById(diaAtual).style.display = 'none';
+  document.querySelector(`#${diaAtual} .botao-adicionar`).style.display = 'none';
+  
+  diaAtualIndex++;
+
+  // Atualiza interface
+  if (diaAtualIndex > 0) {
+    document.getElementById('retornar-dia').style.display = 'inline-block';
+  }
+
+  if (diaAtualIndex < diasDaSemana.length) {
+    const proximoDia = diasDaSemana[diaAtualIndex];
+    document.getElementById(proximoDia).style.display = 'block';
+    document.querySelector(`#${proximoDia} .botao-adicionar`).style.display = 'inline-block';
+    aplicarEstiloCentralizado();
+  }
+
+  // Atualiza botão principal
+  if (diaAtualIndex === diasDaSemana.length - 1) {
+    document.getElementById('alterar-dados').textContent = 'Salvar alterações';
+  }
+
+  if (diaAtualIndex === diasDaSemana.length) {
+    salvarAlteracoes();
+  }
+}
+
+function retornarDia() {
+  if (!emEdicao || diaAtualIndex <= 0) return;
+
+  const diaAtual = diasDaSemana[diaAtualIndex];
+
+  if (existeHorarioIncompleto(diaAtual)) {
+    alert("Por favor, preencha todos os horários antes de retornar.");
+    return;
+  }
+
+  // Esconde dia atual
+  document.getElementById(diaAtual).style.display = 'none';
+  document.querySelector(`#${diaAtual} .botao-adicionar`).style.display = 'none';
+  
+  diaAtualIndex--;
+
+  // Mostra dia anterior
+  const diaAnterior = diasDaSemana[diaAtualIndex];
+  document.getElementById(diaAnterior).style.display = 'block';
+  document.querySelector(`#${diaAnterior} .botao-adicionar`).style.display = 'inline-block';
+
+  // Atualiza botões
+  document.getElementById('alterar-dados').textContent = 'Avançar';
+  if (diaAtualIndex === 0) {
+    document.getElementById('retornar-dia').style.display = 'none';
+  }
+  
+  aplicarEstiloCentralizado();
+}
+
+function existeHorarioIncompleto(dia) {
+  const container = document.querySelector(`#linhas-${dia}`);
+  const linhas = Array.from(container.querySelectorAll('.linha-horario'));
+
+  return linhas.some(linha => {
+    const inputs = linha.querySelectorAll('input[type="time"]');
+    const inicio = inputs[0]?.value;
+    const fim = inputs[1]?.value;
+    return !inicio || !fim;
+  });
+}
+
+/* ===================================================
+   FUNÇÕES DE PERSISTÊNCIA (COM REDIRECIONAMENTO FIXO)
+   =================================================== */
+
+async function salvarAlteracoes() {
+  const ultimoDia = diasDaSemana[diasDaSemana.length - 1];
+  if (existeHorarioIncompleto(ultimoDia)) {
+    alert("Por favor, preencha todos os horários antes de salvar.");
+    diaAtualIndex = diasDaSemana.length - 1;
+    document.getElementById(ultimoDia).style.display = 'block';
+    document.querySelector(`#${ultimoDia} .botao-adicionar`).style.display = 'inline-block';
+    document.getElementById('alterar-dados').textContent = 'Salvar alterações';
+    document.getElementById('retornar-dia').style.display = 'inline-block';
+    return;
+  }
+
+  const dadosGrade = {
+    tipo_operacao: 'sobrescrita_total',
+    dias: {}
+  };
+  
+  diasDaSemana.forEach(dia => {
+    const linhas = Array.from(document.querySelectorAll(`#linhas-${dia} .linha-horario`));
+    dadosGrade.dias[dia] = linhas.map(linha => {
+      const [inicio, fim] = linha.querySelectorAll('input[type="time"]');
+      const origem = linha.querySelector('select');
+      return {
+        inicio: inicio.value,
+        fim: fim.value,
+        origem: origem.value
+      };
+    });
+  });
+
+  try {
+    const response = await fetch('salvar_grade.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dadosGrade)
+    });
+
+    const resultado = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(resultado.message || 'Erro ao salvar os dados');
+    
+ 
+    }
+
+    alert('Grade salva com sucesso!');
+  } catch (error) {
+    console.error('Erro:', error);
+    alert(`Erro: ${error.message}`);
+  } finally {
+    // REDIRECIONAMENTO FIXO (SUCESSO OU ERRO)
+    window.location.href = 'minhasAulas.html';
+  }
+}
+
+/* ===================================================
+   INICIALIZAÇÃO
+   =================================================== */
+
+window.onload = () => {
+  inicializarContadores();
+  
+  // Configura estado inicial
+  document.querySelectorAll('input, select').forEach(el => el.disabled = true);
+  document.querySelectorAll('.linha-horario button').forEach(botao => {
+    botao.style.display = 'none';
+  });
+  document.querySelectorAll('.botao-adicionar').forEach(btn => btn.style.display = 'none');
+  document.getElementById('retornar-dia').style.display = 'none';
+  
+  removerEstiloCentralizado();
 };

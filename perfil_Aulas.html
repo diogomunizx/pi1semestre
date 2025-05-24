@@ -62,41 +62,44 @@
       <div class="dia" id="segunda">
         <h3>Segunda-feira</h3>
         <div class="linhas-horario" id="linhas-segunda"></div>
-        <button onclick="adicionarLinha('segunda')">+ Adicionar horário</button>
+        <button class="botao-adicionar" onclick="adicionarLinha('segunda')">+ Adicionar horário</button>
       </div>
 
       <div class="dia" id="terca">
         <h3>Terça-feira</h3>
         <div class="linhas-horario" id="linhas-terca"></div>
-        <button onclick="adicionarLinha('terca')">+ Adicionar horário</button>
+        <button class="botao-adicionar" onclick="adicionarLinha('terca')">+ Adicionar horário</button>
       </div>
 
       <div class="dia" id="quarta">
         <h3>Quarta-feira</h3>
         <div class="linhas-horario" id="linhas-quarta"></div>
-        <button onclick="adicionarLinha('quarta')">+ Adicionar horário</button>
+        <button class="botao-adicionar" onclick="adicionarLinha('quarta')">+ Adicionar horário</button>
       </div>
 
       <div class="dia" id="quinta">
         <h3>Quinta-feira</h3>
         <div class="linhas-horario" id="linhas-quinta"></div>
-        <button onclick="adicionarLinha('quinta')">+ Adicionar horário</button>
+        <button class="botao-adicionar" onclick="adicionarLinha('quinta')">+ Adicionar horário</button>
       </div>
 
       <div class="dia" id="sexta">
         <h3>Sexta-feira</h3>
         <div class="linhas-horario" id="linhas-sexta"></div>
-        <button onclick="adicionarLinha('sexta')">+ Adicionar horário</button>
+        <button class="botao-adicionar" onclick="adicionarLinha('sexta')">+ Adicionar horário</button>
       </div>
 
       <div class="dia" id="sabado">
         <h3>Sábado</h3>
         <div class="linhas-horario" id="linhas-sabado"></div>
-        <button onclick="adicionarLinha('sabado')">+ Adicionar horário</button>
+        <button class="botao-adicionar" onclick="adicionarLinha('sabado')">+ Adicionar horário</button>
       </div>
     </div>
 
-    <button id="alterar-dados" onclick="habilitarEdicao()">Alterar dados</button>
+    <div class="botoes-controle">
+      <button id="alterar-dados" onclick="habilitarEdicao()">Alterar dados</button>
+      <button id="retornar-dia" style="display: none;" onclick="retornarDia()">Retornar</button>
+</div>
   </main>
 
   <script src="script.js" defer></script>
