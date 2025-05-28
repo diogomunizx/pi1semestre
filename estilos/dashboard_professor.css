@@ -1,0 +1,246 @@
+/* Cartões de Resumo */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.summary-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 16px;
+    margin-right: 20px;
+}
+
+.card-icon img {
+    width: 32px;
+    height: 32px;
+}
+
+.card-content h3 {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.card-value {
+    color: #333;
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Detalhamento de Horas */
+.hours-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.hours-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.hours-card h3 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.hours-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    color: #666;
+    font-size: 16px;
+}
+
+.hours-value {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Gráfico e Container */
+.dashboard-container {
+    padding: 20px;
+    width: 95%;
+    max-width: 1400px;
+    margin: 20px auto;
+}
+
+.chart-container {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.chart-header {
+    margin-bottom: 20px;
+}
+
+.chart-header h2 {
+    color: #333;
+    font-size: 24px;
+    margin: 0;
+}
+
+.chart-wrapper {
+    height: 300px;
+    position: relative;
+}
+
+/* Tabela de Projetos */
+.professors-table {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.professors-table h3 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.professors-table table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.professors-table th,
+.professors-table td {
+    padding: 16px;
+    text-align: left;
+}
+
+.professors-table th {
+    font-weight: 600;
+    color: #444;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #eee;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.professors-table td {
+    border-bottom: 1px solid #eee;
+    color: #555;
+}
+
+.professors-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.professors-table tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Status e Tipos de HAE */
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    text-align: center;
+}
+
+.status-active {
+    background-color: #e6f4ea;
+    color: #0b8948;
+}
+
+.hae-type {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.hae-orientacao {
+    background-color: #fff3e0;
+    color: #f39c12;
+}
+
+.hae-projetos {
+    background-color: #e8f5e9;
+    color: #0b8948;
+}
+
+.horas-column {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Responsividade */
+@media screen and (max-width: 768px) {
+    .summary-cards,
+    .hours-details {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .summary-card {
+        padding: 20px;
+    }
+
+    .card-value {
+        font-size: 28px;
+    }
+
+    .hours-details {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .hours-card {
+        padding: 20px;
+    }
+
+    .chart-wrapper {
+        height: 250px;
+    }
+
+    .professors-table {
+        overflow-x: auto;
+    }
+    
+    .professors-table table {
+        min-width: 600px;
+    }
+} 
