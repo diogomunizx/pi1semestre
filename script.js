@@ -363,6 +363,89 @@ function imprimirInscricao() {
     }, 1000);
 }
 
+function imprimirLinhaSeparada(icone) {
+  const linha = icone.closest("tr");
+  const colunas = linha.querySelectorAll("td");
+
+  let conteudo = `<div style="font-family: Arial, sans-serif; padding: 20px;">
+                    <h2 style="text-align: center;">Resumo</h2>`;
+  colunas.forEach((coluna, i) => {
+    conteudo += `<p><strong>Coluna ${i + 1}:</strong> ${coluna.innerText.trim()}</p>`;
+  });
+  conteudo += `</div>`;
+
+  const janela = window.open('', '_blank', 'width=800,height=600');
+  if (janela) {
+    janela.document.write(`
+      <html>
+        <head>
+          <title>Impressão de Linha</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            h2 { text-align: center; margin-bottom: 20px; }
+            p { font-size: 18px; }
+          </style>
+        </head>
+        <body>${conteudo}</body>
+      </html>
+    `);
+    janela.document.close();
+    janela.focus();
+    setTimeout(() => {
+      janela.print();
+      janela.close();
+    }, 500);
+  } else {
+    alert("Pop-up bloqueado! Permita pop-ups para este site.");
+  }
+}
+
+//Função Upload
+function selecionarPDF(icone) {
+  // Cria input dinamicamente
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "application/pdf";
+
+  input.addEventListener("change", () => {
+    const file = input.files[0];
+    if (!file) return;
+
+    if (file.type !== "application/pdf") {
+      alert("Apenas arquivos PDF são permitidos.");
+      return;
+    }
+
+    const linha = icone.closest("tr");
+
+    const dadosLinha = Array.from(linha.querySelectorAll("td")).map(td => td.innerText.trim());
+
+    const formData = new FormData();
+    formData.append("arquivo", file);
+    formData.append("linhaDados", JSON.stringify(dadosLinha)); // enviar os dados da linha como contexto
+
+    fetch("upload.php", {
+      method: "POST",
+      body: formData,
+    })
+    .then((res) => res.text())
+    .then((mensagem) => {
+      alert("Upload feito com sucesso!");
+      // Marca visual na linha (ex: um check ou texto)
+      const statusCell = linha.querySelector(".upload-status");
+      if (statusCell) {
+        statusCell.innerHTML = "📄 PDF Enviado";
+      }
+    })
+    .catch((erro) => {
+      console.error("Erro ao enviar:", erro);
+      alert("Erro ao enviar o PDF.");
+    });
+  });
+
+  input.click();
+}
+
 
 /* ===================================================
    CONFIGURAÇÕES INICIAIS E VARIÁVEIS GLOBAIS
