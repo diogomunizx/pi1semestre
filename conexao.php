@@ -1,14 +1,16 @@
 <?php
-$host = 'localhost';
-$db = 'seu_banco';
-$user = 'seu_usuario';
-$pass = 'sua_senha';
+$servername = "sql206.infinityfree.com";
+$username = "if0_39097196";
+$password = "V9ymqZGOD3";
+$dbname = "if0_39097196_horus";
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
-    // Configura para lançar exceções em caso de erro
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro na conexão: " . $e->getMessage());
+// Criar conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Checar conexão
+if ($conn->connect_error) {
+    die("Conexão falhou: " . $conn->connect_error);
 }
+
+// echo "Conexão realizada com sucesso!";
 ?>
