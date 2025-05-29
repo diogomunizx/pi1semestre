@@ -933,6 +933,8 @@ body.modal-active {
 /* Estilos para a Grade de Horários */
 .grade-semanal {
     display: grid;
+   
+    width: 45%;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 20px;
@@ -956,17 +958,12 @@ body.modal-active {
     padding-bottom: 10px;
 }
 
-.linhas-horario {
-    margin-bottom: 20px;
-}
-
 .linha-horario {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 5px;
     margin-bottom: 15px;
     align-items: center;
-    padding: 10px;
     background-color: #f8f8f8;
     border-radius: 4px;
     transition: all 0.3s ease;
@@ -982,7 +979,8 @@ body.modal-active {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
-    width: 100%;
+    width: 90%;
+    text-align: center;
     grid-column: span 1;
 }
 
@@ -991,26 +989,29 @@ body.modal-active {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
-    width: 100%;
+    width: 115%;
     background-color: white;
     grid-column: span 1;
 }
 
 .linha-horario button {
-    padding: 8px 12px;
+    padding: 9px 12px;
+    margin-left:25%;
     background-color: #d64d4d;
     color: white;
     border: none;
     border-radius: 4px;
+    align-content: right;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 100%;
+    width: 75%;
     grid-column: span 1;
 }
 
 .linha-horario button:hover {
     background-color: #a23232;
 }
+
 
 .dia button[onclick^="adicionarLinha"] {
     width: 100%;
@@ -1029,6 +1030,11 @@ body.modal-active {
     background-color: #044021;
 }
 
+    .botoes-controle {
+        display: flex;
+        gap: 20px;
+    }
+
 #alterar-dados {
     display: block;
     margin: 30px auto;
@@ -1043,6 +1049,24 @@ body.modal-active {
 }
 
 #alterar-dados:hover {
+    background-color: #8a0a0b;
+    transform: translateY(-2px);
+}
+
+#retornar-dia {
+    display: block;
+    margin: 30px auto;
+    padding: 12px 24px;
+    background-color: #AE0C0D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+#retornar-dia:hover {
     background-color: #8a0a0b;
     transform: translateY(-2px);
 }

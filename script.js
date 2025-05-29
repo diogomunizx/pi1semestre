@@ -526,8 +526,8 @@ function adicionarLinha(dia) {
     <input type="time" name="horario_${dia}_${num}_fim" onchange="ordenarLinhas('${dia}')">
     <select name="origem_${dia}_${num}">
       <option value="fatec">Fatec</option>
-      <option value="outra_fatec">Aula em outra Fatec</option>
-      <option value="outra_instituicao">Aula em outra instituição</option>
+      <option value="outra_fatec">Outra Unidade</option>
+      <option value="outra_instituicao">Aula Externa</option>
     </select>
     <button type="button" onclick="removerLinha(this)">Remover</button>
   `;
