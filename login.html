@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="estilos/login.css">
+  <link rel="icon" type="image/png" href="imagens/logo-horus.png">
   <title>Login Fatec</title>
 </head>
 <body>
@@ -21,18 +22,17 @@
   <div class="main-content">
     <div class="login-container">
       <h1>Login Fatec</h1>
-      <form action="#" method="post">
+      <form method="post" action="controller/login.php">
         <div class="input-group">
-          <label for="matricula">Usuário</label>
-          <input type="text" id="matricula" name="matricula" required />
+          <label for="usuario">Usuário</label>
+          <input type="text" id="usuario" name="usuario" required />
         </div>
         <div class="input-group">
-          <label for="password">Senha</label>
-          <input type="password" id="password" name="password" required autocomplete="current-password" />
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" required autocomplete="current-password" />
         </div>
         
         <!-- Botão com ID para estilização -->
-        <a href="index.html">
         <button id="botaoentrar" type="submit">Entrar</button>
         </a>
       </form>
