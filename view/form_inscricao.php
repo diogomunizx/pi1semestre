@@ -1,14 +1,22 @@
+<?php
+session_start();
+
+// Verifica se o usuário está logado e é professor
+if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'professor') {
+    header("Location: ../login.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilos/style.css">
-    //
+    <link rel="stylesheet" href="../estilos/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <link rel="icon" type="image/png" href="imagens/logo-horus.png">
+    <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
     <title>HORUS - Inscrição</title>
     <style>
         /* Estilos específicos para as etapas do formulário */
@@ -48,20 +56,20 @@
     <header>
         <div class="header-content">
             <div class="user-profile" onclick="toggleDropdown()">
-                <span>M</span>
+                <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
                 <div class="dropdown-menu" id="dropdown-menu">
                     <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
-                    <a href="perfil_cadastro.html" onclick="alterarVisualizacaoTelaCadastro()">Ajustes</a>
-                    <a href="perfil_Aulas.html" onclick="alterarVisualizacaoTelaCadastro()">Minhas aulas</a>
+                    <a href="perfil_cadastro.php">Ajustes</a>
+                    <a href="perfil_Aulas.php">Minhas aulas</a>
                 </div>
             </div>
             <div class="institutions">
                 <div class="fatec">
                     <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img
-                            src="imagens/logo-fatec_itapira.png"></a>
+                            src="../imagens/logo-fatec_itapira.png"></a>
                 </div>
                 <div class="cps">
-                    <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="imagens/logo-cps.png"></a>
+                    <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="../imagens/logo-cps.png"></a>
                 </div>
             </div>
         </div>
@@ -70,26 +78,20 @@
     <nav class="sidebar">
         <div class="logo-container">
             <a href="#">
-                <img src="imagens/logo-horus.png" alt="Logo HORUS">
+                <img src="../imagens/logo-horus.png" alt="Logo HORUS">
             </a>
         </div>
-        <a class="inicio" href="index.html">
-            <img src="imagens/home.png" alt="Início"> <span>Início</span>
+        <a class="inicio" href="index_prof.php">
+            <img src="../imagens/home.png" alt="Início"> <span>Início</span>
         </a>
-        <a href="inscricao.html" id="linkInscricao">
-            <img src="imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
+        <a href="inscricao.php" id="linkInscricao">
+            <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
         </a>
-        <a href="aprovacao.html" id="linkAprovacao">
-            <img src="imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
+        <a href="relatorio_prof.php">
+            <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
         </a>
-        <a href="relatorio_prof.html">
-            <img src="imagens/relat.png" alt="Relatório"> <span>Relatório</span>
-        </a>
-        <a href="relatorio_coord.html">
-            <img src="imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
-        </a>
-        <a href="login.html">
-            <img src="imagens/logout.png" alt="Logout"> <span>Logout</span>
+        <a href="../login.php">
+            <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
         </a>
     </nav>
 
@@ -120,16 +122,16 @@
                 <div class="form-steps active" id="step1">
                     <h4>Informações docente</h4>
                     <label for="professor">Nome:</label>
-                    <input type="text" id="professor" name="professor" disabled value="Marcia Regioli" required><br>
+                    <input type="text" id="professor" name="professor" disabled value="<?php echo htmlspecialchars($_SESSION['Nome']); ?>" required><br>
 
                     <label for="email">E-mail:</label>
-                    <input type="email" id="email" name="email" disabled value="marcia.reggiolli@fatec.sp.gov.br" required><br>
+                    <input type="email" id="email" name="email" disabled value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required><br>
 
                     <label for="rg">R.G.:</label>
-                    <input type="text" id="rg" name="rg" disabled value="123456" required>
+                    <input type="text" id="rg" name="rg" value="<?php echo htmlspecialchars($_SESSION['rg'] ?? ''); ?>" required>
 
                     <label for="matricula">Matrícula:</label>
-                    <input type="text" id="matricula" name="matricula" disabled value="654321" required>
+                    <input type="text" id="matricula" name="matricula" value="<?php echo htmlspecialchars($_SESSION['id_Docente']); ?>" required>
                 </div>
 
                 <!-- Etapa 2: Tipo de HAE e Curso -->
@@ -167,13 +169,13 @@
                 <div class="form-steps" id="step3">
                     <h4>Informações do projeto</h4>
                     <label for="titulo_projeto">Título do projeto:</label>
-                    <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio GE" required><br>
+                    <input type="text" id="titulo_projeto" name="titulo_projeto" required><br>
 
                     <label for="inicio_projeto">Início:</label>
-                    <input type="date" id="inicio_projeto" name="inicio_projeto" value="2024-02-24"><br>
+                    <input type="date" id="inicio_projeto" name="inicio_projeto"><br>
 
                     <label for="termino_projeto">Término previsto:</label>
-                    <input type="date" id="termino_projeto" name="termino_projeto" value="2024-06-20"><br>
+                    <input type="date" id="termino_projeto" name="termino_projeto"><br>
 
                     <h4>Horário de Execução do Projeto</h4>
                     <table class="tabela-inscricao" border="1">
@@ -224,7 +226,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <textarea id="metas" name="metas" class="textarea-auto-ajuste">Garantir que todos os alunos do curso de Gestão Empresarial sejam orientados e supervisionados para a realização do estágio obrigatório.</textarea>
+                                <textarea id="metas" name="metas" class="textarea-auto-ajuste"></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -232,8 +234,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <textarea id="objetivos" name="objetivos"
-                                    class="textarea-auto-ajuste">Criar parcerias com empresas, orientar currículos, acompanhar inscrições e monitorar desempenho dos alunos.</textarea>
+                                <textarea id="objetivos" name="objetivos" class="textarea-auto-ajuste"></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -241,8 +242,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <textarea id="justificativas" name="justificativas"
-                                    class="textarea-auto-ajuste">Necessidade de apoio para alunos encontrarem estágios e atenderem às exigências acadêmicas.</textarea>
+                                <textarea id="justificativas" name="justificativas" class="textarea-auto-ajuste"></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -250,8 +250,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <textarea id="recursos" name="recursos"
-                                    class="textarea-auto-ajuste">Professores, equipe administrativa, computadores, acesso à internet e uma sala para orientação.</textarea>
+                                <textarea id="recursos" name="recursos" class="textarea-auto-ajuste"></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -259,8 +258,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <textarea id="resultados" name="resultados"
-                                    class="textarea-auto-ajuste">100% dos alunos alocados em estágios com documentação regularizada.</textarea>
+                                <textarea id="resultados" name="resultados" class="textarea-auto-ajuste"></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -268,8 +266,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <textarea id="metodologia" name="metodologia"
-                                    class="textarea-auto-ajuste">Contato com empresas, workshops, suporte para entrevistas e acompanhamento do estágio.</textarea>
+                                <textarea id="metodologia" name="metodologia" class="textarea-auto-ajuste"></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -281,43 +278,37 @@
                         </tr>
                         <tr>
                             <td>
-                                <textarea id="descricao" name="descricao"
-                                    class="textarea-auto-ajuste">Contato com empresas para levantamento de vagas disponíveis.</textarea>
+                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
                             </td>
                             <td>Mês 1</td>
                         </tr>
                         <tr>
                             <td>
-                                <textarea id="descricao" name="descricao"
-                                    class="textarea-auto-ajuste">Workshops de orientação e preparação de currículos para os alunos.</textarea>
+                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
                             </td>
                             <td>Mês 2</td>
                         </tr>
                         <tr>
                             <td>
-                                <textarea id="descricao" name="descricao"
-                                    class="textarea-auto-ajuste">Candidaturas dos alunos às vagas e acompanhamento do processo seletivo.</textarea>
+                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
                             </td>
                             <td>Mês 3</td>
                         </tr>
                         <tr>
                             <td>
-                                <textarea id="descricao" name="descricao"
-                                    class="textarea-auto-ajuste">Início dos estágios supervisionados e entrega da documentação inicial.</textarea>
+                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
                             </td>
                             <td>Mês 4</td>
                         </tr>
                         <tr>
                             <td>
-                                <textarea id="descricao" name="descricao"
-                                    class="textarea-auto-ajuste">Acompanhamento contínuo dos estágios e avaliação intermediária.</textarea>
+                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
                             </td>
                             <td>Mês 5</td>
                         </tr>
                         <tr>
                             <td>
-                                <textarea id="descricao" name="descricao"
-                                    class="textarea-auto-ajuste">Finalização dos estágios e entrega dos relatórios finais.</textarea>
+                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
                             </td>
                             <td>Mês 6</td>
                         </tr>
@@ -333,7 +324,7 @@
             </form>
         </div>
     </main>
-    <script src="script.js" defer></script>
+    <script src="../js/script.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let currentStep = 1;
@@ -410,4 +401,4 @@
     </script>
 </body>
 
-</html>
+</html> 

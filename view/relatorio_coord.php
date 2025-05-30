@@ -1,0 +1,170 @@
+<?php
+session_start();
+
+// Verifica se o usuário está logado e é coordenador
+if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'coordenador') {
+    header("Location: ../login.php");
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../estilos/style.css">
+    <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
+    <title>HORUS - Relatórios</title>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="user-profile" onclick="toggleDropdown()">
+                <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
+                    <a href="perfil_cadastro.php">Ajustes</a>
+                    <a href="perfil_Aulas.php">Minhas aulas</a>
+                </div>
+            </div>
+            <div class="institutions">
+                <div class="fatec">
+                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img
+                            src="../imagens/logo-fatec_itapira.png"></a>
+                </div>
+                <div class="cps">
+                    <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="../imagens/logo-cps.png"></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sidebar">
+        <div class="logo-container">
+            <a href="#">
+                <img src="../imagens/logo-horus.png" alt="Logo HORUS">
+            </a>
+        </div>
+        <a class="inicio" href="index_coord.php">
+            <img src="../imagens/home.png" alt="Início"> <span>Início</span>
+        </a>
+        <a href="aprovacao.php" id="linkAprovacao">
+            <img src="../imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
+        </a>
+        <a href="relatorio_coord.php">
+            <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
+        </a>
+        <a href="../login.php">
+            <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
+        </a>
+    </nav>
+
+    <main>
+        <table class="tbls" id="tableCoordenador">
+            <h3 class="titulos" id="tituloCoordenador">Projetos com relatórios aguardando deferimento</h3>
+            <br>
+            <thead>
+                <tr>
+                    <td>Inscrição</td>
+                    <td>Professor</td>
+                    <td>Projeto</td>
+                    <td>Tipo HAE</td>
+                    <td>Quantidade HAE</td>
+                    <td>Status</td>
+                    <td>Ações</td>
+                    <td>Imprimir</td>
+                    <td>Upload</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>005</td>
+                    <td>Ana Celia</td>
+                    <td>Estágio DSM</td>
+                    <td>Estágio</td>
+                    <td>5</td>
+                    <td>Pendente</td>
+                    <td class="destaque"><img src="../imagens/editar.png" onclick="deferirRelatorio()"></td>
+                    <td><img class="destaque" src="../imagens/imprimir.png" onclick="imprimirInscricao()"></td>
+                    <td class="destaque"><img class="img-edit" src="../imagens/upload.png" onclick="selecionarPDF(this)"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div id="formularioCoordenador" class="form-container" style="display: none;">
+            <!-- Indicadores de Progresso -->
+            <div class="step-indicators">
+                <div class="step-indicator active" data-step="1">1</div>
+                <div class="step-indicator" data-step="2">2</div>
+                <div class="step-indicator" data-step="3">3</div>
+            </div>
+
+            <!-- Barra de Progresso -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 33%"></div>
+                </div>
+            </div>
+
+            <form class="form-relatorio" action="#" method="POST">
+                <!-- Etapa 1: Informações do Professor -->
+                <div class="form-steps active" id="step1">
+                    <h4>Informações do Professor</h4>
+                    <label for="professor">Nome:</label>
+                    <input type="text" id="professor" name="professor" disabled value="Ana Celia" required><br>
+
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" disabled value="ana.portes@fatec.sp.gov.br" required><br>
+
+                    <label for="rg">R.G.:</label>
+                    <input type="text" id="rg" name="rg" disabled value="987654" required><br>
+
+                    <label for="matricula">Matrícula:</label>
+                    <input type="text" id="matricula" name="matricula" disabled value="456789" required><br>
+                </div>
+
+                <!-- Etapa 2: Informações do Projeto -->
+                <div class="form-steps" id="step2">
+                    <h4>Informações do Projeto</h4>
+                    <label for="titulo_projeto">Título do projeto:</label>
+                    <input type="text" id="titulo_projeto" name="titulo_projeto" disabled value="Estágio DSM" required><br>
+
+                    <label for="relatorio">Descrição das atividades:</label>
+                    <textarea class="textarea-auto-ajuste" name="relatorio" rows="4">Foi realizado.... alunos entregaram...</textarea><br>
+
+                    <label for="inicio_projeto">Data envio:</label>
+                    <input type="date" id="envio_relatorio" name="envio_relatorio" disabled value="2024-06-27"><br>
+                </div>
+
+                <!-- Etapa 3: Status e Justificativa -->
+                <div class="form-steps" id="step3">
+                    <h4>Status e Justificativa</h4>
+                    <div class="status-justificativa-section">
+                        <label for="status">Status:</label>
+                        <select name="status" id="status" required>
+                            <option value="Pendente" disabled selected>Pendente</option>
+                            <option value="Deferido">Deferido</option>
+                            <option value="Correcao">Fazer correção</option>
+                        </select><br>
+
+                        <label for="justificativa">Justificativa:</label>
+                        <textarea class="textarea-auto-ajuste" name="justificativa" rows="4" placeholder="Digite a justificativa..."></textarea><br>
+                    </div>
+                </div>
+
+                <!-- Navegação entre etapas -->
+                <div class="form-navigation">
+                    <button type="button" class="nav-button prev" onclick="prevStep()" disabled>Anterior</button>
+                    <button type="button" class="nav-button next" onclick="nextStep()">Próxima</button>
+                    <button type="submit" class="nav-button submit" style="display: none;">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="../js/script.js" defer></script>
+</body>
+
+</html> 

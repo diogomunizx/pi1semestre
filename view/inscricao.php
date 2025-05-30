@@ -1,9 +1,4 @@
 <?php
-// index.php
-
-// Inicia ou resume uma sessão existente. Fundamental para manter informações do usuário entre diferentes páginas,
-// como o status de login, o ID do usuário, seu tipo (aluno, professor, etc.).
-// Esta função deve ser chamada ANTES de qualquer saída HTML ser enviada ao navegador.
 session_start();
 
 // Verifica se o usuário está logado e é professor
@@ -12,7 +7,6 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -21,7 +15,7 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../estilos/style.css">
   <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
-  <title>HORUS - Início</title>
+  <title>HORUS - Inscrição</title>
 </head>
 
 <body>
@@ -67,43 +61,43 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
   </nav>
 
   <main>
-    <h1>Painel do Professor</h1>
+    <h3 class="titulos">Suas Inscrições</h3>
+    <br>
     <table class="tbls">
-      <caption>
-        <br>
-        <h3>Referente ao Edital 2025</h3>
-        <br>
-      </caption>
       <thead>
         <tr>
-          <th class="cece" scope="col" colspan="2">Cronograma</th>
+          <td>Inscrição</td>
+          <td>Coordenador</td>
+          <td>Tipo HAE</td>
+          <td>Quantidade HAE</td>
+          <td>Curso</td>
+          <td>Status</td>
+          <td>Justificativa</td>
+          <td>Imprimir</td>
+          <td>Upload</td>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Incrições HAE abertas</td>
-          <td>De 18/11/2024 à 13/01/2025</td>
-        </tr>
-        <tr>
-          <td>Aprovações HAE</td>
-          <td>De 14/01/2025 à 28/01/2025</td>
-        </tr>
-        <tr>
-          <td>Divulgação Lista de Aprovados</td>
-          <td>30/01/2025</td>
-        </tr>
-        <tr>
-          <td>Entrega de Relatorios HAE</td>
-          <td>De 24/06/2025 à 01/07/2025</td>
-        </tr>
-        <tr>
-          <td>Aprovação de Relatorios HAE</td>
-          <td>De 02/07/2025 à 10/07/2025</td>
+          <td>001</td>
+          <td>Coordenador GE</td>
+          <td>Estágio Supervisionado</td>
+          <td>6</td>
+          <td>GE</td>
+          <td>Pendente</td>
+          <td class="destaque"><img class="img-edit" src="../imagens/olho.png" onclick="verJustificativa()"></td>
+          <td><img class="destaque" src="../imagens/imprimir.png" onclick="imprimirInscricao()"></td>
+          <td class="destaque"><img class="img-edit" src="../imagens/upload.png" onclick="selecionarPDF(this)"></td>
         </tr>
       </tbody>
     </table>
+    <br>
+    <div class="nova-inscricao">
+      <a href="form_inscricao.php" class="btn-nova-inscricao">Nova Inscrição</a>
+    </div>
   </main>
+  
   <script src="../js/script.js" defer></script>
 </body>
 
-</html>
+</html> 
