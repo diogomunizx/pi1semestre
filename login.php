@@ -44,7 +44,7 @@ define('BASE_URL', 'https://horusdsm.lovestoblog.com');
 
       <!-- Rodapé -->
       <div class="footer">
-        <p>Esqueceu sua senha? <a href="view/esqueciminhasenha2.php">Clique aqui</a></p>
+        <p>Esqueceu sua senha? <a href="/view/esqueciminhasenha2.php">Clique aqui</a></p>
         <p>Fatec Itapira - DSM 2025</p>
       </div>
     </div>
