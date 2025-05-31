@@ -1,31 +1,40 @@
+<?php
+session_start();
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['id_Docente'])) {
+    header("Location: ../login.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="estilos/style.css">
-  <link rel="icon" type="image/png" href="imagens/logo-horus.png">
-  <title>HORUS - Início</title>
+  <link rel="stylesheet" href="../estilos/style.css">
+  <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
+  <title>HORUS - Minhas Aulas</title>
 </head>
 
 <body>
   <header>
     <div class="header-content">
       <div class="user-profile" onclick="toggleDropdown()">
-        <span>M</span>
+        <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
         <div class="dropdown-menu" id="dropdown-menu">
           <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
-          <a href="perfil_cadastro.html" onclick="alterarVisualizacaoTelaCadastro()">Ajustes</a>
-          <a href="perfil_Aulas.html" onclick="alterarVisualizacaoTelaCadastro()">Minhas Aulas</a>
+          <a href="perfil_cadastro.php">Ajustes</a>
+          <a href="perfil_Aulas.php">Minhas Aulas</a>
         </div>
       </div>
       <div class="institutions">
         <div class="fatec">
-          <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img src="imagens/logo-fatec_itapira.png"></a>
+          <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img src="../imagens/logo-fatec_itapira.png"></a>
         </div>
         <div class="cps">
-          <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="imagens/logo-cps.png"></a>
+          <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="../imagens/logo-cps.png"></a>
         </div>
       </div>
     </div>
@@ -34,26 +43,32 @@
   <nav class="sidebar">
     <div class="logo-container">
       <a href="#">
-        <img src="imagens/logo-horus.png" alt="Logo HORUS">
+        <img src="../imagens/logo-horus.png" alt="Logo HORUS">
       </a>
     </div>
-    <a class="inicio" href="index.html">
-      <img src="imagens/home.png" alt="Início"> <span>Início</span>
+    <?php if (strtolower($_SESSION['funcao']) === 'professor'): ?>
+    <a class="inicio" href="index_prof.php">
+      <img src="../imagens/home.png" alt="Início"> <span>Início</span>
     </a>
-    <a href="inscricao.html" id="linkInscricao">
-      <img src="imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
+    <a href="inscricao.php" id="linkInscricao">
+      <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
     </a>
-    <a href="aprovacao.html" id="linkAprovacao">
-      <img src="imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
+    <a href="relatorio_prof.php">
+      <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
     </a>
-    <a href="relatorio_prof.html">
-      <img src="imagens/relat.png" alt="Relatório"> <span>Relatório</span>
+    <?php else: ?>
+    <a class="inicio" href="index_coord.php">
+      <img src="../imagens/home.png" alt="Início"> <span>Início</span>
     </a>
-    <a href="relatorio_coord.html">
-      <img src="imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
+    <a href="aprovacao.php" id="linkAprovacao">
+      <img src="../imagens/inscricoes.png" alt="Inscrições"> <span>Inscrições</span>
     </a>
-    <a href="login.html">
-      <img src="imagens/logout.png" alt="Logout"> <span>Logout</span>
+    <a href="relatorio_coord.php">
+      <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
+    </a>
+    <?php endif; ?>
+    <a href="../login.php">
+      <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
     </a>
   </nav>
 
@@ -97,14 +112,13 @@
     </div>
 
     <div class="botoes-controle">
-      
       <button id="retornar-dia" style="display: none;" onclick="retornarDia()">Retornar</button>
       <button id="alterar-dados" onclick="habilitarEdicao()">Alterar dados</button>
-</div>
+    </div>
   </main>
 
-  <script src="script.js" defer></script>
+  <script src="../js/script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
 </body>
 
-</html>
+</html> 

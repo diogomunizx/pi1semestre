@@ -46,20 +46,68 @@ function editarInscricao() {
     }
 }
 
+// Função para alternar a visibilidade do menu dropdown
 function toggleDropdown() {
-    const dropdown = document.getElementById("dropdown-menu");
-    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
 }
 
-// Fecha o menu ao clicar fora dele
-document.addEventListener("click", function (event) {
-    const profile = document.querySelector(".user-profile");
-    const dropdown = document.getElementById("dropdown-menu");
-    if (!profile.contains(event.target)) {
-        dropdown.style.display = "none";
+// Fechar o dropdown quando clicar fora dele
+document.addEventListener('click', function(event) {
+    const userProfile = document.querySelector('.user-profile');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    
+    if (!userProfile.contains(event.target)) {
+        dropdownMenu.style.display = 'none';
     }
 });
 
+// Função para alterar visualização
+function alterarVisualizacao() {
+    // Implementar a lógica de alteração de visualização
+    console.log('Alterando visualização...');
+}
+
+// Função para editar data
+function editarData() {
+    // Implementar a lógica de edição de data
+    console.log('Editando data...');
+}
+
+// Função para imprimir linha separada
+function imprimirLinhaSeparada(element) {
+    const row = element.closest('tr');
+    const content = row.innerText;
+    const printWindow = window.open('', '', 'height=400,width=800');
+    printWindow.document.write('<html><head><title>Impressão</title>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write('<h1>HORUS - Impressão</h1>');
+    printWindow.document.write('<pre>' + content + '</pre>');
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+}
+
+// Função para selecionar PDF
+function selecionarPDF(element) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf';
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Aqui você pode implementar o upload do arquivo
+            console.log('Arquivo selecionado:', file.name);
+        }
+    };
+    input.click();
+}
+
+// Função para alterar visualização da tela de cadastro
+function alterarVisualizacaoTelaCadastro() {
+    // Implementar a lógica de alteração de visualização da tela de cadastro
+    console.log('Alterando visualização da tela de cadastro...');
+}
 
 // Função para abrir o modal de justificativa
 function verJustificativa() {
@@ -83,37 +131,6 @@ function verJustificativa() {
         <label>Justificativa:</label>
         <p>Coordenador ainda não visualizou sua inscrição.</p>
         <span class="modal-close" onclick="fecharModal()">Fechar</span>
-    `;
-
-    // Adiciona o modal dentro do overlay e exibe na página
-    modalOverlay.appendChild(modal);
-    document.body.appendChild(modalOverlay);
-}
-
-// Função para editar data
-function editarData() {
-    document.body.classList.add('modal-active');
-
-    // Remove qualquer modal existente antes de criar um novo
-    const modalExistente = document.querySelector('.modal-overlay');
-    if (modalExistente) {
-        modalExistente.remove();
-    }
-
-    // Cria o elemento de overlay e modal
-    const modalOverlay = document.createElement('div');
-    modalOverlay.classList.add('modal-overlay');
-
-    const modal = document.createElement('div');
-    modal.classList.add('modal');
-
-    // HTML do conteúdo do modal
-    modal.innerHTML = `
-        <label for="data_inicio">Data início:</label>
-        <input type="date" id="data_inicio" name="data_inicio"><br>
-        <label for="data_fim">Data final:</label>
-        <input type="date" id="data_fim" name="data_fim"><br>
-        <span class="modal-close" onclick="fecharModal()">Alterar</span>
     `;
 
     // Adiciona o modal dentro do overlay e exibe na página
@@ -243,7 +260,6 @@ function cancelarAlteracaoSenha() {
     formSenha.style.display = 'none';
 }
 
-
 // Seleciona todos os inputs dentro das divs com classe 'hae-projeto-linha'
 const haeInputs = document.querySelectorAll('.hae-projeto-linha input');
 
@@ -362,90 +378,6 @@ function imprimirInscricao() {
         janela.close();
     }, 1000);
 }
-
-function imprimirLinhaSeparada(icone) {
-  const linha = icone.closest("tr");
-  const colunas = linha.querySelectorAll("td");
-
-  let conteudo = `<div style="font-family: Arial, sans-serif; padding: 20px;">
-                    <h2 style="text-align: center;">Resumo</h2>`;
-  colunas.forEach((coluna, i) => {
-    conteudo += `<p><strong>Coluna ${i + 1}:</strong> ${coluna.innerText.trim()}</p>`;
-  });
-  conteudo += `</div>`;
-
-  const janela = window.open('', '_blank', 'width=800,height=600');
-  if (janela) {
-    janela.document.write(`
-      <html>
-        <head>
-          <title>Impressão de Linha</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 40px; }
-            h2 { text-align: center; margin-bottom: 20px; }
-            p { font-size: 18px; }
-          </style>
-        </head>
-        <body>${conteudo}</body>
-      </html>
-    `);
-    janela.document.close();
-    janela.focus();
-    setTimeout(() => {
-      janela.print();
-      janela.close();
-    }, 500);
-  } else {
-    alert("Pop-up bloqueado! Permita pop-ups para este site.");
-  }
-}
-
-//Função Upload
-function selecionarPDF(icone) {
-  // Cria input dinamicamente
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "application/pdf";
-
-  input.addEventListener("change", () => {
-    const file = input.files[0];
-    if (!file) return;
-
-    if (file.type !== "application/pdf") {
-      alert("Apenas arquivos PDF são permitidos.");
-      return;
-    }
-
-    const linha = icone.closest("tr");
-
-    const dadosLinha = Array.from(linha.querySelectorAll("td")).map(td => td.innerText.trim());
-
-    const formData = new FormData();
-    formData.append("arquivo", file);
-    formData.append("linhaDados", JSON.stringify(dadosLinha)); // enviar os dados da linha como contexto
-
-    fetch("upload.php", {
-      method: "POST",
-      body: formData,
-    })
-    .then((res) => res.text())
-    .then((mensagem) => {
-      alert("Upload feito com sucesso!");
-      // Marca visual na linha (ex: um check ou texto)
-      const statusCell = linha.querySelector(".upload-status");
-      if (statusCell) {
-        statusCell.innerHTML = "📄 PDF Enviado";
-      }
-    })
-    .catch((erro) => {
-      console.error("Erro ao enviar:", erro);
-      alert("Erro ao enviar o PDF.");
-    });
-  });
-
-  input.click();
-}
-
 
 /* ===================================================
    CONFIGURAÇÕES INICIAIS E VARIÁVEIS GLOBAIS
