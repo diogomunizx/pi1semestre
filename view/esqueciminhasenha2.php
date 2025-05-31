@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt->execute();
 
             // Link para redefinir senha
-            $link = "https://seusite.com/redefinir_senha.php?token=" . $token;
+            $link = "https://horusdsm.lovestoblog.com/redefinir_senha.php?token=" . $token;
 
             // Envia e-mail
             $assunto = "Redefinição de Senha";
