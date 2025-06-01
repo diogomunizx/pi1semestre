@@ -1,11 +1,50 @@
+<?php
+session_start();
+
+// Verifica se o usuário está logado e é coordenador
+if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'coordenador') {
+    header("Location: ../login.php");
+    exit;
+}
+
+require_once '../model/Database.php';
+
+try {
+    $db = Database::getInstance();
+    $conn = $db->getConnection();
+    
+    // Busca os relatórios pendentes para o coordenador
+    $query = "SELECT i.id_frmInscricaoHae, 
+                     d.Nome as professor,
+                     i.tituloProjeto,
+                     i.tipoHae,
+                     i.quantidadeHae,
+                     r.status
+              FROM tb_frm_inscricao_hae i
+              INNER JOIN tb_Usuario d ON i.tb_Docentes_id_Docente = d.id_Docente
+              INNER JOIN tb_cursos c ON i.id_curso = c.id_curso
+              LEFT JOIN tb_relatorio r ON i.id_frmInscricaoHae = r.id_frmInscricaoHae
+              WHERE c.id_docenteCoordenador = :id_coordenador
+              AND j.status = 'APROVADO'
+              ORDER BY i.id_frmInscricaoHae DESC";
+              
+    $stmt = $conn->prepare($query);
+    $stmt->execute(['id_coordenador' => $_SESSION['id_Docente']]);
+    $relatorios = $stmt->fetchAll();
+    
+} catch (Exception $e) {
+    error_log("Erro ao buscar relatórios: " . $e->getMessage());
+    $erro = "Ocorreu um erro ao carregar os relatórios. Por favor, tente novamente mais tarde.";
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilos/style.css">
-    <link rel="icon" type="image/png" href="imagens/logo-horus.png">
+    <link rel="stylesheet" href="../estilos/style.css">
+    <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
     <title>HORUS - Relatórios</title>
 </head>
 
@@ -13,20 +52,23 @@
     <header>
         <div class="header-content">
             <div class="user-profile" onclick="toggleDropdown()">
-                <span>M</span>
+                <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
                 <div class="dropdown-menu" id="dropdown-menu">
                     <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
-                    <a href="perfil_cadastro.html" onclick="alterarVisualizacaoTelaCadastro()">Ajustes</a>
-                    <a href="perfil_Aulas.html" onclick="alterarVisualizacaoTelaCadastro()">Minhas aulas</a>
+                    <a href="perfil_cadastro.php">Ajustes</a>
+                    <a href="perfil_Aulas.php">Minhas aulas</a>
                 </div>
             </div>
             <div class="institutions">
                 <div class="fatec">
-                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img
-                            src="imagens/logo-fatec_itapira.png"></a>
+                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank">
+                        <img src="../imagens/logo-fatec_itapira.png" alt="FATEC Itapira">
+                    </a>
                 </div>
                 <div class="cps">
-                    <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="imagens/logo-cps.png"></a>
+                    <a href="https://www.cps.sp.gov.br/" target="_blank">
+                        <img src="../imagens/logo-cps.png" alt="CPS">
+                    </a>
                 </div>
             </div>
         </div>
@@ -35,209 +77,211 @@
     <nav class="sidebar">
         <div class="logo-container">
             <a href="#">
-                <img src="imagens/logo-horus.png" alt="Logo HORUS">
+                <img src="../imagens/logo-horus.png" alt="Logo HORUS">
             </a>
         </div>
-        <a class="inicio" href="index.html">
-            <img src="imagens/home.png" alt="Início"> <span>Início</span>
+        <a class="inicio" href="index_coord.php">
+            <img src="../imagens/home.png" alt="Início"> <span>Início</span>
         </a>
-        <a href="inscricao.html" id="linkInscricao">
-            <img src="imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
+        <a href="aprovacao.php" id="linkAprovacao">
+            <img src="../imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
         </a>
-        <a href="aprovacao.html" id="linkAprovacao">
-            <img src="imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
+        <a href="relatorio_coord.php" class="active">
+            <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
         </a>
-        <a href="relatorio_prof.html">
-            <img src="imagens/relat.png" alt="Relatório"> <span>Relatório</span>
-        </a>
-        <a href="relatorio_coord.html" class="active">
-            <img src="imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
-        </a>
-        <a href="login.html">
-            <img src="imagens/logout.png" alt="Logout"> <span>Logout</span>
+        <a href="../login.php">
+            <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
         </a>
     </nav>
 
     <main>
-        <table class="tbls" id="tableCoordenador">
-            <h3 class="titulos" id="tituloCoordenador">Projetos com relatórios aguardando deferimento</h3>
-            <br>
-            <thead>
-                <tr>
-                    <td>Inscrição</td>
-                    <td>Professor</td>
-                    <td>Projeto</td>
-                    <td>Tipo HAE</td>
-                    <td>Quantidade HAE</td>
-                    <td>Status</td>
-                    <td>Ações</td>
-                    <td>Imprimir</td>
-                    <td>Upload</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>005</td>
-                    <td>Ana Celia</td>
-                    <td>Estágio DSM</td>
-                    <td>Estágio</td>
-                    <td>5</td>
-                    <td>Pendente</td>
-                    <td class="destaque"><img src="imagens/editar.png" onclick="deferirRelatorio()"></td>
-                    <td><img class="destaque" src="imagens/imprimir.png" onclick="imprimirInscricao()"></td>
-                    <td class="destaque"><img class="img-edit" src="imagens/upload.png" onclick="selecionarPDF(this)"></td>
-                </tr>
-            </tbody>
-        </table>
+        <h3 class="titulos">Projetos com relatórios aguardando deferimento</h3>
+        <br>
+        <?php if (isset($_SESSION['mensagem'])): ?>
+            <div class="sucesso"><?php echo $_SESSION['mensagem']; unset($_SESSION['mensagem']); ?></div>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['erro'])): ?>
+            <div class="erro"><?php echo $_SESSION['erro']; unset($_SESSION['erro']); ?></div>
+        <?php endif; ?>
 
-        <div id="formularioCoordenador" class="form-container" style="display: none;">
-            <!-- Indicadores de Progresso -->
-            <div class="step-indicators">
-                <div class="step-indicator active" data-step="1">1</div>
-                <div class="step-indicator" data-step="2">2</div>
-                <div class="step-indicator" data-step="3">3</div>
-            </div>
+        <?php if (isset($erro)): ?>
+            <div class="erro"><?php echo $erro; ?></div>
+        <?php else: ?>
+            <?php if (empty($relatorios)): ?>
+                <p>Não há relatórios pendentes no momento.</p>
+            <?php else: ?>
+                <table class="tbls">
+                    <thead>
+                        <tr>
+                            <td>Inscrição</td>
+                            <td>Professor</td>
+                            <td>Projeto</td>
+                            <td>Tipo HAE</td>
+                            <td>Quantidade HAE</td>
+                            <td>Status</td>
+                            <td>Ações</td>
+                            <td>Imprimir</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($relatorios as $relatorio): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($relatorio['id_frmInscricaoHae']); ?></td>
+                                <td><?php echo htmlspecialchars($relatorio['professor']); ?></td>
+                                <td><?php echo htmlspecialchars($relatorio['tituloProjeto']); ?></td>
+                                <td><?php echo htmlspecialchars($relatorio['tipoHae']); ?></td>
+                                <td><?php echo htmlspecialchars($relatorio['quantidadeHae']); ?></td>
+                                <td><?php echo htmlspecialchars($relatorio['status'] ?? 'PENDENTE'); ?></td>
+                                <td class="destaque">
+                                    <img src="../imagens/editar.png" 
+                                         onclick="avaliarRelatorio('<?php echo $relatorio['id_frmInscricaoHae']; ?>')">
+                                </td>
+                                <td>
+                                    <img class="destaque" src="../imagens/imprimir.png" 
+                                         onclick="imprimirRelatorio('<?php echo $relatorio['id_frmInscricaoHae']; ?>')">
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        <?php endif; ?>
 
-            <!-- Barra de Progresso -->
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 33%"></div>
-                </div>
-            </div>
-
-            <form class="form-relatorio" action="#" method="POST">
-                <!-- Etapa 1: Informações do Professor -->
-                <div class="form-steps active" id="step1">
-                    <h4>Informações do Professor</h4>
-                    <label for="professor">Nome:</label>
-                    <input type="text" id="professor" name="professor" disabled value="Ana Celia" required><br>
-
-                    <label for="email">E-mail:</label>
-                    <input type="email" id="email" name="email" disabled value="ana.portes@fatec.sp.gov.br" required><br>
-
-                    <label for="rg">R.G.:</label>
-                    <input type="text" id="rg" name="rg" disabled value="987654" required><br>
-
-                    <label for="matricula">Matrícula:</label>
-                    <input type="text" id="matricula" name="matricula" disabled value="456789" required><br>
-                </div>
-
-                <!-- Etapa 2: Informações do Projeto -->
-                <div class="form-steps" id="step2">
-                    <h4>Informações do Projeto</h4>
-                    <label for="titulo_projeto">Título do projeto:</label>
-                    <input type="text" id="titulo_projeto" name="titulo_projeto" disabled value="Estágio DSM" required><br>
-
-                    <label for="relatorio">Descrição das atividades:</label>
-                    <textarea class="textarea-auto-ajuste" name="relatorio" rows="4">Foi realizado.... alunos entregaram...</textarea><br>
-
-                    <label for="inicio_projeto">Data envio:</label>
-                    <input type="date" id="envio_relatorio" name="envio_relatorio" disabled value="2024-06-27"><br>
-                </div>
-
-                <!-- Etapa 3: Status e Justificativa -->
-                <div class="form-steps" id="step3">
-                    <h4>Status e Justificativa</h4>
-                    <div class="status-justificativa-section">
-                        <label for="status">Status:</label>
-                        <select name="status" id="status" required>
-                            <option value="Pendente" disabled selected>Pendente</option>
-                            <option value="Deferido">Deferido</option>
-                            <option value="Correcao">Fazer correção</option>
-                        </select><br>
-
-                        <label for="justificativa">Justificativa:</label>
-                        <textarea class="textarea-auto-ajuste" name="justificativa" rows="4" placeholder="Digite a justificativa..."></textarea><br>
-                    </div>
-                </div>
-
-                <!-- Navegação entre etapas -->
-                <div class="form-navigation">
-                    <button type="button" class="nav-button prev" onclick="prevStep()" disabled>Anterior</button>
-                    <button type="button" class="nav-button next" onclick="nextStep()">Próxima</button>
-                    <button type="submit" class="nav-button submit" style="display: none;">Enviar</button>
-                </div>
-            </form>
-        </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                let currentStep = 1;
-                const totalSteps = 3;
-
-                function updateProgress() {
-                    const progress = (currentStep / totalSteps) * 100;
-                    document.querySelector('.progress-fill').style.width = `${progress}%`;
-
-                    // Atualiza os indicadores de etapa
-                    document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
-                        indicator.classList.remove('active', 'completed');
-                        if (index + 1 < currentStep) {
-                            indicator.classList.add('completed');
-                        } else if (index + 1 === currentStep) {
-                            indicator.classList.add('active');
-                        }
-                    });
-
-                    // Atualiza os botões de navegação
-                    const prevButton = document.querySelector('.nav-button.prev');
-                    const nextButton = document.querySelector('.nav-button.next');
-                    const submitButton = document.querySelector('.nav-button.submit');
-
-                    prevButton.disabled = currentStep === 1;
+        <!-- Modal de Avaliação do Relatório -->
+        <div id="modal-avaliacao" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="fecharModal()">&times;</span>
+                <h2>Avaliar Relatório</h2>
+                <form id="form-avaliacao" action="processa_avaliacao_relatorio.php" method="POST">
+                    <input type="hidden" id="id_inscricao" name="id_inscricao">
                     
-                    if (currentStep === totalSteps) {
-                        nextButton.style.display = 'none';
-                        submitButton.style.display = 'block';
-                    } else {
-                        nextButton.style.display = 'block';
-                        submitButton.style.display = 'none';
-                    }
-                }
+                    <div class="form-group">
+                        <label for="status">Status:</label>
+                        <select id="status" name="status" required>
+                            <option value="DEFERIDO">Deferir</option>
+                            <option value="CORRECAO">Solicitar Correção</option>
+                        </select>
+                    </div>
 
-                function showStep(step) {
-                    // Oculta todas as etapas com transição suave
-                    document.querySelectorAll('.form-steps').forEach(formStep => {
-                        formStep.classList.remove('active');
-                    });
+                    <div class="form-group">
+                        <label for="observacao">Observação:</label>
+                        <textarea id="observacao" name="observacao" required></textarea>
+                    </div>
 
-                    // Mostra a etapa atual com transição suave
-                    const currentStepElement = document.getElementById(`step${step}`);
-                    if (currentStepElement) {
-                        setTimeout(() => {
-                            currentStepElement.classList.add('active');
-                        }, 50);
-                    }
-                }
-
-                function nextStep() {
-                    if (currentStep < totalSteps) {
-                        currentStep++;
-                        showStep(currentStep);
-                        updateProgress();
-                    }
-                }
-
-                function prevStep() {
-                    if (currentStep > 1) {
-                        currentStep--;
-                        showStep(currentStep);
-                        updateProgress();
-                    }
-                }
-
-                // Adiciona os event listeners aos botões
-                document.querySelector('.nav-button.next').addEventListener('click', nextStep);
-                document.querySelector('.nav-button.prev').addEventListener('click', prevStep);
-
-                // Inicializa o formulário
-                updateProgress();
-            });
-        </script>
-
+                    <div class="form-actions">
+                        <button type="submit">Confirmar</button>
+                        <button type="button" onclick="fecharModal()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
-    <script src="script.js" defer></script>
 
+    <script>
+    function avaliarRelatorio(idInscricao) {
+        document.getElementById('id_inscricao').value = idInscricao;
+        document.getElementById('modal-avaliacao').style.display = 'block';
+    }
+
+    function fecharModal() {
+        document.getElementById('modal-avaliacao').style.display = 'none';
+    }
+
+    function imprimirRelatorio(idInscricao) {
+        window.location.href = `imprimir_relatorio.php?id=${idInscricao}`;
+    }
+
+    // Fecha o modal se clicar fora dele
+    window.onclick = function(event) {
+        var modal = document.getElementById('modal-avaliacao');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    </script>
+
+    <style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 5px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .form-group textarea {
+        height: 100px;
+        resize: vertical;
+    }
+
+    .form-actions {
+        text-align: right;
+        margin-top: 20px;
+    }
+
+    .form-actions button {
+        margin-left: 10px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .form-actions button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .form-actions button[type="button"] {
+        background-color: #f44336;
+        color: white;
+    }
+    </style>
 </body>
 
 </html>
