@@ -74,20 +74,18 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
           <td>Status</td>
           <td>Justificativa</td>
           <td>Imprimir</td>
-          <td>Upload</td>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>001</td>
-          <td>Coordenador GE</td>
-          <td>Estágio Supervisionado</td>
-          <td>6</td>
-          <td>GE</td>
-          <td>Pendente</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
           <td class="destaque"><img class="img-edit" src="../imagens/olho.png" onclick="verJustificativa()"></td>
           <td><img class="destaque" src="../imagens/imprimir.png" onclick="imprimirInscricao()"></td>
-          <td class="destaque"><img class="img-edit" src="../imagens/upload.png" onclick="selecionarPDF(this)"></td>
         </tr>
       </tbody>
     </table>
