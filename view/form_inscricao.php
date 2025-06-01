@@ -127,9 +127,6 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
                     <label for="email">E-mail:</label>
                     <input type="email" id="email" name="email" disabled value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required><br>
 
-                    <label for="rg">R.G.:</label>
-                    <input type="text" id="rg" name="rg" value="<?php echo htmlspecialchars($_SESSION['rg'] ?? ''); ?>" required>
-
                     <label for="matricula">Matrícula:</label>
                     <input type="text" id="matricula" name="matricula" value="<?php echo htmlspecialchars($_SESSION['id_Docente']); ?>" required>
                 </div>
