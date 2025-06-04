@@ -6,6 +6,49 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
     header("Location: ../login.php");
     exit;
 }
+
+require_once '../model/Database.php';
+
+try {
+    $db = Database::getInstance();
+    $conn = $db->getConnection();
+
+    // Debug para ver a conexão
+    if (!$conn) {
+        error_log("Erro: Conexão não estabelecida");
+    }
+
+    // Busca os editais disponíveis
+    $queryEditais = "SELECT id_edital, vigencia, dataInicioInscricao, dataFimInscricao, edital_status 
+                    FROM tb_Editais 
+                    ORDER BY dataFimInscricao DESC";
+    $stmtEditais = $conn->prepare($queryEditais);
+    $stmtEditais->execute();
+    $editais = $stmtEditais->fetchAll(PDO::FETCH_ASSOC);
+
+    // Debug para ver os editais retornados
+    error_log("Editais encontrados: " . print_r($editais, true));
+
+    // Busca os cursos
+    $queryCursos = "SELECT c.id_curso, c.Materia, c.id_docenteCoordenador, u.Nome as coordenador 
+                    FROM tb_cursos c 
+                    LEFT JOIN tb_Usuario u ON c.id_docenteCoordenador = u.id_Docente 
+                    ORDER BY c.Materia";
+    $stmtCursos = $conn->prepare($queryCursos);
+    $stmtCursos->execute();
+    $cursos = $stmtCursos->fetchAll();
+
+} catch (Exception $e) {
+    error_log("Erro ao carregar dados: " . $e->getMessage());
+    $_SESSION['erro'] = "Ocorreu um erro ao carregar os dados. Por favor, tente novamente mais tarde.";
+    header("Location: inscricao.php");
+    exit;
+}
+
+// Função auxiliar para formatar a data
+function formatarData($data) {
+    return date('d/m/Y', strtotime($data));
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -17,7 +60,7 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
-    <title>HORUS - Inscrição</title>
+    <title>HORUS - Nova Inscrição</title>
     <style>
         /* Estilos específicos para as etapas do formulário */
         .form-steps {
@@ -48,6 +91,45 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
 
         .nav-button {
             min-width: 120px;
+        }
+
+        .edital-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .edital-info select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .edital-status {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-aberto {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .status-encerrado {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .edital-datas {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -98,26 +180,62 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
     <main>
         <div class="form-container">
             <div class="info-inscricao">
-                <h3>Inscrição</h3>
+                <h3>Nova Inscrição</h3>
                 <h3>Projeto de Hora Atividade Específica – H.A.E.</h3>
             </div>
 
-            <!-- Indicadores de Progresso -->
-            <div class="step-indicators">
-                <div class="step-indicator active" data-step="1">1</div>
-                <div class="step-indicator" data-step="2">2</div>
-                <div class="step-indicator" data-step="3">3</div>
-                <div class="step-indicator" data-step="4">4</div>
-            </div>
+            <form class="form-inscricao" action="processa_inscricao.php" method="POST">
+                <?php if (isset($_SESSION['erro'])): ?>
+                    <div class="erro"><?php echo $_SESSION['erro']; unset($_SESSION['erro']); ?></div>
+                <?php endif; ?>
 
-            <!-- Barra de Progresso -->
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 25%"></div>
+                <!-- Seleção do Edital -->
+                <div class="edital-info">
+                    <h4>Selecione o Edital:</h4>
+                    <?php if (empty($editais)): ?>
+                        <p style="color: red;">Nenhum edital encontrado no sistema.</p>
+                    <?php else: ?>
+                        <select id="edital" name="id_edital" required onchange="atualizarInfoEdital()">
+                            <option value="">Selecione um edital</option>
+                            <?php foreach ($editais as $edital): ?>
+                                <option value="<?php echo $edital['id_edital']; ?>" 
+                                        data-status="<?php echo $edital['edital_status']; ?>"
+                                        data-inicio="<?php echo formatarData($edital['dataInicioInscricao']); ?>"
+                                        data-fim="<?php echo formatarData($edital['dataFimInscricao']); ?>">
+                                    <?php echo htmlspecialchars($edital['vigencia'] . ' (ID: ' . $edital['id_edital'] . ')'); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <div id="edital-detalhes" class="edital-datas" style="display: none;">
+                            Status: <span id="edital-status"></span><br>
+                            Período de Inscrições: <span id="edital-periodo"></span>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Debug: Mostra os dados dos editais -->
+                    <?php if (isset($_SESSION['debug']) && $_SESSION['debug']): ?>
+                        <div style="margin-top: 20px; padding: 10px; background: #f5f5f5; border: 1px solid #ddd;">
+                            <h5>Debug: Editais Disponíveis</h5>
+                            <pre><?php print_r($editais); ?></pre>
+                        </div>
+                    <?php endif; ?>
                 </div>
-            </div>
 
-            <form class="form-inscricao" action="#" method="POST">
+                <!-- Indicadores de Progresso -->
+                <div class="step-indicators">
+                    <div class="step-indicator active" data-step="1">1</div>
+                    <div class="step-indicator" data-step="2">2</div>
+                    <div class="step-indicator" data-step="3">3</div>
+                    <div class="step-indicator" data-step="4">4</div>
+                </div>
+
+                <!-- Barra de Progresso -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 25%"></div>
+                    </div>
+                </div>
+
                 <!-- Etapa 1: Informações do Docente -->
                 <div class="form-steps active" id="step1">
                     <h4>Informações docente</h4>
@@ -136,25 +254,29 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
                     <h4>Tipo de HAE que está solicitando:</h4>
                     <select id="role" name="role" required>
                         <option value="" disabled selected>Selecione o tipo de HAE</option>
-                        <option value="estudoss">Estudos e Projetos</option>
-                        <option value="servicos">Extensão de serviços à comunidade</option>
-                        <option value="administracao">Administração acadêmica</option>
-                        <option value="plantao">Plantão didático</option>
-                        <option value="estagio">Estágio Supervisionado</option>
-                        <option value="tcc">Orientação de Trabalho de Graduação</option>
-                        <option value="projeto-cientifico">Projeto de iniciação científica</option>
-                        <option value="revista">Revista Prospectus</option>
-                        <option value="divulgacao">Divulgação Cursos</option>
-                        <option value="enade">ENADE</option>
+                        <option value="Estudos e Projetos">Estudos e Projetos</option>
+                        <option value="Extensão de serviços à comunidade">Extensão de serviços à comunidade</option>
+                        <option value="Administração acadêmica">Administração acadêmica</option>
+                        <option value="Plantão didático">Plantão didático</option>
+                        <option value="Estágio Supervisionado">Estágio Supervisionado</option>
+                        <option value="Orientação de TG">Orientação de Trabalho de Graduação</option>
+                        <option value="Iniciação científica">Projeto de iniciação científica</option>
+                        <option value="Revista Prospectus">Revista Prospectus</option>
+                        <option value="Divulgação de Cursos">Divulgação Cursos</option>
+                        <option value="ENADE">ENADE</option>
                     </select>
 
                     <h4>Curso</h4>
                     <select id="curso" name="curso" required>
-                        <option value="" disabled selected>Selecione o curso</option>
-                        <option value="dsm">Desenvolvimento de Software Multiplataforma</option>
-                        <option value="ge">Gestão empresarial</option>
-                        <option value="gpi">Gestão Produção Industrial</option>
+                        <option value="">Selecione um curso</option>
+                        <?php foreach ($cursos as $curso): ?>
+                            <option value="<?php echo $curso['id_curso']; ?>" 
+                                    data-coordenador-id="<?php echo $curso['id_docenteCoordenador']; ?>">
+                                <?php echo htmlspecialchars($curso['Materia'] . ' - Coord.: ' . $curso['coordenador']); ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
+                    <input type="hidden" name="id_docenteCoordenador" id="id_docenteCoordenador">
 
                     <div class="hae-projeto-linha">
                         <label for="hae">Quantidade de H.A.E:</label>
@@ -251,7 +373,7 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
                             </td>
                         </tr>
                         <tr>
-                            <th colspan="2">5 – RESULTADO ESPERADO – PREVISÃO</th>
+                            <th colspan="2">5 - RESULTADOS ESPERADOS</th>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -259,7 +381,7 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
                             </td>
                         </tr>
                         <tr>
-                            <th colspan="2">6 – METODOLOGIA</th>
+                            <th colspan="2">6 - METODOLOGIA</th>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -267,47 +389,43 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
                             </td>
                         </tr>
                         <tr>
-                            <th colspan="2">7 - CRONOGRAMA DE EXECUÇÃO DAS ATIVIDADES</th>
+                            <th colspan="2">7 - CRONOGRAMA DE EXECUÇÃO</th>
                         </tr>
                         <tr>
-                            <th>Atividades</th>
-                            <th>Mês</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
-                            </td>
                             <td>Mês 1</td>
+                            <td>
+                                <textarea id="cronograma_mes1" name="cronograma_mes1" class="textarea-auto-ajuste"></textarea>
+                            </td>
                         </tr>
                         <tr>
-                            <td>
-                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
-                            </td>
                             <td>Mês 2</td>
+                            <td>
+                                <textarea id="cronograma_mes2" name="cronograma_mes2" class="textarea-auto-ajuste"></textarea>
+                            </td>
                         </tr>
                         <tr>
-                            <td>
-                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
-                            </td>
                             <td>Mês 3</td>
+                            <td>
+                                <textarea id="cronograma_mes3" name="cronograma_mes3" class="textarea-auto-ajuste"></textarea>
+                            </td>
                         </tr>
                         <tr>
-                            <td>
-                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
-                            </td>
                             <td>Mês 4</td>
+                            <td>
+                                <textarea id="cronograma_mes4" name="cronograma_mes4" class="textarea-auto-ajuste"></textarea>
+                            </td>
                         </tr>
                         <tr>
-                            <td>
-                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
-                            </td>
                             <td>Mês 5</td>
+                            <td>
+                                <textarea id="cronograma_mes5" name="cronograma_mes5" class="textarea-auto-ajuste"></textarea>
+                            </td>
                         </tr>
                         <tr>
-                            <td>
-                                <textarea id="descricao" name="descricao" class="textarea-auto-ajuste"></textarea>
-                            </td>
                             <td>Mês 6</td>
+                            <td>
+                                <textarea id="cronograma_mes6" name="cronograma_mes6" class="textarea-auto-ajuste"></textarea>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -394,6 +512,31 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
 
             // Inicializa o formulário
             updateProgress();
+        });
+
+        function atualizarInfoEdital() {
+            const select = document.getElementById('edital');
+            const detalhes = document.getElementById('edital-detalhes');
+            const status = document.getElementById('edital-status');
+            const periodo = document.getElementById('edital-periodo');
+
+            if (select.value) {
+                const option = select.options[select.selectedIndex];
+                const editalStatus = option.dataset.status;
+                
+                status.innerHTML = `<span class="edital-status status-${editalStatus.toLowerCase()}">${editalStatus}</span>`;
+                periodo.textContent = `${option.dataset.inicio} a ${option.dataset.fim}`;
+                
+                detalhes.style.display = 'block';
+            } else {
+                detalhes.style.display = 'none';
+            }
+        }
+
+        document.getElementById('curso').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const coordenadorId = selectedOption.getAttribute('data-coordenador-id');
+            document.getElementById('id_docenteCoordenador').value = coordenadorId;
         });
     </script>
 </body>
