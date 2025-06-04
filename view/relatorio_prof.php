@@ -6,6 +6,40 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
     header("Location: ../login.php");
     exit;
 }
+
+require_once '../model/Database.php';
+
+try {
+    $db = Database::getInstance();
+    $conn = $db->getConnection();
+    
+    // Busca as inscrições aprovadas do professor
+    $query = "SELECT i.id_frmInscricaoHae, 
+                     i.tituloProjeto,
+                     i.tipoHae,
+                     i.quantidadeHae,
+                     c.Materia as curso,
+                     coord.Nome as coordenador,
+                     j.status as status_inscricao,
+                     r.status as status_relatorio,
+                     r.id_relatorioHae
+              FROM tb_frm_inscricao_hae i
+              INNER JOIN tb_cursos c ON i.id_curso = c.id_curso
+              INNER JOIN tb_Usuario coord ON c.id_docenteCoordenador = coord.id_Docente
+              INNER JOIN tb_justificativaHae j ON i.id_frmInscricaoHae = j.id_frmInscricaoHae
+              LEFT JOIN tb_relatorioHae r ON i.id_frmInscricaoHae = r.id_frmInscricaoHae
+              WHERE i.tb_Docentes_id_Docente = :id_docente
+              AND j.status = 'APROVADO'
+              ORDER BY i.id_frmInscricaoHae DESC";
+              
+    $stmt = $conn->prepare($query);
+    $stmt->execute(['id_docente' => $_SESSION['id_Docente']]);
+    $inscricoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+} catch (Exception $e) {
+    error_log("Erro ao buscar inscrições: " . $e->getMessage());
+    $erro = "Ocorreu um erro ao carregar as inscrições. Por favor, tente novamente mais tarde.";
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -16,6 +50,136 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
     <link rel="stylesheet" href="../estilos/style.css">
     <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
     <title>HORUS - Relatório</title>
+    <style>
+        .form-container, #formularioProfessor {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-section h4 {
+            color: #2c3e50;
+            font-size: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="date"],
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 180px;
+            resize: vertical;
+        }
+
+        .info-text {
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin: 5px 0;
+            border: 1px solid #e9ecef;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .field-description {
+            font-size: 13px;
+            color: #6c757d;
+            margin: 5px 0 10px;
+            font-style: italic;
+        }
+
+        .projeto-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+
+        .projeto-info .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .nav-button {
+            display: inline-block;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+
+        .nav-button.prev {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .nav-button.submit {
+            background-color: #28a745;
+            color: white;
+            padding: 14px 28px;
+            font-size: 16px;
+            min-width: 200px;
+        }
+
+        /* Estilo para campos inválidos */
+        .form-group input.invalid,
+        .form-group textarea.invalid {
+            border-color: #dc3545;
+        }
+    </style>
 </head>
 
 <body>
@@ -31,11 +195,14 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
             </div>
             <div class="institutions">
                 <div class="fatec">
-                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img
-                            src="../imagens/logo-fatec_itapira.png"></a>
+                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank">
+                        <img src="../imagens/logo-fatec_itapira.png">
+                    </a>
                 </div>
                 <div class="cps">
-                    <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="../imagens/logo-cps.png"></a>
+                    <a href="https://www.cps.sp.gov.br/" target="_blank">
+                        <img src="../imagens/logo-cps.png">
+                    </a>
                 </div>
             </div>
         </div>
@@ -53,7 +220,7 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
         <a href="inscricao.php" id="linkInscricao">
             <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
         </a>
-        <a href="relatorio_prof.php">
+        <a href="relatorio_prof.php" class="active">
             <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
         </a>
         <a href="../login.php">
@@ -62,91 +229,226 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
     </nav>
 
     <main>
-        <table class="tbls" id="tableProfessor">
-            <h3 class="titulos" id="tituloProfessor">Seus projetos para envios de relátórios</h3>
-            <br>
-            <thead>
-                <tr>
-                    <td>Inscrição</td>
-                    <td>Coordenador</td>
-                    <td>Projeto</td>
-                    <td>Tipo HAE</td>
-                    <td>Quantidade HAE</td>
-                    <td>Status</td>
-                    <td>Ações</td>
-                    <td>Imprimir</td>
-                    <td>Upload</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>001</td>
-                    <td>Coordenador GE</td>
-                    <td>Estágio GE</td>
-                    <td>Estágio Supervisionado</td>
-                    <td>5</td>
-                    <td>Pendente</td>
-                    <td class="destaque"><img src="../imagens/relatorio.png" onclick="prepararRelatorio()"></td>
-                    <td><img class="destaque" src="../imagens/imprimir.png" onclick="imprimirInscricao()"></td>
-                    <td class="destaque"><img class="img-edit" src="../imagens/upload.png" onclick="selecionarPDF(this)"></td>
-                </tr>
-            </tbody>
-        </table>
-        <div id="formularioProfessor" class="form-container" style="display: none;">
-            <!-- Indicadores de Progresso -->
-            <div class="step-indicators">
-                <div class="step-indicator active" data-step="1">1</div>
-                <div class="step-indicator" data-step="2">2</div>
-            </div>
+        <?php if (isset($erro)): ?>
+            <div class="erro"><?php echo $erro; ?></div>
+        <?php else: ?>
+            <table class="tbls" id="tableProfessor">
+                <h3 class="titulos">Seus projetos para envio de relatórios</h3>
+                <br>
+                <?php if (isset($_SESSION['mensagem'])): ?>
+                    <div class="sucesso"><?php echo $_SESSION['mensagem']; unset($_SESSION['mensagem']); ?></div>
+                <?php endif; ?>
+                
+                <thead>
+                    <tr>
+                        <td>Inscrição</td>
+                        <td>Coordenador</td>
+                        <td>Projeto</td>
+                        <td>Tipo HAE</td>
+                        <td>Quantidade HAE</td>
+                        <td>Status Relatório</td>
+                        <td>Ações</td>
+                        <td>Imprimir</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($inscricoes)): ?>
+                        <tr>
+                            <td colspan="8">Nenhum projeto aprovado encontrado.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($inscricoes as $inscricao): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($inscricao['id_frmInscricaoHae']); ?></td>
+                                <td><?php echo htmlspecialchars($inscricao['coordenador']); ?></td>
+                                <td><?php echo htmlspecialchars($inscricao['tituloProjeto']); ?></td>
+                                <td><?php echo htmlspecialchars($inscricao['tipoHae']); ?></td>
+                                <td><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></td>
+                                <td>
+                                    <?php if (!$inscricao['status_relatorio']): ?>
+                                        <span class="status-badge status-pendente">PENDENTE</span>
+                                    <?php else: ?>
+                                        <span class="status-badge status-<?php echo strtolower($inscricao['status_relatorio']); ?>">
+                                            <?php echo $inscricao['status_relatorio']; ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="destaque">
+                                    <?php if (!$inscricao['status_relatorio'] || $inscricao['status_relatorio'] === 'CORRECAO'): ?>
+                                        <a href="#" onclick="prepararRelatorioHae(
+                                            '<?php echo $inscricao['id_frmInscricaoHae']; ?>', 
+                                            '<?php echo htmlspecialchars(addslashes($inscricao['tituloProjeto'])); ?>', 
+                                            '<?php echo htmlspecialchars(addslashes($inscricao['tipoHae'])); ?>',
+                                            '<?php echo htmlspecialchars(addslashes($inscricao['coordenador'])); ?>',
+                                            '<?php echo htmlspecialchars(addslashes($inscricao['curso'])); ?>',
+                                            '<?php echo htmlspecialchars($inscricao['quantidadeHae']); ?>'
+                                        ); return false;">
+                                            <img src="../imagens/relatorio.png" style="cursor: pointer;">
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="#" onclick="verRelatorio('<?php echo $inscricao['id_relatorioHae']; ?>'); return false;">
+                                            <img src="../imagens/olho.png" style="cursor: pointer;">
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <a href="#" onclick="imprimirRelatorio('<?php echo $inscricao['id_frmInscricaoHae']; ?>'); return false;">
+                                        <img class="destaque" src="../imagens/imprimir.png" style="cursor: pointer;">
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
 
-            <!-- Barra de Progresso -->
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 50%"></div>
-                </div>
-            </div>
+            <div id="formularioProfessor" style="display: none;">
+                <h4>Envio de Relatório</h4>
+                <form class="form-relatorio" action="processa_relatorio.php" method="POST">
+                    <input type="hidden" name="id_inscricao" id="id_inscricao">
+                    
+                    <!-- Informações do Professor -->
+                    <div class="form-section">
+                        <h4>Informações do Professor</h4>
+                        <div class="form-group">
+                            <label for="professor">Nome:</label>
+                            <input type="text" id="professor" name="professor" disabled value="<?php echo htmlspecialchars($_SESSION['Nome']); ?>">
+                        </div>
 
-            <form class="form-relatorio" action="#" method="POST">
-                <!-- Etapa 1: Informações do Professor -->
-                <div class="form-steps active" id="step1">
-                    <h4>Informações do Professor</h4>
-                    <label for="professor">Nome:</label>
-                    <input type="text" id="professor" name="professor" disabled value="<?php echo htmlspecialchars($_SESSION['Nome']); ?>" required><br>
+                        <div class="form-group">
+                            <label for="email">E-mail:</label>
+                            <input type="email" id="email" name="email" disabled value="<?php echo htmlspecialchars($_SESSION['email']); ?>">
+                        </div>
 
-                    <label for="email">E-mail:</label>
-                    <input type="email" id="email" name="email" disabled value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required><br>
-
-                    <label for="rg">R.G.:</label>
-                    <input type="text" id="rg" name="rg" value="123456" required><br>
-
-                    <label for="matricula">Matrícula:</label>
-                    <input type="text" id="matricula" name="matricula" value="654321" required><br>
-
-                    <label for="titulo_projeto">Título do projeto:</label>
-                    <input type="text" id="titulo_projeto" name="titulo_projeto" value="Estágio GE" required><br>
-                </div>
-
-                <!-- Etapa 2: Relatório e Data -->
-                <div class="form-steps" id="step2">
-                    <h4>Relatório de Atividades</h4>
-                    <div class="status-justificativa-section">
-                        <label for="relatorio">Descrição das atividades:</label>
-                        <textarea class="textarea-auto-ajuste" name="relatorio" rows="4" placeholder="Digite as atividades realizadas..."></textarea><br>
-
-                        <label for="inicio_projeto">Data envio:</label>
-                        <input type="date" id="envio_relatorio" name="envio_relatorio"><br>
+                        <div class="form-group">
+                            <label for="matricula">Matrícula:</label>
+                            <input type="text" id="matricula" name="matricula" value="<?php echo htmlspecialchars($_SESSION['id_Docente']); ?>" disabled>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Navegação entre etapas -->
-                <div class="form-navigation">
-                    <button type="button" class="nav-button prev" onclick="prevStep()" disabled>Anterior</button>
-                    <button type="button" class="nav-button next" onclick="nextStep()">Próxima</button>
-                    <button type="submit" class="nav-button submit" style="display: none;">Enviar</button>
-                </div>
-            </form>
-        </div>
+                    <!-- Informações do Projeto -->
+                    <div class="form-section">
+                        <h4>Informações do Projeto</h4>
+                        <div class="projeto-info">
+                            <div class="form-group">
+                                <label>Título do Projeto:</label>
+                                <p id="titulo_projeto_display" class="info-text"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Tipo HAE:</label>
+                                <p id="tipo_hae_display" class="info-text"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Coordenador:</label>
+                                <p id="coordenador_display" class="info-text"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Curso:</label>
+                                <p id="curso_display" class="info-text"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Quantidade HAE:</label>
+                                <p id="quantidade_hae_display" class="info-text"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Relatório -->
+                    <div class="form-section">
+                        <h4>Relatório de Atividades</h4>
+                        
+                        <div class="form-group">
+                            <label for="descricao_atividades">Descrição das Atividades Realizadas:</label>
+                            <p class="field-description">Descreva detalhadamente as atividades desenvolvidas durante o projeto.</p>
+                            <textarea name="descricao_atividades" id="descricao_atividades" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="resultados_alcancados">Resultados Alcançados:</label>
+                            <p class="field-description">Descreva os resultados obtidos e como eles se relacionam com os objetivos iniciais do projeto.</p>
+                            <textarea name="resultados_alcancados" id="resultados_alcancados" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="data_entrega">Data de Entrega:</label>
+                            <input type="date" id="data_entrega" name="data_entrega" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" onclick="voltarListagem()" class="nav-button prev">Voltar</button>
+                        <button type="submit" class="nav-button submit">Enviar Relatório</button>
+                    </div>
+                </form>
+            </div>
+        <?php endif; ?>
     </main>
+
+    <script>
+    // Funções específicas para o relatório do professor
+    const prepararRelatorioHae = (idInscricao, tituloProjeto, tipoHae, coordenador, curso, quantidadeHae) => {
+        // Esconde a tabela e mostra o formulário
+        document.getElementById('tableProfessor').style.display = 'none';
+        document.getElementById('formularioProfessor').style.display = 'block';
+        
+        // Preenche os campos do formulário
+        document.getElementById('id_inscricao').value = idInscricao;
+        document.getElementById('titulo_projeto_display').textContent = tituloProjeto.replace(/\\/g, '');
+        document.getElementById('tipo_hae_display').textContent = tipoHae.replace(/\\/g, '');
+        document.getElementById('coordenador_display').textContent = coordenador.replace(/\\/g, '');
+        document.getElementById('curso_display').textContent = curso.replace(/\\/g, '');
+        document.getElementById('quantidade_hae_display').textContent = quantidadeHae;
+        
+        // Define a data mínima como hoje
+        const hoje = new Date().toISOString().split('T')[0];
+        document.getElementById('data_entrega').min = hoje;
+    };
+
+    const verRelatorio = (idRelatorio) => {
+        window.location.href = `ver_relatorio.php?id=${idRelatorio}`;
+    };
+
+    const imprimirRelatorio = (idInscricao) => {
+        window.open(`imprimir_relatorio.php?id=${idInscricao}`, '_blank');
+    };
+
+    const voltarListagem = () => {
+        if (confirm('Tem certeza que deseja voltar? Os dados não salvos serão perdidos.')) {
+            document.getElementById('tableProfessor').style.display = 'table';
+            document.getElementById('formularioProfessor').style.display = 'none';
+            document.querySelector('.form-relatorio').reset();
+        }
+    };
+
+    // Adiciona validação no envio do formulário
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('.form-relatorio');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                const requiredFields = form.querySelectorAll('[required]');
+                let isValid = true;
+
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.classList.add('invalid');
+                    } else {
+                        field.classList.remove('invalid');
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                }
+            });
+        }
+    });
+    </script>
 
     <script src="../js/script.js" defer></script>
 </body>

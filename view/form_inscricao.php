@@ -30,7 +30,10 @@ try {
     error_log("Editais encontrados: " . print_r($editais, true));
 
     // Busca os cursos
-    $queryCursos = "SELECT id_curso, Materia FROM tb_cursos ORDER BY Materia";
+    $queryCursos = "SELECT c.id_curso, c.Materia, c.id_docenteCoordenador, u.Nome as coordenador 
+                    FROM tb_cursos c 
+                    LEFT JOIN tb_Usuario u ON c.id_docenteCoordenador = u.id_Docente 
+                    ORDER BY c.Materia";
     $stmtCursos = $conn->prepare($queryCursos);
     $stmtCursos->execute();
     $cursos = $stmtCursos->fetchAll();
@@ -265,11 +268,15 @@ function formatarData($data) {
 
                     <h4>Curso</h4>
                     <select id="curso" name="curso" required>
-                        <option value="" disabled selected>Selecione o curso</option>
-                        <option value="1">Desenvolvimento de Software Multiplataforma</option>
-                        <option value="2">Gestão empresarial</option>
-                        <option value="3">Gestão Produção Industrial</option>
+                        <option value="">Selecione um curso</option>
+                        <?php foreach ($cursos as $curso): ?>
+                            <option value="<?php echo $curso['id_curso']; ?>" 
+                                    data-coordenador-id="<?php echo $curso['id_docenteCoordenador']; ?>">
+                                <?php echo htmlspecialchars($curso['Materia'] . ' - Coord.: ' . $curso['coordenador']); ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
+                    <input type="hidden" name="id_docenteCoordenador" id="id_docenteCoordenador">
 
                     <div class="hae-projeto-linha">
                         <label for="hae">Quantidade de H.A.E:</label>
@@ -525,6 +532,12 @@ function formatarData($data) {
                 detalhes.style.display = 'none';
             }
         }
+
+        document.getElementById('curso').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const coordenadorId = selectedOption.getAttribute('data-coordenador-id');
+            document.getElementById('id_docenteCoordenador').value = coordenadorId;
+        });
     </script>
 </body>
 

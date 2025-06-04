@@ -13,24 +13,26 @@ try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
     
-    // Busca os relatórios pendentes para o coordenador
-    $query = "SELECT i.id_frmInscricaoHae, 
-                     d.Nome as professor,
+    // Busca os relatórios dos professores dos cursos que o coordenador coordena
+    $query = "SELECT r.id_relatorioHae,
+                     r.status,
+                     r.data_entrega,
+                     i.id_frmInscricaoHae,
                      i.tituloProjeto,
                      i.tipoHae,
                      i.quantidadeHae,
-                     r.status
-              FROM tb_frm_inscricao_hae i
-              INNER JOIN tb_Usuario d ON i.tb_Docentes_id_Docente = d.id_Docente
+                     prof.Nome as professor,
+                     c.Materia as curso
+              FROM tb_relatorioHae r
+              INNER JOIN tb_frm_inscricao_hae i ON r.id_frmInscricaoHae = i.id_frmInscricaoHae
+              INNER JOIN tb_Usuario prof ON i.tb_Docentes_id_Docente = prof.id_Docente
               INNER JOIN tb_cursos c ON i.id_curso = c.id_curso
-              LEFT JOIN tb_relatorio r ON i.id_frmInscricaoHae = r.id_frmInscricaoHae
               WHERE c.id_docenteCoordenador = :id_coordenador
-              AND j.status = 'APROVADO'
-              ORDER BY i.id_frmInscricaoHae DESC";
+              ORDER BY r.data_entrega DESC";
               
     $stmt = $conn->prepare($query);
     $stmt->execute(['id_coordenador' => $_SESSION['id_Docente']]);
-    $relatorios = $stmt->fetchAll();
+    $relatorios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
 } catch (Exception $e) {
     error_log("Erro ao buscar relatórios: " . $e->getMessage());
@@ -38,7 +40,7 @@ try {
 }
 ?>
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -46,6 +48,84 @@ try {
     <link rel="stylesheet" href="../estilos/style.css">
     <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
     <title>HORUS - Relatórios</title>
+    <style>
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .status-aprovado { background-color: #28a745; }
+        .status-pendente { background-color: #ffc107; }
+        .status-correcao { background-color: #dc3545; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .avaliacao-form textarea {
+            width: 100%;
+            min-height: 100px;
+            margin: 10px 0;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .avaliacao-form button {
+            margin: 5px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-aprovar {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-correcao {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -62,12 +142,12 @@ try {
             <div class="institutions">
                 <div class="fatec">
                     <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank">
-                        <img src="../imagens/logo-fatec_itapira.png" alt="FATEC Itapira">
+                        <img src="../imagens/logo-fatec_itapira.png">
                     </a>
                 </div>
                 <div class="cps">
                     <a href="https://www.cps.sp.gov.br/" target="_blank">
-                        <img src="../imagens/logo-cps.png" alt="CPS">
+                        <img src="../imagens/logo-cps.png">
                     </a>
                 </div>
             </div>
@@ -83,8 +163,8 @@ try {
         <a class="inicio" href="index_coord.php">
             <img src="../imagens/home.png" alt="Início"> <span>Início</span>
         </a>
-        <a href="aprovacao.php" id="linkAprovacao">
-            <img src="../imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
+        <a href="aprovacao.php">
+            <img src="../imagens/inscricoes.png" alt="Aprovações"> <span>Aprovações</span>
         </a>
         <a href="relatorio_coord.php" class="active">
             <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
@@ -95,82 +175,75 @@ try {
     </nav>
 
     <main>
-        <h3 class="titulos">Projetos com relatórios aguardando deferimento</h3>
+        <h3 class="titulos">Relatórios para Avaliação</h3>
         <br>
         <?php if (isset($_SESSION['mensagem'])): ?>
             <div class="sucesso"><?php echo $_SESSION['mensagem']; unset($_SESSION['mensagem']); ?></div>
         <?php endif; ?>
-        <?php if (isset($_SESSION['erro'])): ?>
-            <div class="erro"><?php echo $_SESSION['erro']; unset($_SESSION['erro']); ?></div>
-        <?php endif; ?>
-
+        
         <?php if (isset($erro)): ?>
             <div class="erro"><?php echo $erro; ?></div>
         <?php else: ?>
-            <?php if (empty($relatorios)): ?>
-                <p>Não há relatórios pendentes no momento.</p>
-            <?php else: ?>
-                <table class="tbls">
-                    <thead>
+            <table class="tbls">
+                <thead>
+                    <tr>
+                        <td>Professor</td>
+                        <td>Curso</td>
+                        <td>Projeto</td>
+                        <td>Tipo HAE</td>
+                        <td>Data Entrega</td>
+                        <td>Status</td>
+                        <td>Ações</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($relatorios)): ?>
                         <tr>
-                            <td>Inscrição</td>
-                            <td>Professor</td>
-                            <td>Projeto</td>
-                            <td>Tipo HAE</td>
-                            <td>Quantidade HAE</td>
-                            <td>Status</td>
-                            <td>Ações</td>
-                            <td>Imprimir</td>
+                            <td colspan="7">Nenhum relatório encontrado.</td>
                         </tr>
-                    </thead>
-                    <tbody>
+                    <?php else: ?>
                         <?php foreach ($relatorios as $relatorio): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($relatorio['id_frmInscricaoHae']); ?></td>
                                 <td><?php echo htmlspecialchars($relatorio['professor']); ?></td>
+                                <td><?php echo htmlspecialchars($relatorio['curso']); ?></td>
                                 <td><?php echo htmlspecialchars($relatorio['tituloProjeto']); ?></td>
                                 <td><?php echo htmlspecialchars($relatorio['tipoHae']); ?></td>
-                                <td><?php echo htmlspecialchars($relatorio['quantidadeHae']); ?></td>
-                                <td><?php echo htmlspecialchars($relatorio['status'] ?? 'PENDENTE'); ?></td>
-                                <td class="destaque">
-                                    <img src="../imagens/editar.png" 
-                                         onclick="avaliarRelatorio('<?php echo $relatorio['id_frmInscricaoHae']; ?>')">
-                                </td>
+                                <td><?php echo date('d/m/Y', strtotime($relatorio['data_entrega'])); ?></td>
                                 <td>
-                                    <img class="destaque" src="../imagens/imprimir.png" 
-                                         onclick="imprimirRelatorio('<?php echo $relatorio['id_frmInscricaoHae']; ?>')">
+                                    <span class="status-badge status-<?php echo strtolower($relatorio['status']); ?>">
+                                        <?php echo $relatorio['status']; ?>
+                                    </span>
+                                </td>
+                                <td class="destaque">
+                                    <?php if ($relatorio['status'] === 'PENDENTE'): ?>
+                                        <img src="../imagens/relatorio.png" 
+                                             onclick="avaliarRelatorio('<?php echo $relatorio['id_relatorioHae']; ?>')">
+                                    <?php else: ?>
+                                        <img src="../imagens/olho.png" 
+                                             onclick="verRelatorio('<?php echo $relatorio['id_relatorioHae']; ?>')">
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         <?php endif; ?>
 
-        <!-- Modal de Avaliação do Relatório -->
-        <div id="modal-avaliacao" class="modal" style="display: none;">
+        <!-- Modal de Avaliação -->
+        <div id="modalAvaliacao" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="fecharModal()">&times;</span>
-                <h2>Avaliar Relatório</h2>
-                <form id="form-avaliacao" action="processa_avaliacao_relatorio.php" method="POST">
-                    <input type="hidden" id="id_inscricao" name="id_inscricao">
+                <span class="close">&times;</span>
+                <h4>Avaliação do Relatório</h4>
+                <form id="avaliacaoForm" class="avaliacao-form" action="processa_avaliacao.php" method="POST">
+                    <input type="hidden" id="id_relatorio" name="id_relatorio">
                     
-                    <div class="form-group">
-                        <label for="status">Status:</label>
-                        <select id="status" name="status" required>
-                            <option value="DEFERIDO">Deferir</option>
-                            <option value="CORRECAO">Solicitar Correção</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="observacao">Observação:</label>
-                        <textarea id="observacao" name="observacao" required></textarea>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit">Confirmar</button>
-                        <button type="button" onclick="fecharModal()">Cancelar</button>
+                    <label for="observacoes">Observações:</label>
+                    <textarea id="observacoes" name="observacoes" required></textarea>
+                    
+                    <div style="text-align: right;">
+                        <button type="submit" name="acao" value="aprovar" class="btn-aprovar">Aprovar</button>
+                        <button type="submit" name="acao" value="correcao" class="btn-correcao">Solicitar Correção</button>
                     </div>
                 </form>
             </div>
@@ -178,110 +251,31 @@ try {
     </main>
 
     <script>
-    function avaliarRelatorio(idInscricao) {
-        document.getElementById('id_inscricao').value = idInscricao;
-        document.getElementById('modal-avaliacao').style.display = 'block';
+    // Modal
+    var modal = document.getElementById("modalAvaliacao");
+    var span = document.getElementsByClassName("close")[0];
+
+    span.onclick = function() {
+        modal.style.display = "none";
     }
 
-    function fecharModal() {
-        document.getElementById('modal-avaliacao').style.display = 'none';
-    }
-
-    function imprimirRelatorio(idInscricao) {
-        window.location.href = `imprimir_relatorio.php?id=${idInscricao}`;
-    }
-
-    // Fecha o modal se clicar fora dele
     window.onclick = function(event) {
-        var modal = document.getElementById('modal-avaliacao');
         if (event.target == modal) {
             modal.style.display = "none";
         }
     }
+
+    function avaliarRelatorio(idRelatorio) {
+        document.getElementById('id_relatorio').value = idRelatorio;
+        modal.style.display = "block";
+    }
+
+    function verRelatorio(idRelatorio) {
+        window.location.href = `ver_relatorio.php?id=${idRelatorio}`;
+    }
     </script>
 
-    <style>
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.4);
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-        border-radius: 5px;
-    }
-
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .form-group select,
-    .form-group textarea {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    .form-group textarea {
-        height: 100px;
-        resize: vertical;
-    }
-
-    .form-actions {
-        text-align: right;
-        margin-top: 20px;
-    }
-
-    .form-actions button {
-        margin-left: 10px;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .form-actions button[type="submit"] {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .form-actions button[type="button"] {
-        background-color: #f44336;
-        color: white;
-    }
-    </style>
+    <script src="../js/script.js" defer></script>
 </body>
 
 </html>

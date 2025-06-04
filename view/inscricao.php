@@ -65,6 +65,43 @@ try {
     .btn-nova-inscricao:hover {
       background-color: #45a049;
     }
+
+    /* Ajustes na tabela */
+    .tbls {
+      width: 100%;
+      table-layout: fixed;
+      font-size: 0.9em;
+    }
+
+    .tbls td {
+      padding: 8px 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tbls td:nth-child(1) { width: 8%; }  /* Inscrição */
+    .tbls td:nth-child(2) { width: 15%; } /* Coordenador */
+    .tbls td:nth-child(3) { width: 15%; } /* Tipo HAE */
+    .tbls td:nth-child(4) { width: 10%; } /* Quantidade HAE */
+    .tbls td:nth-child(5) { width: 20%; } /* Curso */
+    .tbls td:nth-child(6) { width: 12%; } /* Status */
+    .tbls td:nth-child(7) { width: 10%; } /* Justificativa */
+    .tbls td:nth-child(8) { width: 10%; } /* Imprimir */
+
+    /* Estilo para os status */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+    }
+    
+    .status-aprovado { background-color: #28a745; }
+    .status-pendente { background-color: #ffc107; }
+    .status-reprovado { background-color: #dc3545; }
   </style>
 </head>
 
@@ -143,7 +180,11 @@ try {
                       <td><?php echo htmlspecialchars($inscricao['tipoHae']); ?></td>
                       <td><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></td>
                       <td><?php echo htmlspecialchars($inscricao['curso']); ?></td>
-                      <td><?php echo htmlspecialchars($inscricao['status']); ?></td>
+                      <td>
+                        <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
+                          <?php echo $inscricao['status']; ?>
+                        </span>
+                      </td>
                       <td class="destaque">
                           <img class="img-edit" src="../imagens/olho.png" 
                                onclick="verJustificativa('<?php echo $inscricao['id_frmInscricaoHae']; ?>')">

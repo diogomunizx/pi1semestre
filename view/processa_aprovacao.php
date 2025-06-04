@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Confirma a transação
         $conn->commit();
 
-        $_SESSION['mensagem'] = "Avaliação realizada com sucesso!";
+        $_SESSION['mensagem'] = "Inscrição " . strtolower($_POST['status']) . " com sucesso!";
         header("Location: aprovacao.php");
         exit;
 
@@ -68,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($conn)) {
             $conn->rollBack();
         }
-        error_log("Erro ao processar aprovação: " . $e->getMessage());
-        $_SESSION['erro'] = "Ocorreu um erro ao processar a avaliação. Por favor, tente novamente.";
+        error_log("Erro ao processar avaliação: " . $e->getMessage());
+        $_SESSION['erro'] = "Ocorreu um erro ao processar a avaliação: " . $e->getMessage();
         header("Location: aprovacao.php");
         exit;
     }
