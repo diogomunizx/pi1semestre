@@ -434,7 +434,7 @@ function formatarData($data) {
                 <div class="form-navigation">
                     <button type="button" class="nav-button prev" onclick="prevStep()" disabled>Anterior</button>
                     <button type="button" class="nav-button next" onclick="nextStep()">Próxima</button>
-                    <button type="submit" class="nav-button submit" style="display: none;">Enviar</button>
+                    <button type="submit" class="nav-button submit">Enviar</button>
                 </div>
             </form>
         </div>
