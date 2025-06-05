@@ -69,24 +69,68 @@ function alterarVisualizacao() {
 }
 
 // Função para editar data
-function editarData() {
-    // Implementar a lógica de edição de data
-    console.log('Editando data...');
+function editarData(element, id_item, id_usuario) {
+  const modalOverlay = document.createElement('div');
+  modalOverlay.classList.add('modal-overlay');
+
+  const modal = document.createElement('div');
+  modal.classList.add('modal');
+
+  const inputData = document.createElement('input');
+  inputData.type = 'date';
+  inputData.style.display = 'block';
+  inputData.style.marginBottom = '10px';
+
+  const btnSalvar = document.createElement('button');
+  btnSalvar.innerText = 'Salvar';
+  btnSalvar.style.marginRight = '10px';
+
+  const btnCancelar = document.createElement('button');
+  btnCancelar.innerText = 'Cancelar';
+
+  btnSalvar.onclick = function() {
+      const novaData = inputData.value;
+      if (novaData) {
+          const linha = element.closest('tr');
+          const celulaData = linha.querySelector('.celula-data');
+          const dataAntiga = celulaData.innerText;
+
+          celulaData.innerText = novaData;
+
+          // Enviar para backend
+          fetch('alterar_data.php', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                  id_item: id_item,
+                  id_usuario: id_usuario,
+                  data_antiga: dataAntiga,
+                  data_nova: novaData
+              })
+          })
+          .then(response => response.json())
+          .then(data => {
+              alert(data.message);
+          })
+          .catch(error => {
+              console.error('Erro:', error);
+              alert('Erro ao salvar alteração.');
+          });
+      }
+      document.body.removeChild(modalOverlay);
+  };
+
+  btnCancelar.onclick = function() {
+      document.body.removeChild(modalOverlay);
+  };
+
+  modal.appendChild(inputData);
+  modal.appendChild(btnSalvar);
+  modal.appendChild(btnCancelar);
+  modalOverlay.appendChild(modal);
+  document.body.appendChild(modalOverlay);
 }
 
-// Função para imprimir linha separada
-function imprimirLinhaSeparada(element) {
-    const row = element.closest('tr');
-    const content = row.innerText;
-    const printWindow = window.open('', '', 'height=400,width=800');
-    printWindow.document.write('<html><head><title>Impressão</title>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write('<h1>HORUS - Impressão</h1>');
-    printWindow.document.write('<pre>' + content + '</pre>');
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-}
 
 // Função para selecionar PDF
 function selecionarPDF(element) {
