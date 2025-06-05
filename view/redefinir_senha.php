@@ -1,5 +1,5 @@
 <?php
-//include 'conexao.php';
+include '../config/database.php';
 
 $token = $_GET['token'] ?? '';
 
