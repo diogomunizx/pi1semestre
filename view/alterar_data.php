@@ -1,5 +1,5 @@
-<?p
-header('Content-Type: application/json');
+<?php
+header ('Content-Type: application/json');
 //require_once 'conexao.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
