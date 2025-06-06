@@ -60,6 +60,79 @@ try {
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        /* Indicadores de Progresso */
+        .step-indicators {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .step-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .step-indicator.active {
+            background: #28a745;
+            color: white;
+        }
+
+        .step-indicator.completed {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Barra de Progresso */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .progress-fill {
+            position: absolute;
+            height: 100%;
+            background: #28a745;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Etapas do Formulário */
+        .form-steps {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-steps.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
         .form-section {
             margin-bottom: 40px;
         }
@@ -303,13 +376,25 @@ try {
             </table>
 
             <div id="formularioProfessor" style="display: none;">
-                <h4>Envio de Relatório</h4>
+                <!-- Indicadores de Progresso -->
+                <div class="step-indicators">
+                    <div class="step-indicator active" data-step="1">1</div>
+                    <div class="step-indicator" data-step="2">2</div>
+                </div>
+
+                <!-- Barra de Progresso -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 50%"></div>
+                    </div>
+                </div>
+
                 <form class="form-relatorio" action="processa_relatorio.php" method="POST">
                     <input type="hidden" name="id_inscricao" id="id_inscricao">
                     
-                    <!-- Informações do Professor -->
-                    <div class="form-section">
-                        <h4>Informações do Professor</h4>
+                    <!-- Etapa 1: Informações do Professor e Projeto -->
+                    <div class="form-steps active" id="step1">
+                        <h4>Informações do Professor e Projeto</h4>
                         <div class="form-group">
                             <label for="professor">Nome:</label>
                             <input type="text" id="professor" name="professor" disabled value="<?php echo htmlspecialchars($_SESSION['Nome']); ?>">
@@ -324,11 +409,7 @@ try {
                             <label for="matricula">Matrícula:</label>
                             <input type="text" id="matricula" name="matricula" value="<?php echo htmlspecialchars($_SESSION['id_Docente']); ?>" disabled>
                         </div>
-                    </div>
 
-                    <!-- Informações do Projeto -->
-                    <div class="form-section">
-                        <h4>Informações do Projeto</h4>
                         <div class="projeto-info">
                             <div class="form-group">
                                 <label>Título do Projeto:</label>
@@ -357,8 +438,8 @@ try {
                         </div>
                     </div>
 
-                    <!-- Relatório -->
-                    <div class="form-section">
+                    <!-- Etapa 2: Relatório -->
+                    <div class="form-steps" id="step2">
                         <h4>Relatório de Atividades</h4>
                         
                         <div class="form-group">
@@ -379,9 +460,11 @@ try {
                         </div>
                     </div>
 
-                    <div class="form-actions">
-                        <button type="button" onclick="voltarListagem()" class="nav-button prev">Voltar</button>
-                        <button type="submit" class="nav-button submit">Enviar Relatório</button>
+                    <!-- Navegação entre etapas -->
+                    <div class="form-navigation">
+                        <button type="button" class="nav-button prev" onclick="prevStep()" disabled>Anterior</button>
+                        <button type="button" class="nav-button next" onclick="nextStep()">Próxima</button>
+                        <button type="submit" class="nav-button submit" style="display: none;">Enviar Relatório</button>
                     </div>
                 </form>
             </div>
@@ -389,65 +472,126 @@ try {
     </main>
 
     <script>
-    // Funções específicas para o relatório do professor
-    const prepararRelatorioHae = (idInscricao, tituloProjeto, tipoHae, coordenador, curso, quantidadeHae) => {
-        // Esconde a tabela e mostra o formulário
-        document.getElementById('tableProfessor').style.display = 'none';
-        document.getElementById('formularioProfessor').style.display = 'block';
-        
-        // Preenche os campos do formulário
-        document.getElementById('id_inscricao').value = idInscricao;
-        document.getElementById('titulo_projeto_display').textContent = tituloProjeto.replace(/\\/g, '');
-        document.getElementById('tipo_hae_display').textContent = tipoHae.replace(/\\/g, '');
-        document.getElementById('coordenador_display').textContent = coordenador.replace(/\\/g, '');
-        document.getElementById('curso_display').textContent = curso.replace(/\\/g, '');
-        document.getElementById('quantidade_hae_display').textContent = quantidadeHae;
-        
-        // Define a data mínima como hoje
-        const hoje = new Date().toISOString().split('T')[0];
-        document.getElementById('data_entrega').min = hoje;
-    };
+        let currentStep = 1;
+        const totalSteps = 2;
 
-    const verRelatorio = (idRelatorio) => {
-        window.location.href = `ver_relatorio.php?id=${idRelatorio}`;
-    };
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.querySelector('.progress-fill').style.width = `${progress}%`;
 
-    const imprimirRelatorio = (idInscricao) => {
-        window.open(`imprimir_relatorio.php?id=${idInscricao}`, '_blank');
-    };
-
-    const voltarListagem = () => {
-        if (confirm('Tem certeza que deseja voltar? Os dados não salvos serão perdidos.')) {
-            document.getElementById('tableProfessor').style.display = 'table';
-            document.getElementById('formularioProfessor').style.display = 'none';
-            document.querySelector('.form-relatorio').reset();
-        }
-    };
-
-    // Adiciona validação no envio do formulário
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.querySelector('.form-relatorio');
-        if (form) {
-            form.addEventListener('submit', (e) => {
-                const requiredFields = form.querySelectorAll('[required]');
-                let isValid = true;
-
-                requiredFields.forEach(field => {
-                    if (!field.value.trim()) {
-                        isValid = false;
-                        field.classList.add('invalid');
-                    } else {
-                        field.classList.remove('invalid');
-                    }
-                });
-
-                if (!isValid) {
-                    e.preventDefault();
-                    alert('Por favor, preencha todos os campos obrigatórios.');
+            // Atualiza os indicadores de etapa
+            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                indicator.classList.remove('active', 'completed');
+                if (index + 1 < currentStep) {
+                    indicator.classList.add('completed');
+                } else if (index + 1 === currentStep) {
+                    indicator.classList.add('active');
                 }
             });
+
+            // Atualiza os botões de navegação
+            const prevButton = document.querySelector('.nav-button.prev');
+            const nextButton = document.querySelector('.nav-button.next');
+            const submitButton = document.querySelector('.nav-button.submit');
+
+            prevButton.disabled = currentStep === 1;
+            
+            if (currentStep === totalSteps) {
+                nextButton.style.display = 'none';
+                submitButton.style.display = 'block';
+            } else {
+                nextButton.style.display = 'block';
+                submitButton.style.display = 'none';
+            }
         }
-    });
+
+        function showStep(step) {
+            // Oculta todas as etapas com transição suave
+            document.querySelectorAll('.form-steps').forEach(formStep => {
+                formStep.classList.remove('active');
+            });
+
+            // Mostra a etapa atual com transição suave
+            const currentStepElement = document.getElementById(`step${step}`);
+            if (currentStepElement) {
+                setTimeout(() => {
+                    currentStepElement.classList.add('active');
+                }, 50);
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+                updateProgress();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+                updateProgress();
+            }
+        }
+
+        // Funções específicas para o relatório do professor
+        const prepararRelatorioHae = (idInscricao, tituloProjeto, tipoHae, coordenador, curso, quantidadeHae) => {
+            // Esconde a tabela e mostra o formulário
+            document.getElementById('tableProfessor').style.display = 'none';
+            document.getElementById('formularioProfessor').style.display = 'block';
+            
+            // Preenche os campos do formulário
+            document.getElementById('id_inscricao').value = idInscricao;
+            document.getElementById('titulo_projeto_display').textContent = tituloProjeto.replace(/\\/g, '');
+            document.getElementById('tipo_hae_display').textContent = tipoHae.replace(/\\/g, '');
+            document.getElementById('coordenador_display').textContent = coordenador.replace(/\\/g, '');
+            document.getElementById('curso_display').textContent = curso.replace(/\\/g, '');
+            document.getElementById('quantidade_hae_display').textContent = quantidadeHae;
+            
+            // Define a data mínima como hoje
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('data_entrega').min = hoje;
+
+            // Reinicia o progresso
+            currentStep = 1;
+            showStep(1);
+            updateProgress();
+        };
+
+        const verRelatorio = (idRelatorio) => {
+            window.location.href = `ver_relatorio.php?id=${idRelatorio}`;
+        };
+
+        const imprimirRelatorio = (idInscricao) => {
+            window.open(`imprimir_relatorio.php?id=${idInscricao}`, '_blank');
+        };
+
+        // Adiciona validação no envio do formulário
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('.form-relatorio');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    const requiredFields = form.querySelectorAll('[required]');
+                    let isValid = true;
+
+                    requiredFields.forEach(field => {
+                        if (!field.value.trim()) {
+                            isValid = false;
+                            field.classList.add('invalid');
+                        } else {
+                            field.classList.remove('invalid');
+                        }
+                    });
+
+                    if (!isValid) {
+                        e.preventDefault();
+                        alert('Por favor, preencha todos os campos obrigatórios.');
+                    }
+                });
+            }
+        });
     </script>
 
     <script src="../js/script.js" defer></script>
