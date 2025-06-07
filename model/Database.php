@@ -33,5 +33,5 @@ class Database {
     private function __clone() {}
 
     // Previne que a classe seja deserializada
-    private function __wakeup() {}
+    public function __wakeup() {}
 } 

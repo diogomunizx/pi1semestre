@@ -157,21 +157,26 @@ document.addEventListener('click', function(event) {
 
 function liberarCampoCadastro() {
     const nome = document.getElementById('professor');
-    const email = document.getElementById('email');
     const telefone = document.getElementById('telefone');
     const btnSalvar = document.querySelector('.btn-salvarAlterarCadastro');
     const btnCancelar = document.querySelector('.btn-cancelarAlterarCadastro');
     const campoSenha = document.getElementById('campo-senha');
     const botoesAlterar = document.querySelector('.btns-Alterar');
 
+     document.querySelector('.btn-salvarAlterarCadastro').style.display = 'block';
+        document.querySelector('.btn-cancelarAlterarCadastro').style.display = 'block';
+        document.querySelector('.btns-Alterar').style.display = 'none';
+        
+        
+
     if (nome.disabled) {
         nome.disabled = false;
-        email.disabled = false;
         telefone.disabled = false;
-        campoSenha.style.display = 'block';
         btnSalvar.style.display = 'inline-block';
         btnCancelar.style.display = 'inline-block';
+        
         botoesAlterar.style.display = 'none';
+        campoSenha.style.display = 'block';
     } else {
         alert("Cancele ou conclua a operação atual antes de alterar novamente.");
     }
@@ -179,37 +184,51 @@ function liberarCampoCadastro() {
 
 // Função para salvar alterações de cadastro
 function salvarAlteracao() {
-    const senha = document.getElementById('senha').value;
+    const nome = document.getElementById('professor').value;
+    const telefone = document.getElementById('telefone').value;
+    const id = document.getElementById('matricula').value;
 
-    if (senha.trim() === "") {
-        alert("Por favor, informe sua senha para confirmar as alterações.");
-        return;
-    }
-
-    // Aqui você enviaria as alterações para o backend
-
-    alert("Cadastro alterado com sucesso!");
-    document.getElementById('senha').value = '';
-    cancelarAlteracaoCadastro();
+    fetch('../controller/atualizar_perfil.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id_Docente: id,
+            Nome: nome,
+            telefone: telefone
+        })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Erro ao atualizar');
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message || 'Dados atualizados com sucesso!');
+        location.reload(); // Recarrega para refletir os dados atualizados (opcional)
+    })
+    .catch(error => {
+        console.error('Erro ao salvar:', error);
+        alert('Erro ao salvar as alterações.');
+    });
 }
+
+
 
 // Função para cancelar alteração do cadastro
 function cancelarAlteracaoCadastro() {
     const nome = document.getElementById('professor');
-    const email = document.getElementById('email');
     const telefone = document.getElementById('telefone');
     const btnSalvar = document.querySelector('.btn-salvarAlterarCadastro');
     const btnCancelar = document.querySelector('.btn-cancelarAlterarCadastro');
     const campoSenha = document.getElementById('campo-senha');
     const botoesAlterar = document.querySelector('.btns-Alterar');
-
     nome.disabled = true;
-    email.disabled = true;
     telefone.disabled = true;
     campoSenha.style.display = 'none';
+    botoesAlterar.style.display = 'flex';
     btnSalvar.style.display = 'none';
     btnCancelar.style.display = 'none';
-    botoesAlterar.style.display = 'block';
     document.getElementById('senha').value = '';
 }
 
@@ -224,25 +243,50 @@ function liberarFormAlterarSenha() {
 
 // Função para salvar alteração de senha
 function salvarAlteracaoSenha() {
-    const password = document.getElementById('password').value;
-    const novaPassword = document.getElementById('novaPassword').value;
-    const confirmarPassword = document.getElementById('confirmarPassword').value;
+    const senhaAtual = document.getElementById('password').value;
+    const novaSenha = document.getElementById('novaPassword').value;
+    const confirmarSenha = document.getElementById('confirmarPassword').value;
+    const id = document.getElementById('matricula').value;
 
-    if (!password || !novaPassword || !confirmarPassword) {
+    // Validação de campos vazios
+    if (!senhaAtual || !novaSenha || !confirmarSenha) {
         alert("Preencha todos os campos de senha.");
         return;
     }
 
-    if (novaPassword !== confirmarPassword) {
+    // Verificação se nova senha e confirmação coincidem
+    if (novaSenha !== confirmarSenha) {
         alert("A nova senha e a confirmação não coincidem.");
         return;
     }
 
-    // Aqui você enviaria as senhas para o backend para validação e atualização
-
-    alert("Senha alterada com sucesso!");
-    cancelarAlteracaoSenha();
+    // Envio dos dados ao backend
+    fetch('../controller/alterar_senha.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id_Docente: id,
+            senhaAtual: senhaAtual,
+            novaSenha: novaSenha
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Senha alterada com sucesso!");
+            cancelarAlteracaoSenha(); // oculta o formulário
+        } else {
+            alert(data.message || "Erro ao alterar a senha.");
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao alterar senha:', error);
+        alert("Erro ao alterar a senha.");
+    });
 }
+
 
 // Função para cancelar alteração de senha
 function cancelarAlteracaoSenha() {
@@ -259,6 +303,7 @@ function cancelarAlteracaoSenha() {
     formCadastro.style.display = 'block';
     formSenha.style.display = 'none';
 }
+
 
 // Seleciona todos os inputs dentro das divs com classe 'hae-projeto-linha'
 const haeInputs = document.querySelectorAll('.hae-projeto-linha input');
@@ -737,75 +782,159 @@ function existeHorarioIncompleto(dia) {
    FUNÇÕES DE PERSISTÊNCIA (COM REDIRECIONAMENTO FIXO)
    =================================================== */
 
+// Placeholder para salvar alterações, ajuste conforme sua lógica
 async function salvarAlteracoes() {
   const ultimoDia = diasDaSemana[diasDaSemana.length - 1];
+
+  // 1. Verifica se há horário incompleto no último dia
   if (existeHorarioIncompleto(ultimoDia)) {
     alert("Por favor, preencha todos os horários antes de salvar.");
     diaAtualIndex = diasDaSemana.length - 1;
+
+    document.querySelectorAll('.dia').forEach(div => div.style.display = 'none');
     document.getElementById(ultimoDia).style.display = 'block';
     document.querySelector(`#${ultimoDia} .botao-adicionar`).style.display = 'inline-block';
+
     document.getElementById('alterar-dados').textContent = 'Salvar alterações';
     document.getElementById('retornar-dia').style.display = 'inline-block';
     return;
   }
 
-  const dadosGrade = {
-    tipo_operacao: 'sobrescrita_total',
-    dias: {}
+  // 2. Mapeamento e coleta dos dados da grade semanal
+  const mapaDias = {
+    'segunda': 1,
+    'terca': 2,
+    'quarta': 3,
+    'quinta': 4,
+    'sexta': 5,
+    'sabado': 6
   };
-  
-  diasDaSemana.forEach(dia => {
-    const linhas = Array.from(document.querySelectorAll(`#linhas-${dia} .linha-horario`));
-    dadosGrade.dias[dia] = linhas.map(linha => {
-      const [inicio, fim] = linha.querySelectorAll('input[type="time"]');
-      const origem = linha.querySelector('select');
-      return {
-        inicio: inicio.value,
-        fim: fim.value,
-        origem: origem.value
-      };
-    });
-  });
 
+  const dadosParaSalvar = [];
+
+  for (const [diaNome, diaNumero] of Object.entries(mapaDias)) {
+    const container = document.querySelector(`#linhas-${diaNome}`);
+    const linhas = container.querySelectorAll('.linha-horario');
+
+    linhas.forEach(linha => {
+      const [inicioInput, fimInput] = linha.querySelectorAll('input[type="time"]');
+      const selectInstituicao = linha.querySelector('select');
+
+      if (!inicioInput || !fimInput || !selectInstituicao) return;
+
+      const horarioInicio = inicioInput.value;
+      const horarioFim = fimInput.value;
+      const instituicao = selectInstituicao.value;
+
+      if (horarioInicio && horarioFim && instituicao) {
+        dadosParaSalvar.push({
+          diaSemana: diaNumero,
+          horarioInicio,
+          horarioFim,
+          instituicao
+        });
+      }
+    });
+  }
+
+  // 3. Envia os dados via fetch para salvar_horarios.php
   try {
-    const response = await fetch('salvar_grade.php', {
+    const resposta = await fetch('../controller/salvar_horarios.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dadosGrade)
+      body: JSON.stringify({ horarios: dadosParaSalvar })
     });
 
-    const resultado = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(resultado.message || 'Erro ao salvar os dados');
-    
- 
-    }
+    const resultado = await resposta.json();
 
-    alert('Grade salva com sucesso!');
+    if (resultado.sucesso) {
+      alert("Horários salvos com sucesso!");
+      location.reload();
+    } else {
+      alert("Erro ao salvar: " + resultado.mensagem);
+    }
   } catch (error) {
-    console.error('Erro:', error);
-    alert(`Erro: ${error.message}`);
-  } finally {
-    // REDIRECIONAMENTO FIXO (SUCESSO OU ERRO)
-    window.location.href = 'minhasAulas.html';
+    console.error("Erro ao salvar horários:", error);
+    alert("Erro ao salvar os dados. Verifique sua conexão ou tente novamente.");
+    return;
+    
   }
+
+  // 4. Retorna ao modo visualização
+  emEdicao = false;
+
+  document.querySelectorAll('.dia').forEach(div => div.style.display = 'block');
+  document.querySelectorAll('.botao-adicionar').forEach(btn => btn.style.display = 'none');
+
+  document.querySelectorAll('input, select').forEach(el => el.disabled = true);
+  document.querySelectorAll('.linha-horario button').forEach(botao => {
+    botao.style.display = 'none';
+  });
+
+  document.getElementById('retornar-dia').style.display = 'none';
+
+  const botaoAlterar = document.getElementById('alterar-dados');
+  botaoAlterar.textContent = 'Alterar dados';
+  botaoAlterar.onclick = habilitarEdicao;
 }
+z
+
 
 /* ===================================================
    INICIALIZAÇÃO
    =================================================== */
 
-window.onload = () => {
-  inicializarContadores();
-  
-  // Configura estado inicial
-  document.querySelectorAll('input, select').forEach(el => el.disabled = true);
-  document.querySelectorAll('.linha-horario button').forEach(botao => {
-    botao.style.display = 'none';
-  });
-  document.querySelectorAll('.botao-adicionar').forEach(btn => btn.style.display = 'none');
-  document.getElementById('retornar-dia').style.display = 'none';
-  
-  removerEstiloCentralizado();
-};
+async function carregarHorariosSalvos() {
+  try {
+    const resposta = await fetch('buscar_horario.php');
+    if (!resposta.ok) throw new Error("Erro ao carregar os horários");
+
+    const dados = await resposta.json();
+
+    // Mapeia 1 a 6 para 'segunda' a 'sabado'
+    const mapaDias = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+    const horariosPorDia = {};
+
+    // Agrupa os horários por dia
+    dados.forEach(item => {
+      const nomeDia = mapaDias[item.diaSemana - 1]; // Subtrai 1 porque começa no índice 0
+      if (!horariosPorDia[nomeDia]) horariosPorDia[nomeDia] = [];
+      horariosPorDia[nomeDia].push(item);
+    });
+
+    // Preenche os campos com os dados recebidos
+    Object.entries(horariosPorDia).forEach(([dia, horarios]) => {
+      horarios.forEach(horario => {
+        adicionarLinha(dia); // Cria a linha
+
+        const container = document.querySelector(`#linhas-${dia}`);
+        const linhas = container.querySelectorAll('.linha-horario');
+        const ultimaLinha = linhas[linhas.length - 1];
+
+        const [inputInicio, inputFim] = ultimaLinha.querySelectorAll('input[type="time"]');
+        const selectOrigem = ultimaLinha.querySelector('select');
+
+        inputInicio.value = horario.horarioInicio.substring(0, 5);
+        inputFim.value = horario.horarioFim.substring(0, 5);
+
+        // Define valor do select
+        switch ((horario.instituicao || '').toLowerCase()) {
+          case 'fatec':
+          case '':
+            selectOrigem.value = 'fatec';
+            break;
+          case 'outra unidade':
+          case 'outra_fatec':
+            selectOrigem.value = 'outra_fatec';
+            break;
+          default:
+            selectOrigem.value = 'outra_instituicao';
+            break;
+        }
+      });
+    });
+
+  } catch (erro) {
+    console.error("Erro ao carregar horários:", erro);
+  }
+}

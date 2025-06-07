@@ -119,6 +119,74 @@ if (!isset($_SESSION['id_Docente'])) {
 
   <script src="../js/script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll('.botao-adicionar').forEach(btn => btn.style.display = 'none');
+
+  fetch("../controller/buscar_horarios.php")
+    .then(res => res.json())
+    .then(dados => {
+      // seu código atual para processar os dados
+    })
+    .catch(error => {
+      console.error("Erro ao carregar horários:", error);
+    });
+
+
+  fetch("../controller/buscar_horarios.php")
+    .then(res => res.json())
+    .then(dados => {
+      const mapaDias = {
+        1: 'segunda',
+        2: 'terca',
+        3: 'quarta',
+        4: 'quinta',
+        5: 'sexta',
+        6: 'sabado'
+      };
+
+      console.log("Horários recebidos:", dados);
+      dados.forEach(horario => {
+        const dia = mapaDias[horario.diaSemana];
+        const container = document.querySelector(`#linhas-${dia}`);
+        if (!container) return;
+
+        // Corrigir formato dos horários para "HH:mm"
+        const horarioInicio = (horario.horarioInicio && horario.horarioInicio !== '00:00:00')
+          ? horario.horarioInicio.substring(0, 5)
+          : '';
+
+        const horarioFim = (horario.horarioFim && horario.horarioFim !== '00:00:00')
+          ? horario.horarioFim.substring(0, 5)
+          : '';
+
+        const linha = document.createElement("div");
+        linha.classList.add("linha-horario");
+        linha.setAttribute("data-dia", dia);
+
+        linha.innerHTML = `
+          <input type="time" value="${horarioInicio}" disabled>
+          <input type="time" value="${horarioFim}" disabled>
+          <select disabled>
+            <option value="fatec" ${horario.instituicao === 'fatec' ? 'selected' : ''}>Fatec</option>
+            <option value="outra_fatec" ${horario.instituicao === 'outra_fatec' ? 'selected' : ''}>Outra Unidade</option>
+            <option value="outra_instituicao" ${horario.instituicao === 'outra_instituicao' ? 'selected' : ''}>Aula Externa</option>
+          </select>
+          <button type="button" class="btn-remover" style="display:none;" onclick="removerLinha(this)">Remover</button>
+        `;
+
+        container.appendChild(linha);
+      });
+    })
+    .catch(error => {
+      console.error("Erro ao carregar horários:", error);
+    });
+});
+
+
+</script>
 </body>
 
 </html> 

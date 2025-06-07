@@ -82,4 +82,42 @@ class Usuario {
             throw new Exception("Erro ao realizar login. Por favor, tente novamente mais tarde.");
         }
     }
+    public function buscarPorId($id_usuario) {
+    try {
+        $stmt = $this->pdo->prepare("SELECT * FROM tb_Usuario WHERE id_Docente = :id");
+        $stmt->bindParam(':id', $id_usuario, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($usuario) {
+            return $usuario;
+        } else {
+            return false;
+        }
+    } catch (PDOException $e) {
+        error_log("Erro ao buscar usuário por ID: " . $e->getMessage());
+        return false;
+    }
+}
+public function atualizarPerfil($id_Docente, $nome, $telefone) {
+    try {
+        $stmt = $this->pdo->prepare("UPDATE tb_Usuario SET Nome = :nome, telefone = :telefone WHERE id_Docente = :id");
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':telefone', $telefone);
+        $stmt->bindParam(':id', $id_Docente, PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        error_log("Erro ao atualizar perfil: " . $e->getMessage());
+        return false;
+    }
+}
+
+public function atualizarSenha($id, $novaSenha) {
+    $stmt = $this->pdo->prepare("UPDATE tb_Usuario SET senha = :senha WHERE id_Docente = :id");
+    $stmt->bindParam(':senha', $novaSenha);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    return $stmt->execute();
+}
+
 }
