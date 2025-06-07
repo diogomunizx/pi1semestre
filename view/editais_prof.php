@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-// Verifica se o usuário está logado e é coordenador
-if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'coordenador') {
+// Verifica se o usuário está logado e é professor
+if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'professor') {
     header("Location: ../login.php");
     exit;
 }
@@ -37,46 +37,6 @@ try {
     <link rel="stylesheet" href="../estilos/style.css">
     <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
     <title>HORUS - Editais</title>
-    <style>
-        /* Garantir que os estilos do menu não sejam sobrescritos */
-        .sidebar {
-            position: fixed !important;
-            z-index: 999 !important;
-        }
-        .sidebar a {
-            display: flex !important;
-            align-items: center !important;
-        }
-        .sidebar a img {
-            width: 30px !important;
-            height: 30px !important;
-            margin-right: 15px !important;
-        }
-        /* Estilos originais da página */
-        .acoes {
-            margin-bottom: 20px;
-        }
-        .btn-novo {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-        .btn-novo:hover {
-            background-color: #45a049;
-        }
-        .icone-acao {
-            cursor: pointer;
-            margin: 0 5px;
-            width: 20px;
-            height: 20px;
-        }
-        td.acoes {
-            white-space: nowrap;
-        }
-    </style>
 </head>
 
 <body>
@@ -111,17 +71,17 @@ try {
                 <img src="../imagens/logo-horus.png" alt="Logo HORUS">
             </a>
         </div>
-        <a class="inicio" href="index_coord.php">
+        <a class="inicio" href="index_prof.php">
             <img src="../imagens/home.png" alt="Início"> <span>Início</span>
         </a>
-        <a href="aprovacao.php" id="linkAprovacao">
-            <img src="../imagens/inscricoes.png" alt="Inscrições"> <span>Inscrições</span>
+        <a href="inscricao.php" id="linkInscricao">
+            <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
         </a>
-        <a href="editais.php" class="active">
+        <a href="editais_prof.php" class="active">
             <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
         </a>
-        <a href="relatorio_coord.php">
-            <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
+        <a href="relatorio_prof.php">
+            <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
         </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
@@ -129,19 +89,8 @@ try {
     </nav>
 
     <main>
-        <h3 class="titulos">Gerenciamento de Editais</h3>
+        <h3 class="titulos">Editais</h3>
         <br>
-        <?php if (isset($_SESSION['mensagem'])): ?>
-            <div class="sucesso"><?php echo $_SESSION['mensagem']; unset($_SESSION['mensagem']); ?></div>
-        <?php endif; ?>
-        <?php if (isset($_SESSION['erro'])): ?>
-            <div class="erro"><?php echo $_SESSION['erro']; unset($_SESSION['erro']); ?></div>
-        <?php endif; ?>
-
-        <div class="acoes">
-            <a href="form_edital.php" class="btn-novo">Novo Edital</a>
-        </div>
-
         <?php if (isset($erro)): ?>
             <div class="erro"><?php echo $erro; ?></div>
         <?php else: ?>
@@ -157,7 +106,6 @@ try {
                             <td>Fim Inscrições</td>
                             <td>Status</td>
                             <td>Unidade</td>
-                            <td>Ações</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -169,20 +117,6 @@ try {
                                 <td><?php echo date('d/m/Y', strtotime($edital['dataFimInscricao'])); ?></td>
                                 <td><?php echo htmlspecialchars($edital['edital_status']); ?></td>
                                 <td><?php echo htmlspecialchars($edital['unidade']); ?></td>
-                                <td class="acoes">
-                                    <img src="../imagens/editar.png" alt="Editar" 
-                                         onclick="editarEdital('<?php echo $edital['id_edital']; ?>')"
-                                         class="icone-acao">
-                                    <?php if ($edital['edital_status'] === 'ABERTO'): ?>
-                                        <img src="../imagens/encerrar.png" alt="Encerrar" 
-                                             onclick="encerrarEdital('<?php echo $edital['id_edital']; ?>')"
-                                             class="icone-acao">
-                                    <?php else: ?>
-                                        <img src="../imagens/reabrir.png" alt="Reabrir" 
-                                             onclick="reabrirEdital('<?php echo $edital['id_edital']; ?>')"
-                                             class="icone-acao">
-                                    <?php endif; ?>
-                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -191,25 +125,27 @@ try {
         <?php endif; ?>
     </main>
 
-    <script>
-    function editarEdital(id) {
-        window.location.href = `form_edital.php?id=${id}`;
+    <style>
+    .tbls {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
     }
 
-    function encerrarEdital(id) {
-        if (confirm('Tem certeza que deseja encerrar este edital?')) {
-            window.location.href = `processa_edital.php?acao=encerrar&id=${id}`;
-        }
+    .tbls thead {
+        background-color: #f5f5f5;
     }
 
-    function reabrirEdital(id) {
-        if (confirm('Tem certeza que deseja reabrir este edital?')) {
-            window.location.href = `processa_edital.php?acao=reabrir&id=${id}`;
-        }
+    .tbls td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
     }
-    </script>
 
-    <script src="../js/script.js" defer></script>
+    .tbls tbody tr:hover {
+        background-color: #f9f9f9;
+    }
+    </style>
 </body>
 
 </html> 

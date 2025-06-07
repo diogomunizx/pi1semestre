@@ -16,7 +16,7 @@ body, html {
 /* Sidebar */
 .sidebar {
     position: fixed;
-    top: 0;;
+    top: 0;
     left: 0;
     height: 100vh;
     width: 200px;
@@ -28,8 +28,8 @@ body, html {
     z-index: 2;
 }
 .sidebar a {
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
     color: #fff;
     text-decoration: none;
     padding: 30px;
@@ -41,10 +41,12 @@ body, html {
 .sidebar a:hover {
     background-color: #580707;
 }
-.sidebar img {
-    width: 30px;
-    height: 30px;
-    margin-right: 15px;
+.sidebar a img {
+    width: 30px !important;
+    height: 30px !important;
+    margin-right: 15px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
 }
 .sidebar span {
     display: inline;
@@ -55,33 +57,37 @@ body, html {
 }
 /* Estilo para o container da logo */
 .sidebar .logo-container {
-    position: absolute; /* Coloca no topo do menu */
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 95px; /* Mesmo que a altura do header */
-    background-color: #AE0C0D; /* Garante consistência com o menu */
+    height: 95px;
+    background-color: #AE0C0D;
     display: flex;
     align-items: center;
     justify-content: center;
     border-bottom: 2px solid #444;
-    z-index: 3; /* Logo no mesmo nível visual que o header */
+    z-index: 3;
     margin-bottom: 10px;
     padding: 15px 0;
 }
 .sidebar .logo-container img {
-    width: 90px; /* Ajuste o tamanho da logo */
+    width: 90px;
     height: auto;
     margin-left: 18px;
     margin-top: 5px;
 }
 /* Impede que hover afete a logo */
 .sidebar .logo-container a:hover {
-    background-color: transparent; /* Garante que não muda de cor */
-    cursor: default; /* Remove o ponteiro de link */
+    background-color: transparent;
+    cursor: default;
 }
 .sidebar .inicio{
     margin-top: 30px;
+}
+
+.sidebar a.active {
+    background-color: #580707;
 }
 
 

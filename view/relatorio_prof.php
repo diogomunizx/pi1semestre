@@ -347,6 +347,9 @@ try {
         <a href="inscricao.php" id="linkInscricao">
             <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
         </a>
+        <a href="editais_prof.php">
+            <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
+        </a>
         <a href="relatorio_prof.php" class="active">
             <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
         </a>

@@ -167,6 +167,9 @@ function formatarData($data) {
     <a href="aprovacao.php" id="linkAprovacao">
       <img src="../imagens/inscricoes.png" alt="Inscrições"> <span>Inscrições</span>
     </a>
+    <a href="editais.php">
+      <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
+    </a>
     <a href="relatorio_coord.php">
       <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
     </a>

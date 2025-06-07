@@ -67,6 +67,21 @@ try {
     <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
     <title>HORUS - Detalhes do Relatório</title>
     <style>
+        /* Garantir que os estilos do menu não sejam sobrescritos */
+        .sidebar {
+            position: fixed !important;
+            z-index: 999 !important;
+        }
+        .sidebar a {
+            display: flex !important;
+            align-items: center !important;
+        }
+        .sidebar a img {
+            width: 30px !important;
+            height: 30px !important;
+            margin-right: 15px !important;
+        }
+        /* Estilos originais da página */
         .detalhes-container {
             max-width: 800px;
             margin: 30px auto;
@@ -189,7 +204,10 @@ try {
             <img src="../imagens/home.png" alt="Início"> <span>Início</span>
         </a>
         <a href="aprovacao.php" id="linkAprovacao">
-            <img src="../imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
+            <img src="../imagens/inscricoes.png" alt="Inscrições"> <span>Inscrições</span>
+        </a>
+        <a href="editais.php">
+            <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
         </a>
         <a href="relatorio_coord.php" class="active">
             <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>

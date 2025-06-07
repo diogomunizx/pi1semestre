@@ -91,7 +91,7 @@ try {
             <img src="../imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
         </a>
         <a href="editais.php" class="active">
-            <img src="../imagens/edital.png" alt="Editais"> <span>Editais</span>
+            <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
         </a>
         <a href="relatorio_coord.php">
             <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
