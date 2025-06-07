@@ -16,6 +16,28 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'coor
   <link rel="stylesheet" href="../estilos/style.css">
   <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
   <title>Painel do Coordenador</title>
+  <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+    </style>
 </head>
 
 <body>
@@ -77,34 +99,34 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'coor
         <tr>
           <td>Incrições HAE abertas</td>
           <td>De 18/11/2024 à 13/01/2025</td>
-          <td class="destaque"><img class="img-edit" src="../imagens/editar.png" onclick="editarData()"></td>
+          <td class="destaque"><img class="img-edit" src="../imagens/editar.png" onclick="editarData(this)"></td>
           <td class="destaque"><img class="img-edit" src="../imagens/imprimir.png" onclick="imprimirLinhaSeparada(this)"></td>
           <td class="destaque"><img class="img-edit" src="../imagens/upload.png" onclick="selecionarPDF(this)"></td>
         </tr>
         <tr>
           <td>Aprovações HAE</td>
           <td>De 14/01/2025 à 28/01/2025</td>
-          <td class="destaque"><img class="img-edit" src="../imagens/editar.png" onclick="editarData()"></td>
+          <td class="destaque"><img class="img-edit" src="../imagens/editar.png" onclick="editarData(this)"></td>
           <td class="destaque"><img class="img-edit" src="../imagens/imprimir.png" onclick="imprimirLinhaSeparada(this)"></td>
           <td class="destaque"><img class="img-edit" src="../imagens/upload.png" onclick="selecionarPDF(this)"></td>
         </tr>
         <tr>
           <td>Divulgação Lista de Aprovados</td>
           <td>30/01/2025</td>
-          <td class="destaque"><img class="img-edit" src="../imagens/editar.png" onclick="editarData()"></td>
+          <td class="destaque"><img class="img-edit" src="../imagens/editar.png" onclick="editarData(this)"></td>
           <td class="destaque"><img class="img-edit" src="../imagens/imprimir.png" onclick="imprimirLinhaSeparada(this)"></td>
           <td class="destaque"><img class="img-edit" src="../imagens/upload.png" onclick="selecionarPDF(this)"></td>
         </tr>
         <tr>
           <td>Entrega de Relatorios HAE</td>
           <td>De 24/06/2025 à 01/07/2025</td>
-          <td class="destaque"><img class="img-edit" src="../imagens/editar.png" onclick="editarData()"></td>
+          <td class="destaque"><img class="img-edit" src="../imagens/editar.png" onclick="editarData(this)"></td>
           <td class="destaque"><img class="img-edit" src="../imagens/imprimir.png" onclick="imprimirLinhaSeparada(this)"></td>
           <td class="destaque"><img class="img-edit" src="../imagens/upload.png" onclick="selecionarPDF(this)"></td>
         </tr>
         <td>Aprovação de Relatorios HAE</td>
         <td>De 02/07/2025 à 10/07/2025</td>
-        <td class="destaque"><img class="img-edit" src="../imagens/editar.png" onclick="editarData()"></td>
+        <td class="destaque"><img class="img-edit" src="../imagens/editar.png" onclick="editarData(this)"></td>
         <td class="destaque"><img class="img-edit" src="../imagens/imprimir.png" onclick="imprimirLinhaSeparada(this)"></td>
         <td class="destaque"><img class="img-edit" src="../imagens/upload.png" onclick="selecionarPDF(this)"></td>
         </tr>
