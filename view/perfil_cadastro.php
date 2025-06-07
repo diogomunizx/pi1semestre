@@ -81,32 +81,36 @@ if (!isset($_SESSION['id_Docente'])) {
 
             <div class="input-grupoCadastro">
                 <label for="professor">Nome</label>
-                <input type="text" id="professor" disabled value="<?php echo htmlspecialchars($_SESSION['Nome']); ?>">
+                <input type="text" id="professor" disabled >
             </div>
 
             <div class="input-grupoCadastro">
                 <label for="matricula">Matrícula</label>
-                <input type="text" id="matricula" disabled value="<?php echo htmlspecialchars($_SESSION['id_Docente']); ?>">
+                <input type="text" id="matricula" disabled >
             </div>
 
             <div class="input-grupoCadastro">
                 <label for="email">E-mail</label>
-                <input type="email" id="email" disabled value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>">
+                <input type="email" id="email" disabled >
             </div>
 
             <div class="input-grupoCadastro">
                 <label for="telefone">Telefone</label>
-                <input type="tel" id="telefone" disabled value="<?php echo htmlspecialchars($_SESSION['telefone'] ?? ''); ?>">
+                <input type="tel" id="telefone" disabled >
             </div>
+
+             <div class="input-grupoCadastro" id="campo-senha" style="display:none;">
+                <label for="senhaAtualCadastro">Senha Atual</label>
+                <input type="password" id="senhaAtualCadastro" required>
+            </div>    
 
             <div class="btns-Alterar">
                 <a href="#" onclick="liberarCampoCadastro()">Alterar Cadastro</a>
                 <a href="#" onclick="liberarFormAlterarSenha()">Alterar Senha</a>
             </div>
-
             <button type="button" class="btn-salvarAlterarCadastro" style="display: none;" onclick="salvarAlteracao()">Salvar Alterações</button>
             <button type="button" class="btn-cancelarAlterarCadastro" style="display: none;" onclick="cancelarAlteracaoCadastro()">Cancelar</button>
-        </form>
+       </form>
 
         <form class="form-AlterarSenha" style="display: none;">
             <div class="header-AlterarSenha">
@@ -143,6 +147,23 @@ if (!isset($_SESSION['id_Docente'])) {
 </main>
 
 <script src="../js/script.js" defer></script>
+
+<script>document.addEventListener('DOMContentLoaded', () => {
+fetch('../controller/usuario_perfil.php')
+    .then(response => {
+        if (!response.ok) throw new Error('Erro ao buscar dados');
+        return response.json();
+    })
+    .then(data => {
+        console.log(data); // Veja todos os dados retornados aqui!
+        document.getElementById('professor').value = data.Nome;
+        document.getElementById('email').value = data.email;
+        document.getElementById('telefone').value = data.telefone;
+        document.getElementById('matricula').value = data.id_Docente;
+    })
+    .catch(error => console.error(error));
+});</script>
+
 
 </body>
 </html> 

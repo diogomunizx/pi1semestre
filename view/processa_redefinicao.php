@@ -1,5 +1,5 @@
 <?php
-//include 'conexao.php';
+include '../config/database.php';
 
 $token = $_POST['token'];
 $novaSenha = $_POST['novaSenha'];
