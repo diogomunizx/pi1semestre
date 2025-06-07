@@ -252,6 +252,60 @@ try {
         .form-group textarea.invalid {
             border-color: #dc3545;
         }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .status-aprovado { background-color: #28a745; }
+        .status-pendente { background-color: #ffc107; color: #000; }
+        .status-reprovado { background-color: #dc3545; }
+        .status-correcao { background-color: #dc3545; }
+
+        .btn-novo, .btn-ver {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-novo {
+            background-color: #28a745;
+        }
+
+        .btn-ver {
+            background-color: #6c757d;
+        }
+
+        .btn-novo:hover, .btn-ver:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .btn-novo:hover {
+            background-color: #218838;
+        }
+
+        .btn-ver:hover {
+            background-color: #5a6268;
+        }
+
+        .tbls td:nth-child(1) { width: 8%; }  /* ID */
+        .tbls td:nth-child(2) { width: 20%; } /* Título */
+        .tbls td:nth-child(3) { width: 12%; } /* Tipo HAE */
+        .tbls td:nth-child(4) { width: 10%; } /* Quantidade */
+        .tbls td:nth-child(5) { width: 15%; } /* Curso */
+        .tbls td:nth-child(6) { width: 15%; } /* Status */
+        .tbls td:nth-child(7) { width: 20%; } /* Ações */
     </style>
 </head>
 
@@ -314,60 +368,41 @@ try {
                 
                 <thead>
                     <tr>
-                        <td>Inscrição</td>
-                        <td>Coordenador</td>
-                        <td>Projeto</td>
+                        <td>ID</td>
+                        <td>Título do Projeto</td>
                         <td>Tipo HAE</td>
-                        <td>Quantidade HAE</td>
-                        <td>Status Relatório</td>
+                        <td>Quantidade</td>
+                        <td>Curso</td>
+                        <td>Status</td>
                         <td>Ações</td>
-                        <td>Imprimir</td>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($inscricoes)): ?>
                         <tr>
-                            <td colspan="8">Nenhum projeto aprovado encontrado.</td>
+                            <td colspan="7">Nenhum projeto aprovado encontrado.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($inscricoes as $inscricao): ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($inscricao['id_frmInscricaoHae']); ?></td>
-                                <td><?php echo htmlspecialchars($inscricao['coordenador']); ?></td>
                                 <td><?php echo htmlspecialchars($inscricao['tituloProjeto']); ?></td>
                                 <td><?php echo htmlspecialchars($inscricao['tipoHae']); ?></td>
                                 <td><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></td>
+                                <td><?php echo htmlspecialchars($inscricao['curso']); ?></td>
                                 <td>
-                                    <?php if (!$inscricao['status_relatorio']): ?>
-                                        <span class="status-badge status-pendente">PENDENTE</span>
-                                    <?php else: ?>
-                                        <span class="status-badge status-<?php echo strtolower($inscricao['status_relatorio']); ?>">
-                                            <?php echo $inscricao['status_relatorio']; ?>
-                                        </span>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="destaque">
-                                    <?php if (!$inscricao['status_relatorio'] || $inscricao['status_relatorio'] === 'CORRECAO'): ?>
-                                        <a href="#" onclick="prepararRelatorioHae(
-                                            '<?php echo $inscricao['id_frmInscricaoHae']; ?>', 
-                                            '<?php echo htmlspecialchars(addslashes($inscricao['tituloProjeto'])); ?>', 
-                                            '<?php echo htmlspecialchars(addslashes($inscricao['tipoHae'])); ?>',
-                                            '<?php echo htmlspecialchars(addslashes($inscricao['coordenador'])); ?>',
-                                            '<?php echo htmlspecialchars(addslashes($inscricao['curso'])); ?>',
-                                            '<?php echo htmlspecialchars($inscricao['quantidadeHae']); ?>'
-                                        ); return false;">
-                                            <img src="../imagens/relatorio.png" style="cursor: pointer;">
-                                        </a>
-                                    <?php else: ?>
-                                        <a href="#" onclick="verRelatorio('<?php echo $inscricao['id_relatorioHae']; ?>'); return false;">
-                                            <img src="../imagens/olho.png" style="cursor: pointer;">
-                                        </a>
-                                    <?php endif; ?>
+                                    <span class="status-badge status-<?php echo strtolower($inscricao['status_relatorio'] ?? 'pendente'); ?>">
+                                        <?php echo $inscricao['status_relatorio'] ?? 'PENDENTE'; ?>
+                                    </span>
                                 </td>
                                 <td>
-                                    <a href="#" onclick="imprimirRelatorio('<?php echo $inscricao['id_frmInscricaoHae']; ?>'); return false;">
-                                        <img class="destaque" src="../imagens/imprimir.png" style="cursor: pointer;">
-                                    </a>
+                                    <?php if (empty($inscricao['id_relatorioHae'])): ?>
+                                        <a href="form_relatorio.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
+                                           class="btn-novo">Novo Relatório</a>
+                                    <?php else: ?>
+                                        <a href="ver_detalhes_relatorio_prof.php?id=<?php echo $inscricao['id_relatorioHae']; ?>" 
+                                           class="btn-ver">Ver Detalhes</a>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

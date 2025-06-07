@@ -19,11 +19,8 @@ try {
                      i.tipoHae,
                      i.quantidadeHae,
                      i.tituloProjeto,
-                     c.Materia as curso,
                      e.vigencia as edital,
-                     COALESCE(j.status, 'PENDENTE') as status,
-                     i.inicioProjeto,
-                     i.fimProjeto
+                     COALESCE(j.status, 'PENDENTE') as status
               FROM tb_frm_inscricao_hae i
               INNER JOIN tb_cursos c ON i.id_curso = c.id_curso
               INNER JOIN tb_Usuario prof ON i.tb_Docentes_id_Docente = prof.id_Docente
@@ -54,6 +51,52 @@ try {
     <link rel="stylesheet" href="../estilos/style.css">
     <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
     <title>HORUS - Aprovação de HAE</title>
+    <style>
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .status-aprovado { background-color: #28a745; }
+        .status-pendente { background-color: #ffc107; color: #000; }
+        .status-reprovado { background-color: #dc3545; }
+
+        .btn-avaliar, .btn-ver {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-avaliar {
+            background-color: #007bff;
+        }
+
+        .btn-ver {
+            background-color: #6c757d;
+        }
+
+        .btn-avaliar:hover, .btn-ver:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .btn-avaliar:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-ver:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 
 <body>
@@ -120,10 +163,8 @@ try {
                         <td>Professor</td>
                         <td>Tipo HAE</td>
                         <td>Quantidade HAE</td>
-                        <td>Curso</td>
                         <td>Edital</td>
                         <td>Título do Projeto</td>
-                        <td>Período</td>
                         <td>Status</td>
                         <td>Ações</td>
                     </tr>
@@ -135,22 +176,19 @@ try {
                             <td><?php echo htmlspecialchars($inscricao['professor']); ?></td>
                             <td><?php echo htmlspecialchars($inscricao['tipoHae']); ?></td>
                             <td><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></td>
-                            <td><?php echo htmlspecialchars($inscricao['curso']); ?></td>
                             <td><?php echo htmlspecialchars($inscricao['edital']); ?></td>
                             <td><?php echo htmlspecialchars($inscricao['tituloProjeto']); ?></td>
                             <td>
-                                <?php 
-                                    echo date('d/m/Y', strtotime($inscricao['inicioProjeto'])) . ' a ' . 
-                                         date('d/m/Y', strtotime($inscricao['fimProjeto']));
-                                ?>
+                                <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
+                                    <?php echo $inscricao['status']; ?>
+                                </span>
                             </td>
-                            <td><?php echo htmlspecialchars($inscricao['status']); ?></td>
                             <td>
                                 <?php if ($inscricao['status'] === 'PENDENTE'): ?>
                                     <a href="avaliar_inscricao.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
                                        class="btn-avaliar">Avaliar</a>
                                 <?php else: ?>
-                                    <a href="ver_justificativa.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
+                                    <a href="ver_detalhes_inscricao.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
                                        class="btn-ver">Ver Detalhes</a>
                                 <?php endif; ?>
                             </td>

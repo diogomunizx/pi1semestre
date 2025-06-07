@@ -19,7 +19,8 @@ try {
                      i.tipoHae,
                      i.quantidadeHae,
                      c.Materia as curso,
-                     COALESCE(j.status, 'PENDENTE') as status
+                     COALESCE(j.status, 'PENDENTE') as status,
+                     j.justificativa
               FROM tb_frm_inscricao_hae i
               LEFT JOIN tb_cursos c ON i.id_curso = c.id_curso
               LEFT JOIN tb_Usuario coord ON c.id_docenteCoordenador = coord.id_Docente
@@ -84,10 +85,9 @@ try {
     .tbls td:nth-child(2) { width: 15%; } /* Coordenador */
     .tbls td:nth-child(3) { width: 15%; } /* Tipo HAE */
     .tbls td:nth-child(4) { width: 10%; } /* Quantidade HAE */
-    .tbls td:nth-child(5) { width: 20%; } /* Curso */
+    .tbls td:nth-child(5) { width: 25%; } /* Curso */
     .tbls td:nth-child(6) { width: 12%; } /* Status */
-    .tbls td:nth-child(7) { width: 10%; } /* Justificativa */
-    .tbls td:nth-child(8) { width: 10%; } /* Imprimir */
+    .tbls td:nth-child(7) { width: 15%; } /* Ações */
 
     /* Estilo para os status */
     .status-badge {
@@ -102,6 +102,101 @@ try {
     .status-aprovado { background-color: #28a745; }
     .status-pendente { background-color: #ffc107; }
     .status-reprovado { background-color: #dc3545; }
+
+    /* Estilos para o Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 600px;
+        border-radius: 8px;
+        position: relative;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .modal-header h4 {
+        margin: 0;
+        color: #333;
+        font-size: 1.2em;
+    }
+
+    .modal-body {
+        margin-bottom: 20px;
+        line-height: 1.5;
+        color: #444;
+        font-size: 1em;
+    }
+
+    .close-modal {
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+        transition: color 0.3s ease;
+    }
+
+    .close-modal:hover {
+        color: #000;
+    }
+
+    .img-edit {
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .img-edit:hover {
+        transform: scale(1.1);
+    }
+
+    .btn-ver {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        background-color: #6c757d;
+    }
+
+    .btn-ver:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        color: white;
+    }
   </style>
 </head>
 
@@ -168,8 +263,7 @@ try {
                   <td>Quantidade HAE</td>
                   <td>Curso</td>
                   <td>Status</td>
-                  <td>Justificativa</td>
-                  <td>Imprimir</td>
+                  <td>Ações</td>
                 </tr>
               </thead>
               <tbody>
@@ -185,13 +279,9 @@ try {
                           <?php echo $inscricao['status']; ?>
                         </span>
                       </td>
-                      <td class="destaque">
-                          <img class="img-edit" src="../imagens/olho.png" 
-                               onclick="verJustificativa('<?php echo $inscricao['id_frmInscricaoHae']; ?>')">
-                      </td>
                       <td>
-                          <img class="destaque" src="../imagens/imprimir.png" 
-                               onclick="imprimirInscricao('<?php echo $inscricao['id_frmInscricaoHae']; ?>')">
+                        <a href="ver_detalhes_inscricao_prof.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
+                           class="btn-ver">Ver Detalhes</a>
                       </td>
                     </tr>
                 <?php endforeach; ?>
@@ -205,14 +295,54 @@ try {
     </div>
   </main>
   
+  <!-- Modal para Justificativa -->
+  <div id="justificativaModal" class="modal">
+      <div class="modal-content">
+          <span class="close-modal" onclick="fecharModal()">&times;</span>
+          <div class="modal-header">
+              <h4>Justificativa da Inscrição</h4>
+          </div>
+          <div class="modal-body" id="justificativaTexto">
+          </div>
+      </div>
+  </div>
+
   <script>
-  function verJustificativa(idInscricao) {
-      // Implementar visualização da justificativa
-      window.location.href = `ver_justificativa.php?id=${idInscricao}`;
+  function verJustificativa(idInscricao, status, justificativa) {
+      const modal = document.getElementById('justificativaModal');
+      const textoJustificativa = document.getElementById('justificativaTexto');
+      
+      if (status === 'PENDENTE') {
+          textoJustificativa.innerHTML = '<p style="color: #666;">O coordenador ainda não visualizou sua inscrição.</p>';
+      } else {
+          // Se não houver justificativa, mostra uma mensagem padrão
+          const texto = justificativa ? justificativa.replace(/\\'/g, "'") : 'Nenhuma justificativa fornecida.';
+          textoJustificativa.innerHTML = `<p>${texto}</p>`;
+      }
+      
+      modal.style.display = 'block';
   }
 
+  function fecharModal() {
+      document.getElementById('justificativaModal').style.display = 'none';
+  }
+
+  // Fecha o modal se clicar fora dele
+  window.onclick = function(event) {
+      const modal = document.getElementById('justificativaModal');
+      if (event.target == modal) {
+          modal.style.display = 'none';
+      }
+  }
+
+  // Fecha o modal ao pressionar ESC
+  document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+          document.getElementById('justificativaModal').style.display = 'none';
+      }
+  });
+
   function imprimirInscricao(idInscricao) {
-      // Implementar impressão da inscrição
       window.location.href = `imprimir_inscricao.php?id=${idInscricao}`;
   }
   </script>

@@ -18,6 +18,12 @@ try {
         error_log("Erro: Conexão não estabelecida");
     }
 
+    // Busca os dados do professor
+    $queryProfessor = "SELECT email, matricula FROM tb_Usuario WHERE id_Docente = :id_docente";
+    $stmtProfessor = $conn->prepare($queryProfessor);
+    $stmtProfessor->execute(['id_docente' => $_SESSION['id_Docente']]);
+    $dadosProfessor = $stmtProfessor->fetch(PDO::FETCH_ASSOC);
+
     // Busca os editais disponíveis
     $queryEditais = "SELECT id_edital, vigencia, dataInicioInscricao, dataFimInscricao, edital_status 
                     FROM tb_Editais 
@@ -131,6 +137,38 @@ function formatarData($data) {
             color: #666;
             margin-top: 5px;
         }
+
+        /* Adicione estes estilos */
+        .horario-select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 120px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .horario-select:focus {
+            border-color: #28a745;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+        }
+
+        .tabela-inscricao td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .horario-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .horario-label {
+            color: #666;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 
@@ -243,10 +281,10 @@ function formatarData($data) {
                     <input type="text" id="professor" name="professor" disabled value="<?php echo htmlspecialchars($_SESSION['Nome']); ?>" required><br>
 
                     <label for="email">E-mail:</label>
-                    <input type="email" id="email" name="email" disabled value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required><br>
+                    <input type="email" id="email" name="email" disabled value="<?php echo htmlspecialchars($dadosProfessor['email']); ?>" required><br>
 
                     <label for="matricula">Matrícula:</label>
-                    <input type="text" id="matricula" name="matricula" value="<?php echo htmlspecialchars($_SESSION['id_Docente']); ?>" required>
+                    <input type="text" id="matricula" name="matricula" value="<?php echo htmlspecialchars($dadosProfessor['matricula']); ?>" required>
                 </div>
 
                 <!-- Etapa 2: Tipo de HAE e Curso -->
@@ -300,40 +338,237 @@ function formatarData($data) {
                     <table class="tabela-inscricao" border="1">
                         <tr>
                             <th>Dia da Semana</th>
-                            <th>Horário Ínicio</th>
+                            <th>Horário Início</th>
                             <th>Horário Final</th>
                         </tr>
                         <tr>
                             <td>Segunda-feira</td>
-                            <td><input type="time" name="horario_inicio_segunda" class="hora-inteira"></td>
-                            <td><input type="time" name="horario_final_segunda" class="hora-inteira"></td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_inicio_segunda" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_final_segunda" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Terça-feira</td>
-                            <td><input type="time" name="horario_inicio_terca" class="hora-inteira"></td>
-                            <td><input type="time" name="horario_final_terca" class="hora-inteira"></td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_inicio_terca" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_final_terca" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Quarta-feira</td>
-                            <td><input type="time" name="horario_inicio_quarta" class="hora-inteira"></td>
-                            <td><input type="time" name="horario_final_quarta" class="hora-inteira"></td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_inicio_quarta" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_final_quarta" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Quinta-feira</td>
-                            <td><input type="time" name="horario_inicio_quinta" class="hora-inteira"></td>
-                            <td><input type="time" name="horario_final_quinta" class="hora-inteira"></td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_inicio_quinta" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_final_quinta" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Sexta-feira</td>
-                            <td><input type="time" name="horario_inicio_sexta" class="hora-inteira"></td>
-                            <td><input type="time" name="horario_final_sexta" class="hora-inteira"></td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_inicio_sexta" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_final_sexta" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Sábado</td>
-                            <td><input type="time" name="horario_inicio_sabado" class="hora-inteira"></td>
-                            <td><input type="time" name="horario_final_sabado" class="hora-inteira"></td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_inicio_sabado" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="horario-container">
+                                    <select name="horario_final_sabado" class="horario-select">
+                                        <option value="">Selecione</option>
+                                        <?php
+                                        for ($hora = 7; $hora <= 22; $hora++) {
+                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
+                                                $time = sprintf("%02d:%02d", $hora, $minuto);
+                                                echo "<option value='$time'>$time</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </td>
                         </tr>
                     </table>
+
+                    <script>
+                        // Função para validar os horários
+                        function validarHorarios() {
+                            const dias = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+                            
+                            dias.forEach(dia => {
+                                const inicio = document.querySelector(`select[name="horario_inicio_${dia}"]`);
+                                const fim = document.querySelector(`select[name="horario_final_${dia}"]`);
+                                
+                                inicio.addEventListener('change', () => {
+                                    if (inicio.value && fim.value && inicio.value >= fim.value) {
+                                        alert(`O horário de início deve ser menor que o horário final para ${dia}-feira`);
+                                        inicio.value = '';
+                                    }
+                                });
+                                
+                                fim.addEventListener('change', () => {
+                                    if (inicio.value && fim.value && inicio.value >= fim.value) {
+                                        alert(`O horário final deve ser maior que o horário de início para ${dia}-feira`);
+                                        fim.value = '';
+                                    }
+                                });
+                            });
+                        }
+
+                        // Inicializa a validação quando o documento estiver carregado
+                        document.addEventListener('DOMContentLoaded', validarHorarios);
+                    </script>
                 </div>
 
                 <!-- Etapa 4: Detalhamento do Projeto -->

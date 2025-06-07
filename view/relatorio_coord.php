@@ -15,14 +15,13 @@ try {
     
     // Busca os relatórios dos professores dos cursos que o coordenador coordena
     $query = "SELECT r.id_relatorioHae,
-                     r.status,
-                     r.data_entrega,
-                     i.id_frmInscricaoHae,
+                     r.data_entrega as dataEntrega,
                      i.tituloProjeto,
                      i.tipoHae,
                      i.quantidadeHae,
                      prof.Nome as professor,
-                     c.Materia as curso
+                     c.Materia as curso,
+                     r.status
               FROM tb_relatorioHae r
               INNER JOIN tb_frm_inscricao_hae i ON r.id_frmInscricaoHae = i.id_frmInscricaoHae
               INNER JOIN tb_Usuario prof ON i.tb_Docentes_id_Docente = prof.id_Docente
@@ -59,8 +58,40 @@ try {
         }
         
         .status-aprovado { background-color: #28a745; }
-        .status-pendente { background-color: #ffc107; }
+        .status-pendente { background-color: #ffc107; color: #000; }
         .status-correcao { background-color: #dc3545; }
+
+        .btn-avaliar, .btn-ver {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-avaliar {
+            background-color: #007bff;
+        }
+
+        .btn-ver {
+            background-color: #6c757d;
+        }
+
+        .btn-avaliar:hover, .btn-ver:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .btn-avaliar:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-ver:hover {
+            background-color: #5a6268;
+        }
 
         .modal {
             display: none;
@@ -208,19 +239,19 @@ try {
                                 <td><?php echo htmlspecialchars($relatorio['curso']); ?></td>
                                 <td><?php echo htmlspecialchars($relatorio['tituloProjeto']); ?></td>
                                 <td><?php echo htmlspecialchars($relatorio['tipoHae']); ?></td>
-                                <td><?php echo date('d/m/Y', strtotime($relatorio['data_entrega'])); ?></td>
+                                <td><?php echo date('d/m/Y', strtotime($relatorio['dataEntrega'])); ?></td>
                                 <td>
                                     <span class="status-badge status-<?php echo strtolower($relatorio['status']); ?>">
                                         <?php echo $relatorio['status']; ?>
                                     </span>
                                 </td>
-                                <td class="destaque">
+                                <td>
                                     <?php if ($relatorio['status'] === 'PENDENTE'): ?>
-                                        <img src="../imagens/relatorio.png" 
-                                             onclick="avaliarRelatorio('<?php echo $relatorio['id_relatorioHae']; ?>')">
+                                        <a href="avaliar_relatorio.php?id=<?php echo $relatorio['id_relatorioHae']; ?>" 
+                                           class="btn-avaliar">Avaliar</a>
                                     <?php else: ?>
-                                        <img src="../imagens/olho.png" 
-                                             onclick="verRelatorio('<?php echo $relatorio['id_relatorioHae']; ?>')">
+                                        <a href="ver_detalhes_relatorio.php?id=<?php echo $relatorio['id_relatorioHae']; ?>" 
+                                           class="btn-ver">Ver Detalhes</a>
                                     <?php endif; ?>
                                 </td>
                             </tr>

@@ -9,10 +9,10 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'coor
 
 require_once '../model/Database.php';
 
-// Verifica se foi passado um ID de inscrição
+// Verifica se foi passado um ID de relatório
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    $_SESSION['erro'] = "ID de inscrição inválido.";
-    header("Location: aprovacao.php");
+    $_SESSION['erro'] = "ID de relatório inválido.";
+    header("Location: relatorio_coord.php");
     exit;
 }
 
@@ -20,35 +20,37 @@ try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
     
-    // Busca os detalhes da inscrição
-    $query = "SELECT i.*, 
+    // Busca os detalhes do relatório
+    $query = "SELECT r.id_relatorioHae, 
+                     r.data_entrega as dataEntrega,
+                     r.descricao_atividades as descricaoAtividades,
+                     r.resultados_alcancados as resultadosObtidos,
+                     r.observacoes_coordenador as observacoes,
+                     i.tituloProjeto,
+                     i.tipoHae,
+                     i.quantidadeHae,
                      prof.Nome as professor,
-                     prof.email as email_professor,
-                     e.vigencia as edital,
-                     c.Materia as curso,
-                     COALESCE(j.status, 'PENDENTE') as status
-              FROM tb_frm_inscricao_hae i
+                     r.status
+              FROM tb_relatorioHae r
+              INNER JOIN tb_frm_inscricao_hae i ON r.id_frmInscricaoHae = i.id_frmInscricaoHae
               INNER JOIN tb_Usuario prof ON i.tb_Docentes_id_Docente = prof.id_Docente
-              INNER JOIN tb_Editais e ON i.id_edital = e.id_edital
-              INNER JOIN tb_cursos c ON i.id_curso = c.id_curso
-              LEFT JOIN tb_justificativaHae j ON i.id_frmInscricaoHae = j.id_frmInscricaoHae
-              WHERE i.id_frmInscricaoHae = :id_inscricao";
+              WHERE r.id_relatorioHae = :id_relatorio";
               
     $stmt = $conn->prepare($query);
-    $stmt->execute(['id_inscricao' => $_GET['id']]);
+    $stmt->execute(['id_relatorio' => $_GET['id']]);
     
-    $inscricao = $stmt->fetch(PDO::FETCH_ASSOC);
+    $relatorio = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    if (!$inscricao) {
-        $_SESSION['erro'] = "Inscrição não encontrada.";
-        header("Location: aprovacao.php");
+    if (!$relatorio) {
+        $_SESSION['erro'] = "Relatório não encontrado.";
+        header("Location: relatorio_coord.php");
         exit;
     }
     
 } catch (Exception $e) {
-    error_log("Erro ao buscar detalhes da inscrição: " . $e->getMessage());
-    $_SESSION['erro'] = "Ocorreu um erro ao carregar os detalhes da inscrição.";
-    header("Location: aprovacao.php");
+    error_log("Erro ao buscar detalhes do relatório: " . $e->getMessage());
+    $_SESSION['erro'] = "Ocorreu um erro ao carregar os detalhes do relatório.";
+    header("Location: relatorio_coord.php");
     exit;
 }
 ?>
@@ -60,7 +62,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../estilos/style.css">
     <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
-    <title>HORUS - Avaliar Inscrição</title>
+    <title>HORUS - Avaliar Relatório</title>
     <style>
         .avaliacao-container {
             max-width: 800px;
@@ -154,9 +156,9 @@ try {
             color: white;
         }
 
-        .btn-reprovar {
-            background-color: #dc3545;
-            color: white;
+        .btn-correcao {
+            background-color: #ffc107;
+            color: black;
         }
 
         .btn-avaliar:hover {
@@ -168,8 +170,8 @@ try {
             background-color: #218838;
         }
 
-        .btn-reprovar:hover {
-            background-color: #c82333;
+        .btn-correcao:hover {
+            background-color: #e0a800;
         }
 
         .status-atual {
@@ -242,10 +244,10 @@ try {
         <a class="inicio" href="index_coord.php">
             <img src="../imagens/home.png" alt="Início"> <span>Início</span>
         </a>
-        <a href="aprovacao.php" class="active">
+        <a href="aprovacao.php" id="linkAprovacao">
             <img src="../imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
         </a>
-        <a href="relatorio_coord.php">
+        <a href="relatorio_coord.php" class="active">
             <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
         </a>
         <a href="../login.php">
@@ -256,38 +258,37 @@ try {
     <main>
         <div class="avaliacao-container">
             <div class="avaliacao-header">
-                <h3>Avaliação de Inscrição HAE</h3>
+                <h3>Avaliação do Relatório HAE</h3>
                 <span class="status-atual status-pendente">Status: PENDENTE</span>
             </div>
 
             <div class="info-projeto">
-                <p><strong>Professor:</strong> <span><?php echo htmlspecialchars($inscricao['professor']); ?></span></p>
-                <p><strong>Curso:</strong> <span><?php echo htmlspecialchars($inscricao['curso']); ?></span></p>
-                <p><strong>Tipo HAE:</strong> <span><?php echo htmlspecialchars($inscricao['tipoHae']); ?></span></p>
-                <p><strong>Quantidade HAE:</strong> <span><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></span></p>
-                <p><strong>Título do Projeto:</strong> <span><?php echo htmlspecialchars($inscricao['tituloProjeto']); ?></span></p>
-                <p><strong>Edital:</strong> <span><?php echo htmlspecialchars($inscricao['edital']); ?></span></p>
+                <p><strong>Professor:</strong> <span><?php echo htmlspecialchars($relatorio['professor']); ?></span></p>
+                <p><strong>Tipo HAE:</strong> <span><?php echo htmlspecialchars($relatorio['tipoHae']); ?></span></p>
+                <p><strong>Quantidade HAE:</strong> <span><?php echo htmlspecialchars($relatorio['quantidadeHae']); ?></span></p>
+                <p><strong>Título do Projeto:</strong> <span><?php echo htmlspecialchars($relatorio['tituloProjeto']); ?></span></p>
+                <p><strong>Data de Entrega:</strong> <span><?php echo date('d/m/Y', strtotime($relatorio['dataEntrega'])); ?></span></p>
             </div>
 
             <div class="acoes-container">
                 <div class="acoes-icones">
-                    <a href="ver_detalhes_inscricao.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
-                       class="btn-ver-completa">Ver Inscrição Completa</a>
+                    <a href="ver_detalhes_relatorio.php?id=<?php echo $relatorio['id_relatorioHae']; ?>" 
+                       class="btn-ver-completa">Ver Relatório Completo</a>
                 </div>
             </div>
 
-            <form action="processa_aprovacao.php" method="POST">
-                <input type="hidden" name="id_inscricao" value="<?php echo $inscricao['id_frmInscricaoHae']; ?>">
+            <form action="processa_avaliacao_relatorio.php" method="POST">
+                <input type="hidden" name="id_relatorio" value="<?php echo $relatorio['id_relatorioHae']; ?>">
                 
                 <div class="form-group">
                     <label for="justificativa">Justificativa da Avaliação:</label>
                     <textarea id="justificativa" name="justificativa" required 
-                              placeholder="Digite aqui sua justificativa para a aprovação ou reprovação desta inscrição..."></textarea>
+                              placeholder="Digite aqui sua justificativa para a aprovação ou solicitação de correção deste relatório..."></textarea>
                 </div>
 
                 <div class="avaliacao-actions">
-                    <button type="submit" name="acao" value="aprovar" class="btn-avaliar btn-aprovar">Aprovar Inscrição</button>
-                    <button type="submit" name="acao" value="reprovar" class="btn-avaliar btn-reprovar">Reprovar Inscrição</button>
+                    <button type="submit" name="acao" value="aprovar" class="btn-avaliar btn-aprovar">Aprovar Relatório</button>
+                    <button type="submit" name="acao" value="correcao" class="btn-avaliar btn-correcao">Solicitar Correção</button>
                 </div>
             </form>
         </div>

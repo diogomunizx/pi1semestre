@@ -11,6 +11,33 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
     header("Location: ../login.php");
     exit;
 }
+
+require_once '../model/Database.php';
+
+try {
+    $db = Database::getInstance();
+    $conn = $db->getConnection();
+    
+    // Busca o edital mais recente
+    $queryEdital = "SELECT id_edital FROM tb_Editais ORDER BY id_edital DESC LIMIT 1";
+    $stmtEdital = $conn->query($queryEdital);
+    $edital = $stmtEdital->fetch();
+    $idEdital = $edital ? $edital['id_edital'] : null;
+
+    // Busca as datas do cronograma
+    if ($idEdital) {
+        $queryCronograma = "SELECT tipo_evento, data_inicio, data_fim FROM tb_cronograma WHERE id_edital = :id_edital";
+        $stmtCronograma = $conn->prepare($queryCronograma);
+        $stmtCronograma->execute(['id_edital' => $idEdital]);
+        $cronograma = $stmtCronograma->fetchAll(PDO::FETCH_ASSOC);
+    }
+} catch (Exception $e) {
+    error_log("Erro ao buscar cronograma: " . $e->getMessage());
+}
+
+function formatarData($data) {
+    return $data ? date('d/m/Y', strtotime($data)) : '';
+}
 ?>
 
 <!DOCTYPE html>
@@ -22,6 +49,28 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
   <link rel="stylesheet" href="../estilos/style.css">
   <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
   <title>HORUS - Início</title>
+  <style>
+    .data-cell {
+        min-width: 200px;
+    }
+
+    .periodo-datas {
+        display: block;
+        font-size: 14px;
+        color: #2c3e50;
+    }
+
+    .status-atual {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        color: white;
+        background-color: #28a745;
+        margin-left: 10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -71,8 +120,6 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
     <table class="tbls">
       <caption>
         <br>
-        <h3>Referente ao Edital 2025</h3>
-        <br>
       </caption>
       <thead>
         <tr>
@@ -81,24 +128,130 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'prof
       </thead>
       <tbody>
         <tr>
-          <td>Incrições HAE abertas</td>
-          <td>De 18/11/2024 à 13/01/2025</td>
+          <td>Divulgação do Edital</td>
+          <td class="data-cell">
+            <?php 
+            $evento = array_filter($cronograma ?? [], function($item) {
+                return $item['tipo_evento'] === 'divulgacao_edital';
+            });
+            $evento = reset($evento);
+            if ($evento): ?>
+                <span class="periodo-datas">
+                    <?php echo formatarData($evento['data_inicio']); ?> - 
+                    <?php echo formatarData($evento['data_fim']); ?>
+                    <?php 
+                    $hoje = date('Y-m-d');
+                    if ($hoje >= $evento['data_inicio'] && $hoje <= $evento['data_fim']): ?>
+                        <span class="status-atual">ATUAL</span>
+                    <?php endif; ?>
+                </span>
+            <?php endif; ?>
+          </td>
+        </tr>
+        <tr>
+          <td>Inscrições HAE Abertas</td>
+          <td class="data-cell">
+            <?php 
+            $evento = array_filter($cronograma ?? [], function($item) {
+                return $item['tipo_evento'] === 'inscricoes_abertas';
+            });
+            $evento = reset($evento);
+            if ($evento): ?>
+                <span class="periodo-datas">
+                    <?php echo formatarData($evento['data_inicio']); ?> - 
+                    <?php echo formatarData($evento['data_fim']); ?>
+                    <?php 
+                    $hoje = date('Y-m-d');
+                    if ($hoje >= $evento['data_inicio'] && $hoje <= $evento['data_fim']): ?>
+                        <span class="status-atual">ATUAL</span>
+                    <?php endif; ?>
+                </span>
+            <?php endif; ?>
+          </td>
         </tr>
         <tr>
           <td>Aprovações HAE</td>
-          <td>De 14/01/2025 à 28/01/2025</td>
+          <td class="data-cell">
+            <?php 
+            $evento = array_filter($cronograma ?? [], function($item) {
+                return $item['tipo_evento'] === 'aprovacoes';
+            });
+            $evento = reset($evento);
+            if ($evento): ?>
+                <span class="periodo-datas">
+                    <?php echo formatarData($evento['data_inicio']); ?> - 
+                    <?php echo formatarData($evento['data_fim']); ?>
+                    <?php 
+                    $hoje = date('Y-m-d');
+                    if ($hoje >= $evento['data_inicio'] && $hoje <= $evento['data_fim']): ?>
+                        <span class="status-atual">ATUAL</span>
+                    <?php endif; ?>
+                </span>
+            <?php endif; ?>
+          </td>
         </tr>
         <tr>
           <td>Divulgação Lista de Aprovados</td>
-          <td>30/01/2025</td>
+          <td class="data-cell">
+            <?php 
+            $evento = array_filter($cronograma ?? [], function($item) {
+                return $item['tipo_evento'] === 'lista_aprovados';
+            });
+            $evento = reset($evento);
+            if ($evento): ?>
+                <span class="periodo-datas">
+                    <?php echo formatarData($evento['data_inicio']); ?> - 
+                    <?php echo formatarData($evento['data_fim']); ?>
+                    <?php 
+                    $hoje = date('Y-m-d');
+                    if ($hoje >= $evento['data_inicio'] && $hoje <= $evento['data_fim']): ?>
+                        <span class="status-atual">ATUAL</span>
+                    <?php endif; ?>
+                </span>
+            <?php endif; ?>
+          </td>
         </tr>
         <tr>
-          <td>Entrega de Relatorios HAE</td>
-          <td>De 24/06/2025 à 01/07/2025</td>
+          <td>Entrega de Relatórios HAE</td>
+          <td class="data-cell">
+            <?php 
+            $evento = array_filter($cronograma ?? [], function($item) {
+                return $item['tipo_evento'] === 'entrega_relatorios';
+            });
+            $evento = reset($evento);
+            if ($evento): ?>
+                <span class="periodo-datas">
+                    <?php echo formatarData($evento['data_inicio']); ?> - 
+                    <?php echo formatarData($evento['data_fim']); ?>
+                    <?php 
+                    $hoje = date('Y-m-d');
+                    if ($hoje >= $evento['data_inicio'] && $hoje <= $evento['data_fim']): ?>
+                        <span class="status-atual">ATUAL</span>
+                    <?php endif; ?>
+                </span>
+            <?php endif; ?>
+          </td>
         </tr>
         <tr>
-          <td>Aprovação de Relatorios HAE</td>
-          <td>De 02/07/2025 à 10/07/2025</td>
+          <td>Aprovação de Relatórios HAE</td>
+          <td class="data-cell">
+            <?php 
+            $evento = array_filter($cronograma ?? [], function($item) {
+                return $item['tipo_evento'] === 'aprovacao_relatorios';
+            });
+            $evento = reset($evento);
+            if ($evento): ?>
+                <span class="periodo-datas">
+                    <?php echo formatarData($evento['data_inicio']); ?> - 
+                    <?php echo formatarData($evento['data_fim']); ?>
+                    <?php 
+                    $hoje = date('Y-m-d');
+                    if ($hoje >= $evento['data_inicio'] && $hoje <= $evento['data_fim']): ?>
+                        <span class="status-atual">ATUAL</span>
+                    <?php endif; ?>
+                </span>
+            <?php endif; ?>
+          </td>
         </tr>
       </tbody>
     </table>
