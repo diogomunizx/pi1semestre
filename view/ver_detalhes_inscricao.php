@@ -11,8 +11,13 @@ require_once '../model/Database.php';
 
 // Verifica se foi passado um ID de inscrição
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    $_SESSION['erro'] = "ID de inscrição inválido.";
-    header("Location: aprovacao.php");
+    if (isset($_GET['from']) && $_GET['from'] === 'relatorio') {
+        $_SESSION['erro'] = "ID de inscrição inválido.";
+        header("Location: relatorio_coord.php");
+    } else {
+        $_SESSION['erro'] = "ID de inscrição inválido.";
+        header("Location: aprovacao.php");
+    }
     exit;
 }
 
@@ -142,11 +147,33 @@ function formatarDiaSemana($dia) {
             text-decoration: none;
             border-radius: 6px;
             transition: all 0.3s ease;
+            margin-right: 10px;
         }
 
         .btn-voltar:hover {
             background-color: #5a6268;
             transform: translateY(-2px);
+        }
+
+        .btn-imprimir {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-imprimir:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+
+        .acoes-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
         }
 
         .status-badge {
@@ -185,6 +212,40 @@ function formatarDiaSemana($dia) {
             background-color: #f8f9fa;
             font-weight: 600;
             color: #2c3e50;
+        }
+
+        @media print {
+            header, .sidebar, .acoes-container {
+                display: none !important;
+            }
+            
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .detalhes-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Garantir que textos escuros sejam impressos */
+            * {
+                color: #000 !important;
+                text-shadow: none !important;
+                background: transparent !important;
+            }
+
+            /* Quebrar URLs longas */
+            a[href]:after {
+                content: " (" attr(href) ")";
+            }
         }
     </style>
 </head>
@@ -348,16 +409,13 @@ function formatarDiaSemana($dia) {
             </div>
             <?php endif; ?>
 
-            <div style="text-align: center; margin-top: 30px;">
-                <?php if ($inscricao['status'] === 'PENDENTE'): ?>
-                    <a href="avaliar_inscricao.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" class="btn-voltar">
-                        Voltar para Avaliação
-                    </a>
-                <?php else: ?>
-                    <a href="aprovacao.php" class="btn-voltar">
-                        Voltar para Lista de Inscrições
-                    </a>
-                <?php endif; ?>
+            <div class="acoes-container">
+                <a href="javascript:history.back()" class="btn-voltar">
+                    Voltar
+                </a>
+                <a href="javascript:void(0)" onclick="window.print()" class="btn-imprimir">
+                    Imprimir Inscrição
+                </a>
             </div>
         </div>
     </main>

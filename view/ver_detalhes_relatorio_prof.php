@@ -124,11 +124,48 @@ try {
             text-decoration: none;
             border-radius: 6px;
             transition: all 0.3s ease;
+            margin-right: 10px;
         }
 
         .btn-voltar:hover {
             background-color: #5a6268;
             transform: translateY(-2px);
+        }
+
+        .btn-imprimir {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-imprimir:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+
+        .btn-inscricao {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-inscricao:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .acoes-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
         }
 
         .status-badge {
@@ -149,6 +186,45 @@ try {
             font-size: 14px;
             line-height: 1.6;
             color: #444;
+        }
+
+        @media print {
+            header, .sidebar, .acoes-container {
+                display: none !important;
+            }
+            
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .detalhes-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Garantir que textos escuros sejam impressos */
+            * {
+                color: #000 !important;
+                text-shadow: none !important;
+                background: transparent !important;
+            }
+
+            /* Quebrar URLs longas */
+            a[href]:after {
+                content: " (" attr(href) ")";
+            }
+
+            /* Manter cores do status */
+            .status-badge {
+                border: 1px solid #000;
+            }
         }
     </style>
 </head>
@@ -263,9 +339,15 @@ try {
             </div>
             <?php endif; ?>
 
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="relatorio_prof.php" class="btn-voltar">
-                    Voltar para Lista de Relatórios
+            <div class="acoes-container">
+                <a href="javascript:history.back()" class="btn-voltar">
+                    Voltar
+                </a>
+                <a href="ver_detalhes_inscricao_prof.php?id=<?php echo $relatorio['id_frmInscricaoHae']; ?>" class="btn-inscricao">
+                    Ver Inscrição Original
+                </a>
+                <a href="javascript:void(0)" onclick="window.print()" class="btn-imprimir">
+                    Imprimir Relatório
                 </a>
             </div>
         </div>

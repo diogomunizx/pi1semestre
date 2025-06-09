@@ -260,17 +260,18 @@ try {
 
         .status-badge {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 6px 12px;
             border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 14px;
             color: white;
         }
         
-        .status-aprovado { background-color: #28a745; }
         .status-pendente { background-color: #ffc107; color: #000; }
+        .status-aprovado { background-color: #28a745; }
         .status-reprovado { background-color: #dc3545; }
         .status-correcao { background-color: #dc3545; }
+        .status-nao-enviado { background-color: #2196F3; }
 
         .btn-novo, .btn-ver {
             display: inline-block;
@@ -400,7 +401,7 @@ try {
                                 <td><?php echo htmlspecialchars($inscricao['curso']); ?></td>
                                 <td>
                                     <?php 
-                                    $statusClass = '';
+                                    $statusClass = 'status-nao-enviado';
                                     $statusText = 'Não enviado';
                                     
                                     if ($inscricao['status_relatorio'] !== NULL) {
@@ -426,14 +427,20 @@ try {
                                     <?php if ($inscricao['status_relatorio'] === NULL): ?>
                                         <a href="form_relatorio.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
                                            class="btn-novo">Enviar Relatório</a>
+                                        <a href="ver_detalhes_inscricao_prof.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
+                                           class="btn-ver">Ver Inscrição</a>
                                     <?php elseif ($inscricao['status_relatorio'] === 'CORREÇÃO'): ?>
                                         <a href="form_relatorio.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>&edit=true" 
                                            class="btn-novo">Corrigir Relatório</a>
                                         <a href="ver_detalhes_relatorio_prof.php?id=<?php echo $inscricao['id_relatorioHae']; ?>" 
                                            class="btn-ver">Ver Detalhes</a>
+                                        <a href="ver_detalhes_inscricao_prof.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
+                                           class="btn-ver">Ver Inscrição</a>
                                     <?php else: ?>
                                         <a href="ver_detalhes_relatorio_prof.php?id=<?php echo $inscricao['id_relatorioHae']; ?>" 
                                            class="btn-ver">Ver Detalhes</a>
+                                        <a href="ver_detalhes_inscricao_prof.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
+                                           class="btn-ver">Ver Inscrição</a>
                                     <?php endif; ?>
                                 </td>
                             </tr>

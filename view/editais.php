@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once '../config/session_config.php';
 
 // Verifica se o usuário está logado e é coordenador
 if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'coordenador') {
@@ -14,7 +14,7 @@ try {
     $conn = $db->getConnection();
     
     // Busca os editais
-    $query = "SELECT e.*, f.Nome_Fantasia as unidade
+    $query = "SELECT e.*, f.Nome_Fantasia as unidade, e.arquivo_pdf
               FROM tb_Editais e
               INNER JOIN tb_unidadeFatec f ON e.Unidade_Fatec_idUnidade_Fatec = f.id_unidadeFatec
               ORDER BY e.id_edital DESC";
@@ -101,6 +101,25 @@ try {
             white-space: nowrap;
             text-align: center;
         }
+        /* Estilos para upload de arquivo */
+        .upload-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .file-input {
+            max-width: 200px;
+        }
+        .btn-upload {
+            background-color: #17a2b8;
+        }
+        .btn-upload:hover {
+            background-color: #138496;
+        }
+        .arquivo-nome {
+            font-size: 14px;
+            color: #28a745;
+        }
     </style>
 </head>
 
@@ -182,6 +201,7 @@ try {
                             <td>Fim Inscrições</td>
                             <td>Status</td>
                             <td>Unidade</td>
+                            <td>Arquivo</td>
                             <td>Ações</td>
                         </tr>
                     </thead>
@@ -194,6 +214,17 @@ try {
                                 <td><?php echo date('d/m/Y', strtotime($edital['dataFimInscricao'])); ?></td>
                                 <td><?php echo htmlspecialchars($edital['edital_status']); ?></td>
                                 <td><?php echo htmlspecialchars($edital['unidade']); ?></td>
+                                <td>
+                                    <?php if (!empty($edital['arquivo_pdf'])): ?>
+                                        <span class="arquivo-nome"><?php echo basename($edital['arquivo_pdf']); ?></span>
+                                    <?php else: ?>
+                                        <form action="upload_edital.php" method="post" enctype="multipart/form-data" class="upload-form">
+                                            <input type="hidden" name="id_edital" value="<?php echo $edital['id_edital']; ?>">
+                                            <input type="file" name="arquivo_pdf" accept=".pdf" required class="file-input">
+                                            <button type="submit" class="btn-acao btn-upload">Upload</button>
+                                        </form>
+                                    <?php endif; ?>
+                                </td>
                                 <td class="acoes">
                                     <button class="btn-acao btn-editar" 
                                             onclick="editarEdital('<?php echo $edital['id_edital']; ?>')">

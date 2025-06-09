@@ -6,8 +6,19 @@
 // Esta função deve ser chamada ANTES de qualquer saída HTML ser enviada ao navegador.
 session_start();
 
-// Verifica se o usuário está logado e é professor
-if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'professor') {
+require_once '../config/session_config.php';
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['id_Docente'])) {
+    $_SESSION['login_error'] = "Por favor, faça login para acessar o sistema.";
+    header("Location: ../login.php");
+    exit;
+}
+
+// Verifica se é professor ou coordenador
+$funcao = strtolower($_SESSION['funcao']);
+if ($funcao !== 'professor' && $funcao !== 'coordenador' && $funcao !== 'prof/coord') {
+    $_SESSION['login_error'] = "Acesso não autorizado.";
     header("Location: ../login.php");
     exit;
 }

@@ -1,11 +1,28 @@
 <?php
 session_start();
 
-// Verifica se o usuário está logado e é professor
-if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'professor') {
+// Debug - Início
+error_log("=== Debug editais_prof.php ===");
+error_log("Session ID: " . session_id());
+error_log("Session Data: " . print_r($_SESSION, true));
+// Debug - Fim
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['id_Docente'])) {
+    error_log("Usuário não está logado - redirecionando para login");
     header("Location: ../login.php");
     exit;
 }
+
+// Verifica se é professor - agora aceita 'professor', 'Professor' ou 'PROFESSOR'
+$funcao = strtolower($_SESSION['funcao']);
+if ($funcao !== 'professor' && $funcao !== 'prof/coord') {
+    error_log("Usuário não é professor - Função: " . $_SESSION['funcao']);
+    header("Location: ../login.php");
+    exit;
+}
+
+error_log('Editais Prof - Acesso autorizado para: ' . $_SESSION['Nome']);
 
 require_once '../model/Database.php';
 
@@ -14,7 +31,7 @@ try {
     $conn = $db->getConnection();
     
     // Busca os editais
-    $query = "SELECT e.*, f.Nome_Fantasia as unidade
+    $query = "SELECT e.*, f.Nome_Fantasia as unidade, e.arquivo_pdf
               FROM tb_Editais e
               INNER JOIN tb_unidadeFatec f ON e.Unidade_Fatec_idUnidade_Fatec = f.id_unidadeFatec
               ORDER BY e.id_edital DESC";
@@ -106,6 +123,7 @@ try {
                             <td>Fim Inscrições</td>
                             <td>Status</td>
                             <td>Unidade</td>
+                            <td>Arquivo</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,6 +135,15 @@ try {
                                 <td><?php echo date('d/m/Y', strtotime($edital['dataFimInscricao'])); ?></td>
                                 <td><?php echo htmlspecialchars($edital['edital_status']); ?></td>
                                 <td><?php echo htmlspecialchars($edital['unidade']); ?></td>
+                                <td>
+                                    <?php if (!empty($edital['arquivo_pdf'])): ?>
+                                        <a href="download_edital.php?id=<?php echo $edital['id_edital']; ?>" class="btn-acao btn-download">
+                                            Download PDF
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="sem-arquivo">Não disponível</span>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -144,6 +171,24 @@ try {
 
     .tbls tbody tr:hover {
         background-color: #f9f9f9;
+    }
+
+    /* Estilos para download de arquivo */
+    .btn-download {
+        background-color: #17a2b8;
+        color: white;
+        text-decoration: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    .btn-download:hover {
+        background-color: #138496;
+        color: white;
+    }
+    .sem-arquivo {
+        color: #6c757d;
+        font-style: italic;
     }
     </style>
 </body>

@@ -15,6 +15,7 @@ try {
     
     // Busca os relatórios dos professores dos cursos que o coordenador coordena
     $query = "SELECT r.id_relatorioHae,
+                     r.id_frmInscricaoHae,
                      r.data_entrega as dataEntrega,
                      i.tituloProjeto,
                      i.tipoHae,
@@ -283,6 +284,8 @@ try {
                                         <a href="ver_detalhes_relatorio.php?id=<?php echo $relatorio['id_relatorioHae']; ?>" 
                                            class="btn-ver">Ver Detalhes</a>
                                     <?php endif; ?>
+                                    <a href="ver_detalhes_inscricao.php?id=<?php echo $relatorio['id_frmInscricaoHae']; ?>&from=relatorio" 
+                                       class="btn-ver">Ver Inscrição</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
