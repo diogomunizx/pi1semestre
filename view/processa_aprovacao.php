@@ -15,9 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn = $db->getConnection();
 
         // Verifica se todos os campos necessários foram enviados
-        if (!isset($_POST['id_inscricao'], $_POST['status'], $_POST['justificativa'])) {
+        if (!isset($_POST['id_inscricao'], $_POST['acao'], $_POST['justificativa'])) {
             throw new Exception("Dados incompletos");
         }
+
+        // Converte a ação em status
+        $status = ($_POST['acao'] === 'aprovar') ? 'APROVADO' : 'REPROVADO';
 
         // Inicia a transação
         $conn->beginTransaction();
@@ -47,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare($query);
         $params = [
             'justificativa' => $_POST['justificativa'],
-            'status' => $_POST['status'],
+            'status' => $status,
             'id_inscricao' => $_POST['id_inscricao'],
         ];
 
@@ -60,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Confirma a transação
         $conn->commit();
 
-        $_SESSION['mensagem'] = "Inscrição " . strtolower($_POST['status']) . " com sucesso!";
+        $_SESSION['mensagem'] = "Inscrição " . strtolower($status) . " com sucesso!";
         header("Location: aprovacao.php");
         exit;
 

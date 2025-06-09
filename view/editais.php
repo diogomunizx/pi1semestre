@@ -67,14 +67,39 @@ try {
         .btn-novo:hover {
             background-color: #45a049;
         }
-        .icone-acao {
+        /* Novos estilos para os botões de ação */
+        .btn-acao {
+            padding: 6px 12px;
+            margin: 0 4px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            margin: 0 5px;
-            width: 20px;
-            height: 20px;
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-editar {
+            background-color: #2196F3;
+        }
+        .btn-editar:hover {
+            background-color: #1976D2;
+        }
+        .btn-encerrar {
+            background-color: #f44336;
+        }
+        .btn-encerrar:hover {
+            background-color: #d32f2f;
+        }
+        .btn-reabrir {
+            background-color: #4CAF50;
+        }
+        .btn-reabrir:hover {
+            background-color: #388E3C;
         }
         td.acoes {
             white-space: nowrap;
+            text-align: center;
         }
     </style>
 </head>
@@ -170,17 +195,20 @@ try {
                                 <td><?php echo htmlspecialchars($edital['edital_status']); ?></td>
                                 <td><?php echo htmlspecialchars($edital['unidade']); ?></td>
                                 <td class="acoes">
-                                    <img src="../imagens/editar.png" alt="Editar" 
-                                         onclick="editarEdital('<?php echo $edital['id_edital']; ?>')"
-                                         class="icone-acao">
+                                    <button class="btn-acao btn-editar" 
+                                            onclick="editarEdital('<?php echo $edital['id_edital']; ?>')">
+                                        Editar
+                                    </button>
                                     <?php if ($edital['edital_status'] === 'ABERTO'): ?>
-                                        <img src="../imagens/encerrar.png" alt="Encerrar" 
-                                             onclick="encerrarEdital('<?php echo $edital['id_edital']; ?>')"
-                                             class="icone-acao">
+                                        <button class="btn-acao btn-encerrar"
+                                                onclick="encerrarEdital('<?php echo $edital['id_edital']; ?>')">
+                                            Encerrar
+                                        </button>
                                     <?php else: ?>
-                                        <img src="../imagens/reabrir.png" alt="Reabrir" 
-                                             onclick="reabrirEdital('<?php echo $edital['id_edital']; ?>')"
-                                             class="icone-acao">
+                                        <button class="btn-acao btn-reabrir"
+                                                onclick="reabrirEdital('<?php echo $edital['id_edital']; ?>')">
+                                            Reabrir
+                                        </button>
                                     <?php endif; ?>
                                 </td>
                             </tr>

@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-// Verifica se o usuário está logado e é coordenador
-if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'coordenador') {
+// Verifica se o usuário está logado e é professor
+if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'professor') {
     header("Location: ../login.php");
     exit;
 }
@@ -12,7 +12,7 @@ require_once '../model/Database.php';
 // Verifica se foi passado um ID de inscrição
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     $_SESSION['erro'] = "ID de inscrição inválido.";
-    header("Location: aprovacao.php");
+    header("Location: relatorio_prof.php");
     exit;
 }
 
@@ -26,29 +26,42 @@ try {
                      prof.email as email_professor,
                      e.vigencia as edital,
                      c.Materia as curso,
-                     COALESCE(j.status, 'PENDENTE') as status
+                     coord.Nome as coordenador
               FROM tb_frm_inscricao_hae i
               INNER JOIN tb_Usuario prof ON i.tb_Docentes_id_Docente = prof.id_Docente
               INNER JOIN tb_Editais e ON i.id_edital = e.id_edital
               INNER JOIN tb_cursos c ON i.id_curso = c.id_curso
-              LEFT JOIN tb_justificativaHae j ON i.id_frmInscricaoHae = j.id_frmInscricaoHae
-              WHERE i.id_frmInscricaoHae = :id_inscricao";
+              INNER JOIN tb_Usuario coord ON c.id_docenteCoordenador = coord.id_Docente
+              WHERE i.id_frmInscricaoHae = :id_inscricao
+              AND i.tb_Docentes_id_Docente = :id_docente";
               
     $stmt = $conn->prepare($query);
-    $stmt->execute(['id_inscricao' => $_GET['id']]);
+    $stmt->execute([
+        'id_inscricao' => $_GET['id'],
+        'id_docente' => $_SESSION['id_Docente']
+    ]);
     
     $inscricao = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$inscricao) {
-        $_SESSION['erro'] = "Inscrição não encontrada.";
-        header("Location: aprovacao.php");
+        $_SESSION['erro'] = "Inscrição não encontrada ou você não tem permissão para acessá-la.";
+        header("Location: relatorio_prof.php");
         exit;
+    }
+
+    // Se for edição, busca o relatório existente
+    if (isset($_GET['edit']) && $_GET['edit'] === 'true') {
+        $queryRelatorio = "SELECT * FROM tb_relatorioHae 
+                          WHERE id_frmInscricaoHae = :id_inscricao";
+        $stmtRelatorio = $conn->prepare($queryRelatorio);
+        $stmtRelatorio->execute(['id_inscricao' => $_GET['id']]);
+        $relatorio = $stmtRelatorio->fetch(PDO::FETCH_ASSOC);
     }
     
 } catch (Exception $e) {
     error_log("Erro ao buscar detalhes da inscrição: " . $e->getMessage());
     $_SESSION['erro'] = "Ocorreu um erro ao carregar os detalhes da inscrição.";
-    header("Location: aprovacao.php");
+    header("Location: relatorio_prof.php");
     exit;
 }
 ?>
@@ -60,9 +73,9 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../estilos/style.css">
     <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
-    <title>HORUS - Avaliar Inscrição</title>
+    <title>HORUS - Envio de Relatório</title>
     <style>
-        .avaliacao-container {
+        .form-container {
             max-width: 800px;
             margin: 30px auto;
             padding: 25px;
@@ -71,13 +84,13 @@ try {
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .avaliacao-header {
+        .form-header {
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid #f0f0f0;
         }
 
-        .avaliacao-header h3 {
+        .form-header h3 {
             color: #2c3e50;
             margin: 0;
             font-size: 1.5em;
@@ -129,7 +142,16 @@ try {
             outline: none;
         }
 
-        .avaliacao-actions {
+        .form-group input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-actions {
             display: flex;
             gap: 15px;
             margin-top: 30px;
@@ -137,7 +159,7 @@ try {
             border-top: 1px solid #e9ecef;
         }
 
-        .btn-avaliar {
+        .btn {
             padding: 12px 25px;
             border: none;
             border-radius: 6px;
@@ -149,60 +171,35 @@ try {
             letter-spacing: 0.5px;
         }
 
-        .btn-aprovar {
+        .btn-enviar {
             background-color: #28a745;
             color: white;
         }
 
-        .btn-reprovar {
-            background-color: #dc3545;
+        .btn-cancelar {
+            background-color: #6c757d;
             color: white;
+            text-decoration: none;
         }
 
-        .btn-avaliar:hover {
+        .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        .btn-aprovar:hover {
+        .btn-enviar:hover {
             background-color: #218838;
         }
 
-        .btn-reprovar:hover {
-            background-color: #c82333;
+        .btn-cancelar:hover {
+            background-color: #5a6268;
         }
 
-        .status-atual {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        .status-pendente {
-            background-color: #ffc107;
-            color: #000;
-        }
-
-        .btn-ver-completa {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .btn-ver-completa:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        .field-description {
+            font-size: 13px;
+            color: #6c757d;
+            margin: 5px 0 10px;
+            font-style: italic;
         }
     </style>
 </head>
@@ -239,17 +236,17 @@ try {
                 <img src="../imagens/logo-horus.png" alt="Logo HORUS">
             </a>
         </div>
-        <a class="inicio" href="index_coord.php">
+        <a class="inicio" href="index_prof.php">
             <img src="../imagens/home.png" alt="Início"> <span>Início</span>
         </a>
-        <a href="aprovacao.php" class="active">
-            <img src="../imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
+        <a href="inscricao.php">
+            <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
         </a>
-        <a href="editais.php">
+        <a href="editais_prof.php">
             <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
         </a>
-        <a href="relatorio_coord.php">
-            <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
+        <a href="relatorio_prof.php" class="active">
+            <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
         </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
@@ -257,10 +254,9 @@ try {
     </nav>
 
     <main>
-        <div class="avaliacao-container">
-            <div class="avaliacao-header">
-                <h3>Avaliação de Inscrição HAE</h3>
-                <span class="status-atual status-pendente">Status: PENDENTE</span>
+        <div class="form-container">
+            <div class="form-header">
+                <h3><?php echo isset($_GET['edit']) ? 'Editar' : 'Novo'; ?> Relatório HAE</h3>
             </div>
 
             <div class="info-projeto">
@@ -269,48 +265,68 @@ try {
                 <p><strong>Tipo HAE:</strong> <span><?php echo htmlspecialchars($inscricao['tipoHae']); ?></span></p>
                 <p><strong>Quantidade HAE:</strong> <span><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></span></p>
                 <p><strong>Título do Projeto:</strong> <span><?php echo htmlspecialchars($inscricao['tituloProjeto']); ?></span></p>
-                <p><strong>Edital:</strong> <span><?php echo htmlspecialchars($inscricao['edital']); ?></span></p>
+                <p><strong>Coordenador:</strong> <span><?php echo htmlspecialchars($inscricao['coordenador']); ?></span></p>
             </div>
 
-            <div class="acoes-container">
-                <div class="acoes-icones">
-                    <a href="ver_detalhes_inscricao.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
-                       class="btn-ver-completa">Ver Inscrição Completa</a>
-                </div>
-            </div>
-
-            <form action="processa_aprovacao.php" method="POST" id="formAvaliacao">
+            <form action="processa_relatorio.php" method="POST" id="formRelatorio">
                 <input type="hidden" name="id_inscricao" value="<?php echo $inscricao['id_frmInscricaoHae']; ?>">
-                
+                <?php if (isset($_GET['edit'])): ?>
+                    <input type="hidden" name="edit" value="true">
+                <?php endif; ?>
+
                 <div class="form-group">
-                    <label for="justificativa">Justificativa da Avaliação:</label>
-                    <textarea id="justificativa" name="justificativa" required 
-                              placeholder="Digite aqui sua justificativa para a aprovação ou reprovação desta inscrição..."></textarea>
+                    <label for="descricao_atividades">Descrição das Atividades Realizadas:</label>
+                    <p class="field-description">Descreva detalhadamente as atividades desenvolvidas durante o projeto.</p>
+                    <textarea name="descricao_atividades" id="descricao_atividades" required><?php echo isset($relatorio) ? htmlspecialchars($relatorio['descricao_atividades']) : ''; ?></textarea>
                 </div>
 
-                <div class="avaliacao-actions">
-                    <button type="submit" name="acao" value="aprovar" class="btn-avaliar btn-aprovar">Aprovar Inscrição</button>
-                    <button type="submit" name="acao" value="reprovar" class="btn-avaliar btn-reprovar">Reprovar Inscrição</button>
+                <div class="form-group">
+                    <label for="resultados_alcancados">Resultados Alcançados:</label>
+                    <p class="field-description">Descreva os resultados obtidos e como eles se relacionam com os objetivos iniciais do projeto.</p>
+                    <textarea name="resultados_alcancados" id="resultados_alcancados" required><?php echo isset($relatorio) ? htmlspecialchars($relatorio['resultados_alcancados']) : ''; ?></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="data_entrega">Data de Entrega:</label>
+                    <input type="date" id="data_entrega" name="data_entrega" required 
+                           value="<?php echo isset($relatorio) ? $relatorio['data_entrega'] : date('Y-m-d'); ?>">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-enviar">
+                        <?php echo isset($_GET['edit']) ? 'Atualizar' : 'Enviar'; ?> Relatório
+                    </button>
+                    <a href="relatorio_prof.php" class="btn btn-cancelar">Cancelar</a>
                 </div>
             </form>
         </div>
     </main>
 
-    <script src="../js/script.js" defer></script>
     <script>
-    // Adiciona validação do formulário
-    document.getElementById('formAvaliacao').addEventListener('submit', function(e) {
-        const justificativa = document.getElementById('justificativa').value.trim();
-        
-        if (!justificativa) {
-            e.preventDefault();
-            alert('Por favor, preencha a justificativa antes de aprovar ou reprovar a inscrição.');
-            return false;
-        }
-        
-        return true;
+    document.addEventListener('DOMContentLoaded', function() {
+        // Define a data mínima como hoje
+        const hoje = new Date().toISOString().split('T')[0];
+        document.getElementById('data_entrega').min = hoje;
+
+        // Validação do formulário
+        const form = document.getElementById('formRelatorio');
+        form.addEventListener('submit', function(e) {
+            const descricao = document.getElementById('descricao_atividades').value.trim();
+            const resultados = document.getElementById('resultados_alcancados').value.trim();
+            const data = document.getElementById('data_entrega').value;
+
+            if (!descricao || !resultados || !data) {
+                e.preventDefault();
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return false;
+            }
+
+            return true;
+        });
     });
     </script>
+
+    <script src="../js/script.js" defer></script>
 </body>
 
 </html> 

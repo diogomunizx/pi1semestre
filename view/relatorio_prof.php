@@ -21,8 +21,13 @@ try {
                      c.Materia as curso,
                      coord.Nome as coordenador,
                      j.status as status_inscricao,
-                     r.status as status_relatorio,
-                     r.id_relatorioHae
+                     r.id_relatorioHae,
+                     CASE 
+                         WHEN r.id_relatorioHae IS NULL THEN NULL
+                         WHEN r.status = 'CORRECAO' THEN 'CORREÇÃO'
+                         WHEN r.status = 'APROVADO' THEN 'APROVADO'
+                         ELSE 'PENDENTE'
+                     END as status_relatorio
               FROM tb_frm_inscricao_hae i
               INNER JOIN tb_cursos c ON i.id_curso = c.id_curso
               INNER JOIN tb_Usuario coord ON c.id_docenteCoordenador = coord.id_Docente
@@ -394,14 +399,38 @@ try {
                                 <td><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></td>
                                 <td><?php echo htmlspecialchars($inscricao['curso']); ?></td>
                                 <td>
-                                    <span class="status-badge status-<?php echo strtolower($inscricao['status_relatorio'] ?? 'pendente'); ?>">
-                                        <?php echo $inscricao['status_relatorio'] ?? 'PENDENTE'; ?>
+                                    <?php 
+                                    $statusClass = '';
+                                    $statusText = 'Não enviado';
+                                    
+                                    if ($inscricao['status_relatorio'] !== NULL) {
+                                        $statusText = $inscricao['status_relatorio'];
+                                        switch($statusText) {
+                                            case 'PENDENTE':
+                                                $statusClass = 'status-pendente';
+                                                break;
+                                            case 'APROVADO':
+                                                $statusClass = 'status-aprovado';
+                                                break;
+                                            case 'CORREÇÃO':
+                                                $statusClass = 'status-correcao';
+                                                break;
+                                        }
+                                    }
+                                    ?>
+                                    <span class="status-badge <?php echo $statusClass; ?>">
+                                        <?php echo $statusText; ?>
                                     </span>
                                 </td>
                                 <td>
-                                    <?php if (empty($inscricao['id_relatorioHae'])): ?>
+                                    <?php if ($inscricao['status_relatorio'] === NULL): ?>
                                         <a href="form_relatorio.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
-                                           class="btn-novo">Novo Relatório</a>
+                                           class="btn-novo">Enviar Relatório</a>
+                                    <?php elseif ($inscricao['status_relatorio'] === 'CORREÇÃO'): ?>
+                                        <a href="form_relatorio.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>&edit=true" 
+                                           class="btn-novo">Corrigir Relatório</a>
+                                        <a href="ver_detalhes_relatorio_prof.php?id=<?php echo $inscricao['id_relatorioHae']; ?>" 
+                                           class="btn-ver">Ver Detalhes</a>
                                     <?php else: ?>
                                         <a href="ver_detalhes_relatorio_prof.php?id=<?php echo $inscricao['id_relatorioHae']; ?>" 
                                            class="btn-ver">Ver Detalhes</a>

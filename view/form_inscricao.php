@@ -287,7 +287,7 @@ function formatarData($data) {
                     <input type="email" id="email" name="email" disabled value="<?php echo htmlspecialchars($dadosProfessor['email']); ?>" required><br>
 
                     <label for="matricula">Matrícula:</label>
-                    <input type="text" id="matricula" name="matricula" value="<?php echo htmlspecialchars($dadosProfessor['matricula']); ?>" required>
+                    <input type="text" id="matricula" name="matricula" disabled value="<?php echo htmlspecialchars($dadosProfessor['matricula']); ?>" required>
                 </div>
 
                 <!-- Etapa 2: Tipo de HAE e Curso -->

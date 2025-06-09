@@ -156,19 +156,24 @@ try {
 
     <style>
     .form-edital {
-        max-width: 600px;
+        max-width: 800px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
 
     .form-group label {
         display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        font-size: 15px;
     }
 
     .form-group input[type="text"],
@@ -176,27 +181,53 @@ try {
     .form-group select,
     .form-group textarea {
         width: 100%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 14px;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 15px;
+        transition: border-color 0.3s ease;
+        background-color: #f8f9fa;
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group input[type="date"]:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #2196F3;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+    }
+
+    .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-group select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M8 11.5l-6-6h12z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 35px;
     }
 
     .form-actions {
-        margin-top: 30px;
+        margin-top: 35px;
         display: flex;
-        gap: 10px;
+        gap: 15px;
         justify-content: flex-end;
     }
 
     .btn-salvar,
     .btn-cancelar {
-        padding: 10px 20px;
+        padding: 12px 25px;
         border: none;
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 15px;
+        font-weight: 600;
         text-decoration: none;
+        transition: all 0.3s ease;
     }
 
     .btn-salvar {
@@ -211,10 +242,30 @@ try {
 
     .btn-salvar:hover {
         background-color: #45a049;
+        transform: translateY(-1px);
     }
 
     .btn-cancelar:hover {
         background-color: #da190b;
+        transform: translateY(-1px);
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .form-edital {
+            padding: 20px;
+            margin: 10px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-salvar,
+        .btn-cancelar {
+            width: 100%;
+            text-align: center;
+        }
     }
     </style>
 
