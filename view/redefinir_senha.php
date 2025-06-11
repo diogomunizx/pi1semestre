@@ -1,14 +1,13 @@
 <?php
-include '../config/database.php';
+require_once '../config/database.php';
 
 $token = $_GET['token'] ?? '';
 
-$stmt = $conn->prepare("SELECT email, expira_em FROM tokens_redefinicao WHERE token = ?");
-$stmt->bind_param("s", $token);
-$stmt->execute();
-$result = $stmt->get_result();
+$stmt = $conn->prepare("SELECT * FROM tokens_redefinicao WHERE token = ? AND expira_em > NOW()");
+$stmt->execute([$token]);
+$tokenData = $stmt->fetch();
 
-if ($result->num_rows === 0 || strtotime($result->fetch_assoc()['expira_em']) < time()) {
+if (!$tokenData) {
     die("Token inválido ou expirado.");
 }
 ?>
@@ -37,7 +36,7 @@ if ($result->num_rows === 0 || strtotime($result->fetch_assoc()['expira_em']) < 
         <label for="confirmarSenha" class="form-label">Confirmar Senha</label>
         <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" required>
       </div>
-      <button type="submit" class="btn btn-success w-100">Salvar Nova Senha</button>
+      <button type="submit" class="btn w-100" style="background-color: #e60000; color: white;">Nova Senha</button>
     </form>
   </div>
   <div class="bottom-left-logo">

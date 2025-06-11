@@ -1,35 +1,26 @@
 <?php
-include '../config/database.php';
+require_once '../config/database.php';
 
-$token = $_POST['token'];
-$novaSenha = $_POST['novaSenha'];
-$confirmarSenha = $_POST['confirmarSenha'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $token = $_POST['token'] ?? '';
+    $nova_senha = $_POST['nova_senha'] ?? '';
 
-if ($novaSenha !== $confirmarSenha) {
-    die("As senhas não coincidem.");
+    $stmt = $conn->prepare("SELECT * FROM tokens_redefinicao WHERE token = ? AND expira_em > NOW()");
+    $stmt->execute([$token]);
+    $tokenData = $stmt->fetch();
+
+    if ($tokenData) {
+        $email = $tokenData['email'];
+        $senhaHash = password_hash($nova_senha, PASSWORD_DEFAULT);
+
+        $stmt = $conn->prepare("UPDATE tb_Usuario SET senha = ? WHERE email = ?");
+        $stmt->execute([$senhaHash, $email]);
+
+        $conn->prepare("DELETE FROM tokens_redefinicao WHERE token = ?")->execute([$token]);
+
+        echo "Senha redefinida com sucesso.";
+    } else {
+        echo "Token inválido ou expirado.";
+    }
 }
-
-$stmt = $conn->prepare("SELECT email FROM tokens_redefinicao WHERE token = ?");
-$stmt->bind_param("s", $token);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 0) {
-    die("Token inválido.");
-}
-
-$email = $result->fetch_assoc()['email'];
-$senhaCriptografada = password_hash($novaSenha, PASSWORD_DEFAULT);
-
-// Atualiza a senha
-$update = $conn->prepare("UPDATE tb_Usuario SET senha = ? WHERE email = ?");
-$update->bind_param("ss", $senhaCriptografada, $email);
-$update->execute();
-
-// Remove o token
-$delete = $conn->prepare("DELETE FROM tokens_redefinicao WHERE token = ?");
-$delete->bind_param("s", $token);
-$delete->execute();
-
-echo "<script>alert('Senha redefinida com sucesso.'); window.location.href = 'login.html';</script>";
 ?>
