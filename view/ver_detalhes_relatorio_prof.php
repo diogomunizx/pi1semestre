@@ -336,6 +336,12 @@ try {
                     <div class="texto-projeto"><?php echo nl2br(htmlspecialchars($relatorio['observacoes'])); ?></div>
                 </div>
                 <?php endif; ?>
+                <?php if (!empty($relatorio['observacoes_coordenador'])): ?>
+                <div class="info-item">
+                    <strong>Justificativa do Coordenador:</strong><br>
+                    <div class="texto-projeto"><?php echo nl2br(htmlspecialchars($relatorio['observacoes_coordenador'])); ?></div>
+                </div>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
 
