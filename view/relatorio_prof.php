@@ -412,6 +412,11 @@ try {
                                                 break;
                                             case 'APROVADO':
                                                 $statusClass = 'status-aprovado';
+                                                $statusText = 'Deferido';
+                                                break;
+                                            case 'REPROVADO':
+                                                $statusClass = 'status-reprovado';
+                                                $statusText = 'Indeferido';
                                                 break;
                                             case 'CORREÇÃO':
                                                 $statusClass = 'status-correcao';

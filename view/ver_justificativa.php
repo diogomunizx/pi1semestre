@@ -121,7 +121,11 @@ try {
             <div class="header-justificativa">
                 <h2>Justificativa - <?php echo htmlspecialchars($resultado['tipoHae']); ?></h2>
                 <div class="status <?php echo strtolower($resultado['status'] ?? 'pendente'); ?>">
-                    <?php echo htmlspecialchars($resultado['status'] ?? 'PENDENTE'); ?>
+                    <?php 
+                        if (($resultado['status'] ?? '') === 'APROVADO') echo 'Deferido';
+                        elseif (($resultado['status'] ?? '') === 'REPROVADO') echo 'Indeferido';
+                        else echo htmlspecialchars($resultado['status'] ?? 'PENDENTE');
+                    ?>
                 </div>
             </div>
 

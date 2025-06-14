@@ -183,7 +183,12 @@ try {
                             <td><?php echo htmlspecialchars($inscricao['tituloProjeto']); ?></td>
                             <td>
                                 <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
-                                    <?php echo $inscricao['status']; ?>
+                                    <?php 
+                                        $status = strtoupper($inscricao['status']);
+                                        if ($status === 'APROVADO') echo 'Deferido';
+                                        elseif ($status === 'REPROVADO') echo 'Indeferido';
+                                        else echo $inscricao['status'];
+                                    ?>
                                 </span>
                             </td>
                             <td>

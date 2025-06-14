@@ -302,8 +302,12 @@ function formatarDiaSemana($dia) {
         <div class="detalhes-container">
             <div class="detalhes-header">
                 <h3>Detalhes da Inscrição HAE</h3>
-                <span class="status-badge status-<?php echo strtolower($inscricao['status'] ?? 'pendente'); ?>">
-                    <?php echo $inscricao['status'] ?? 'PENDENTE'; ?>
+                <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
+                    <?php 
+                        if ($inscricao['status'] === 'APROVADO') echo 'Deferido';
+                        elseif ($inscricao['status'] === 'REPROVADO') echo 'Indeferido';
+                        else echo $inscricao['status'];
+                    ?>
                 </span>
             </div>
 
@@ -392,7 +396,11 @@ function formatarDiaSemana($dia) {
                 <div class="info-item">
                     <strong>Status:</strong>
                     <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
-                        <?php echo $inscricao['status']; ?>
+                        <?php 
+                            if ($inscricao['status'] === 'APROVADO') echo 'Deferido';
+                            elseif ($inscricao['status'] === 'REPROVADO') echo 'Indeferido';
+                            else echo $inscricao['status'];
+                        ?>
                     </span>
                 </div>
                 <div class="info-item">

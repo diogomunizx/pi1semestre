@@ -16,12 +16,36 @@ try {
     // Processa ações de encerrar/reabrir edital
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['acao']) && isset($_GET['id'])) {
         $novoStatus = ($_GET['acao'] === 'encerrar') ? 'ENCERRADO' : 'ABERTO';
-        
+        $idEdital = $_GET['id'];
+
+        if ($_GET['acao'] === 'reabrir') {
+            // Buscar dataFimInscricao do edital
+            $query = "SELECT dataFimInscricao FROM tb_Editais WHERE id_edital = :id";
+            $stmt = $conn->prepare($query);
+            $stmt->execute(['id' => $idEdital]);
+            $edital = $stmt->fetch();
+
+            if (!$edital) {
+                $_SESSION['erro'] = "Edital não encontrado.";
+                header("Location: editais.php");
+                exit;
+            }
+
+            $dataFim = new DateTime($edital['dataFimInscricao']);
+            $hoje = new DateTime();
+            $hoje->setTime(0,0,0);
+            if ($dataFim < $hoje) {
+                $_SESSION['erro'] = "Não é possível reabrir um edital cujo período de inscrições já terminou.";
+                header("Location: editais.php");
+                exit;
+            }
+        }
+
         $query = "UPDATE tb_Editais SET edital_status = :status WHERE id_edital = :id";
         $stmt = $conn->prepare($query);
         $stmt->execute([
             'status' => $novoStatus,
-            'id' => $_GET['id']
+            'id' => $idEdital
         ]);
 
         $_SESSION['mensagem'] = "Edital " . strtolower($novoStatus) . " com sucesso!";
