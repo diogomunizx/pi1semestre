@@ -122,27 +122,30 @@ try {
     </header>
 
     <nav class="sidebar">
-        <div class="logo-container">
-            <a href="#">
-                <img src="../imagens/logo-horus.png" alt="Logo HORUS">
-            </a>
-        </div>
-        <a class="inicio" href="index_coord.php">
-            <img src="../imagens/home.png" alt="Início"> <span>Início</span>
-        </a>
-        <a href="aprovacao.php" id="linkAprovacao" class="active">
-            <img src="../imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
-        </a>
-        <a href="editais.php">
-            <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
-        </a>
-        <a href="relatorio_coord.php">
-            <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
-        </a>
-        <a href="../login.php">
-            <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
-        </a>
-    </nav>
+    <div class="logo-container">
+      <a href="#">
+        <img src="../imagens/logo-horus.png" alt="Logo HORUS">
+      </a>
+    </div>
+    <a class="inicio" href="index_coord.php">
+      <img src="../imagens/home.png" alt="Início"> <span>Início</span>
+    </a>
+    <a href="aprovacao.php" id="linkAprovacao">
+      <img src="../imagens/inscricoes.png" alt="Inscrições"> <span>Inscrições</span>
+    </a>
+    <a href="editais.php">
+      <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
+    </a>
+    <a href="relatorio_coord.php">
+      <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
+    </a>
+    <a href="dashboard_coordenador.php">
+      <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+    </a>
+    <a href="../login.php">
+      <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
+    </a>
+  </nav>
 
     <main>
         <h3 class="titulos">Inscrições para Aprovação</h3>

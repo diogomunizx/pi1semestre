@@ -59,6 +59,9 @@ if (!isset($_SESSION['id_Docente'])) {
     <a href="relatorio_prof.php">
       <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
     </a>
+    <a href="dashboard_professor.php">
+        <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+    </a>
     <?php else: ?>
     <a class="inicio" href="index_coord.php">
       <img src="../imagens/home.png" alt="Início"> <span>Início</span>
@@ -71,6 +74,9 @@ if (!isset($_SESSION['id_Docente'])) {
     </a>
     <a href="relatorio_coord.php">
       <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
+    </a>
+    <a href="dashboard_coordenador.php">
+        <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
     </a>
     <?php endif; ?>
     <a href="../login.php">
