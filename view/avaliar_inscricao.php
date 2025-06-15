@@ -290,8 +290,8 @@ try {
                 </div>
 
                 <div class="avaliacao-actions">
-                    <button type="submit" name="acao" value="aprovar" class="btn-avaliar btn-aprovar">Aprovar Inscrição</button>
-                    <button type="submit" name="acao" value="reprovar" class="btn-avaliar btn-reprovar">Reprovar Inscrição</button>
+                    <button type="submit" name="acao" value="aprovar" class="btn-avaliar btn-aprovar">Deferir Inscrição</button>
+                    <button type="submit" name="acao" value="reprovar" class="btn-avaliar btn-reprovar">Indeferir Inscrição</button>
                 </div>
             </form>
         </div>

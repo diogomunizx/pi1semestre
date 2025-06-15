@@ -15,42 +15,48 @@ try {
 
     // Processa ações de encerrar/reabrir edital
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['acao']) && isset($_GET['id'])) {
-        $novoStatus = ($_GET['acao'] === 'encerrar') ? 'ENCERRADO' : 'ABERTO';
-        $idEdital = $_GET['id'];
+        $acao = $_GET['acao'];
+        $id_edital = $_GET['id'];
 
-        if ($_GET['acao'] === 'reabrir') {
-            // Buscar dataFimInscricao do edital
-            $query = "SELECT dataFimInscricao FROM tb_Editais WHERE id_edital = :id";
+        try {
+            // Verifica se o edital existe e obtém a data de fim de inscrição
+            $query = "SELECT edital_status, dataFimInscricao FROM tb_Editais WHERE id_edital = :id_edital";
             $stmt = $conn->prepare($query);
-            $stmt->execute(['id' => $idEdital]);
+            $stmt->execute(['id_edital' => $id_edital]);
             $edital = $stmt->fetch();
 
             if (!$edital) {
-                $_SESSION['erro'] = "Edital não encontrado.";
-                header("Location: editais.php");
-                exit;
+                throw new Exception("Edital não encontrado.");
             }
 
-            $dataFim = new DateTime($edital['dataFimInscricao']);
-            $hoje = new DateTime();
-            $hoje->setTime(0,0,0);
-            if ($dataFim < $hoje) {
-                $_SESSION['erro'] = "Não é possível reabrir um edital cujo período de inscrições já terminou.";
-                header("Location: editais.php");
-                exit;
+            if ($acao === 'reabrir') {
+                // Verifica se o período de inscrição ainda está vigente
+                if (strtotime($edital['dataFimInscricao']) < strtotime('today')) {
+                    throw new Exception("Não é possível reabrir este edital pois o período de inscrição já expirou.");
+                }
+
+                $query = "UPDATE tb_Editais SET edital_status = 'ABERTO' WHERE id_edital = :id_edital";
+                $stmt = $conn->prepare($query);
+                $stmt->execute(['id_edital' => $id_edital]);
+                $_SESSION['mensagem'] = "Edital reaberto com sucesso!";
+            } elseif ($acao === 'encerrar') {
+                $query = "UPDATE tb_Editais SET edital_status = 'ENCERRADO' WHERE id_edital = :id_edital";
+                $stmt = $conn->prepare($query);
+                $stmt->execute(['id_edital' => $id_edital]);
+                $_SESSION['mensagem'] = "Edital encerrado com sucesso!";
+            } else {
+                throw new Exception("Ação inválida.");
             }
+        } catch (Exception $e) {
+            error_log("Erro ao processar edital: " . $e->getMessage());
+            $_SESSION['erro'] = $e->getMessage();
         }
 
-        $query = "UPDATE tb_Editais SET edital_status = :status WHERE id_edital = :id";
-        $stmt = $conn->prepare($query);
-        $stmt->execute([
-            'status' => $novoStatus,
-            'id' => $idEdital
-        ]);
-
-        $_SESSION['mensagem'] = "Edital " . strtolower($novoStatus) . " com sucesso!";
+        // Redireciona de volta para editais.php após a ação
         header("Location: editais.php");
         exit;
+    } else {
+        $_SESSION['erro'] = "Parâmetros inválidos.";
     }
 
     // Processa criação/edição de edital

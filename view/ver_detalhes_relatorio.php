@@ -78,12 +78,6 @@ try {
             align-items: center !important;
         }
 
-        .sidebar a img {
-            width: 30px !important;
-            height: 30px !important;
-            margin-right: 15px !important;
-        }
-
         /* Estilos originais da página */
         .detalhes-container {
             max-width: 800px;
@@ -316,8 +310,12 @@ try {
         <div class="detalhes-container">
             <div class="detalhes-header">
                 <h3>Detalhes do Relatório HAE</h3>
-                <span class="status-badge status-<?php echo strtolower($relatorio['status']); ?>">
-                    <?php echo $relatorio['status']; ?>
+                <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
+                    <?php
+                    if ($inscricao['status'] === 'APROVADO') echo 'Deferido';
+                    elseif ($inscricao['status'] === 'REPROVADO') echo 'Indeferido';
+                    else echo $inscricao['status'];
+                    ?>
                 </span>
             </div>
 
@@ -356,8 +354,12 @@ try {
                     <h4>Avaliação do Coordenador</h4>
                     <div class="info-item">
                         <strong>Status:</strong>
-                        <span class="status-badge status-<?php echo strtolower($relatorio['status']); ?>">
-                            <?php echo $relatorio['status']; ?>
+                        <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
+                            <?php
+                            if ($inscricao['status'] === 'APROVADO') echo 'Deferido';
+                            elseif ($inscricao['status'] === 'REPROVADO') echo 'Indeferido';
+                            else echo $inscricao['status'];
+                            ?>
                         </span>
                     </div>
                     <div class="info-item">

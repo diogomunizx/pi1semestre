@@ -14,7 +14,11 @@ try {
     $conn = $db->getConnection();
     
     // Busca os editais
-    $query = "SELECT e.*, f.Nome_Fantasia as unidade, e.arquivo_pdf
+    $query = "SELECT e.*, f.Nome_Fantasia as unidade, e.arquivo_pdf,
+              CASE 
+                WHEN e.dataFimInscricao >= CURDATE() THEN 1 
+                ELSE 0 
+              END as periodo_vigente
               FROM tb_Editais e
               INNER JOIN tb_unidadeFatec f ON e.Unidade_Fatec_idUnidade_Fatec = f.id_unidadeFatec
               ORDER BY e.id_edital DESC";
@@ -46,11 +50,6 @@ try {
         .sidebar a {
             display: flex !important;
             align-items: center !important;
-        }
-        .sidebar a img {
-            width: 30px !important;
-            height: 30px !important;
-            margin-right: 15px !important;
         }
         /* Estilos originais da página */
         .acoes {
@@ -96,6 +95,14 @@ try {
         }
         .btn-reabrir:hover {
             background-color: #388E3C;
+        }
+        .btn-reabrir:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .btn-reabrir:disabled:hover {
+            background-color: #cccccc;
         }
         td.acoes {
             white-space: nowrap;
@@ -238,10 +245,17 @@ try {
                                             Encerrar
                                         </button>
                                     <?php else: ?>
-                                        <button class="btn-acao btn-reabrir"
-                                                onclick="reabrirEdital('<?php echo $edital['id_edital']; ?>')">
-                                            Reabrir
-                                        </button>
+                                        <?php if ($edital['periodo_vigente']): ?>
+                                            <button class="btn-acao btn-reabrir"
+                                                    onclick="reabrirEdital('<?php echo $edital['id_edital']; ?>')">
+                                                Reabrir
+                                            </button>
+                                        <?php else: ?>
+                                            <button class="btn-acao btn-reabrir" disabled
+                                                    title="Não é possível reabrir este edital pois o período de inscrição já expirou">
+                                                Reabrir
+                                            </button>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </td>
                             </tr>

@@ -47,23 +47,32 @@ try {
   <title>HORUS - Inscrição</title>
   <style>
     .nova-inscricao {
-      margin-top: 20px;
+      margin: 30px auto;
       text-align: center;
+      width: 100%;
+      position: relative;
+      z-index: 2;
     }
 
     .btn-nova-inscricao {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
+      display: inline-block !important;
+      padding: 12px 24px !important;
+      background-color: #4CAF50 !important;
+      color: white !important;
+      text-decoration: none !important;
+      border-radius: 4px !important;
+      font-weight: bold !important;
+      font-size: 16px !important;
+      transition: all 0.3s ease !important;
+      border: none !important;
+      cursor: pointer !important;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
     }
 
     .btn-nova-inscricao:hover {
-      background-color: #45a049;
+      background-color: #45a049 !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
     }
 
     /* Ajustes na tabela */
@@ -244,6 +253,13 @@ try {
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       color: white;
     }
+
+    .content-wrapper {
+      padding: 20px;
+      margin-left: 250px; /* Ajuste conforme a largura do seu menu lateral */
+      position: relative;
+      min-height: calc(100vh - 60px); /* Ajuste conforme a altura do seu header */
+    }
   </style>
 </head>
 
@@ -295,61 +311,62 @@ try {
   </nav>
 
   <main>
-    <h3 class="titulos">Suas Inscrições</h3>
-    <br>
-    <?php if (isset($_SESSION['mensagem'])): ?>
-      <div class="sucesso"><?php echo $_SESSION['mensagem'];
-                            unset($_SESSION['mensagem']); ?></div>
-    <?php endif; ?>
-    <?php if (isset($erro)): ?>
-      <div class="erro"><?php echo $erro; ?></div>
-    <?php else: ?>
-      <?php if (empty($inscricoes)): ?>
-        <p>Você ainda não possui nenhuma inscrição cadastrada.</p>
-      <?php else: ?>
-        <table class="tbls">
-          <thead>
-            <tr>
-              <td>Inscrição</td>
-              <td>Coordenador</td>
-              <td>Tipo HAE</td>
-              <td>Quantidade HAE</td>
-              <td>Curso</td>
-              <td>Status</td>
-              <td>Ações</td>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($inscricoes as $inscricao): ?>
-              <tr>
-                <td><?php echo htmlspecialchars($inscricao['id_frmInscricaoHae']); ?></td>
-                <td><?php echo htmlspecialchars($inscricao['coordenador']); ?></td>
-                <td><?php echo htmlspecialchars($inscricao['tipoHae']); ?></td>
-                <td><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></td>
-                <td><?php echo htmlspecialchars($inscricao['curso']); ?></td>
-                <td>
-                  <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
-                    <?php
-                    $status = strtoupper($inscricao['status']);
-                    if ($status === 'APROVADO') echo 'Deferido';
-                    elseif ($status === 'REPROVADO') echo 'Indeferido';
-                    else echo $inscricao['status'];
-                    ?>
-                  </span>
-                </td>
-                <td>
-                  <a href="ver_detalhes_inscricao_prof.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>"
-                    class="btn-ver">Ver Detalhes</a>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
+    <div class="content-wrapper">
+      <h3 class="titulos">Suas Inscrições</h3>
+      <br>
+      <?php if (isset($_SESSION['mensagem'])): ?>
+        <div class="sucesso"><?php echo $_SESSION['mensagem']; unset($_SESSION['mensagem']); ?></div>
       <?php endif; ?>
-    <?php endif; ?>
-    <br>
-    <div class="nova-inscricao">
-      <a href="form_inscricao.php" class="btn-nova-inscricao">Nova Inscrição</a>
+      <?php if (isset($erro)): ?>
+        <div class="erro"><?php echo $erro; ?></div>
+      <?php else: ?>
+        <?php if (empty($inscricoes)): ?>
+          <p>Você ainda não possui nenhuma inscrição cadastrada.</p>
+        <?php else: ?>
+          <table class="tbls">
+            <thead>
+              <tr>
+                <td>Inscrição</td>
+                <td>Coordenador</td>
+                <td>Tipo HAE</td>
+                <td>Quantidade HAE</td>
+                <td>Curso</td>
+                <td>Status</td>
+                <td>Ações</td>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($inscricoes as $inscricao): ?>
+                <tr>
+                  <td><?php echo htmlspecialchars($inscricao['id_frmInscricaoHae']); ?></td>
+                  <td><?php echo htmlspecialchars($inscricao['coordenador']); ?></td>
+                  <td><?php echo htmlspecialchars($inscricao['tipoHae']); ?></td>
+                  <td><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></td>
+                  <td><?php echo htmlspecialchars($inscricao['curso']); ?></td>
+                  <td>
+                    <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
+                      <?php
+                      $status = strtoupper($inscricao['status']);
+                      if ($status === 'APROVADO') echo 'Deferido';
+                      elseif ($status === 'REPROVADO') echo 'Indeferido';
+                      else echo $inscricao['status'];
+                      ?>
+                    </span>
+                  </td>
+                  <td>
+                    <a href="ver_detalhes_inscricao_prof.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>"
+                      class="btn-ver">Ver Detalhes</a>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        <?php endif; ?>
+      <?php endif; ?>
+      
+      <div class="nova-inscricao">
+        <a href="form_inscricao.php" class="btn-nova-inscricao">Nova Inscrição</a>
+      </div>
     </div>
   </main>
 

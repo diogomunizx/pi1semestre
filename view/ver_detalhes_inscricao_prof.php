@@ -264,26 +264,27 @@ function formatarDiaSemana($dia)
 </head>
 
 <body>
-    <header>
+<header>
         <div class="header-content">
             <div class="user-profile" onclick="toggleDropdown()">
                 <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
-                <a href="perfil_cadastro.php">Ajustes</a>
-                <a href="perfil_Aulas.php">Minhas aulas</a>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="perfil_cadastro.php">Ajustes</a>
+                    <a href="perfil_Aulas.php">Minhas aulas</a>
+                </div>
             </div>
-        </div>
-        <div class="institutions">
-            <div class="fatec">
-                <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank">
-                    <img src="../imagens/logo-fatec_itapira.png">
-                </a>
+            <div class="institutions">
+                <div class="fatec">
+                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank">
+                        <img src="../imagens/logo-fatec_itapira.png">
+                    </a>
+                </div>
+                <div class="cps">
+                    <a href="https://www.cps.sp.gov.br/" target="_blank">
+                        <img src="../imagens/logo-cps.png">
+                    </a>
+                </div>
             </div>
-            <div class="cps">
-                <a href="https://www.cps.sp.gov.br/" target="_blank">
-                    <img src="../imagens/logo-cps.png">
-                </a>
-            </div>
-        </div>
         </div>
     </header>
 

@@ -58,11 +58,7 @@ try {
             display: flex !important;
             align-items: center !important;
         }
-        .sidebar a img {
-            width: 30px !important;
-            height: 30px !important;
-            margin-right: 15px !important;
-        }
+        
         /* Estilos originais da página */
         .status-badge {
             display: inline-block;
