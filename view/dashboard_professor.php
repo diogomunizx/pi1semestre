@@ -12,26 +12,26 @@
 </head>
 
 <body>
-    <header>
-        <div class="header-content">
-            <div class="user-profile" onclick="toggleDropdown()">
-                <span>M</span>
-                <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
-                    <a href="perfil_cadastro.html" onclick="alterarVisualizacaoTelaCadastro()">Ajustes</a>
-                    <a href="perfil_Aulas.html" onclick="alterarVisualizacaoTelaCadastro()">Minhas aulas</a>
-                </div>
-            </div>
-            <div class="institutions">
-                <div class="fatec">
-                    <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img src="../imagens/logo-fatec_itapira.png"></a>
-                </div>
-                <div class="cps">
-                    <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="../imagens/logo-cps.png"></a>
-                </div>
-            </div>
+<header>
+    <div class="header-content">
+      <div class="user-profile" onclick="toggleDropdown()">
+        <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
+        <div class="dropdown-menu" id="dropdown-menu">
+          <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
+          <a href="perfil_cadastro.php">Ajustes</a>
+          <a href="perfil_Aulas.php">Minhas aulas</a>
         </div>
-    </header>
+      </div>
+      <div class="institutions">
+        <div class="fatec">
+          <a href="https://fatecitapira.cps.sp.gov.br/" target="_blank"><img src="../imagens/logo-fatec_itapira.png"></a>
+        </div>
+        <div class="cps">
+          <a href="https://www.cps.sp.gov.br/" target="_blank"><img src="../imagens/logo-cps.png"></a>
+        </div>
+      </div>
+    </div>
+  </header>
 
     <nav class="sidebar">
         <div class="logo-container">
@@ -39,25 +39,22 @@
                 <img src="../imagens/logo-horus.png" alt="Logo HORUS">
             </a>
         </div>
-        <a class="inicio" href="../index.html">
+        <a class="inicio" href="index_prof.php">
             <img src="../imagens/home.png" alt="Início"> <span>Início</span>
         </a>
-        <a href="dashboard_professor.html" class="active">
-            <img src="../imagens/dashboard2.png" alt="Minhas HAE"> <span>Minhas HAE</span>
-        </a>
-        <a href="../inscricao.html" id="linkInscricao">
+        <a href="inscricao.php" id="linkInscricao">
             <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
         </a>
-        <a href="../aprovacao.html" id="linkAprovacao">
-            <img src="../imagens/inscricoes.png" alt="Inscricoes"> <span>Inscrições</span>
+        <a href="editais_prof.php">
+            <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
         </a>
-        <a href="relatorio_prof.html">
+        <a href="relatorio_prof.php" class="active">
             <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
         </a>
-        <a href="relatorio_coord.html">
-            <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
-        </a>
-        <a href="../login.html">
+        <a href="dashboard_professor.php">
+        <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+    </a>
+        <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
         </a>
     </nav>
@@ -187,6 +184,7 @@
 
         new Chart(ctx, config);
     </script>
+    <script src="../js/script.js" defer></script>
 </body>
 
 </html> 

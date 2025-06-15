@@ -107,27 +107,30 @@ function formatarData($data) {
   </header>
 
   <nav class="sidebar">
-    <div class="logo-container">
-      <a href="#">
-        <img src="../imagens/logo-horus.png" alt="Logo HORUS">
-      </a>
-    </div>
-    <a class="inicio" href="index_prof.php">
-      <img src="../imagens/home.png" alt="Início"> <span>Início</span>
+        <div class="logo-container">
+            <a href="#">
+                <img src="../imagens/logo-horus.png" alt="Logo HORUS">
+            </a>
+        </div>
+        <a class="inicio" href="index_prof.php">
+            <img src="../imagens/home.png" alt="Início"> <span>Início</span>
+        </a>
+        <a href="inscricao.php" id="linkInscricao">
+            <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
+        </a>
+        <a href="editais_prof.php">
+            <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
+        </a>
+        <a href="relatorio_prof.php" class="active">
+            <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
+        </a>
+        <a href="dashboard_professor.php">
+        <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
     </a>
-    <a href="inscricao.php" id="linkInscricao">
-      <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
-    </a>
-    <a href="editais.php">
-      <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
-    </a>
-    <a href="relatorio_prof.php">
-      <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
-    </a>
-    <a href="../login.php">
-      <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
-    </a>
-  </nav>
+        <a href="../login.php">
+            <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
+        </a>
+    </nav>
 
   <main>
     <h1>Painel do Professor</h1>

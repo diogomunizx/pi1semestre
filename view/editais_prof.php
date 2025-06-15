@@ -94,12 +94,15 @@ try {
         <a href="inscricao.php" id="linkInscricao">
             <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
         </a>
-        <a href="editais_prof.php" class="active">
+        <a href="editais_prof.php">
             <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
         </a>
-        <a href="relatorio_prof.php">
+        <a href="relatorio_prof.php" class="active">
             <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
         </a>
+        <a href="dashboard_professor.php">
+        <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+    </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
         </a>
