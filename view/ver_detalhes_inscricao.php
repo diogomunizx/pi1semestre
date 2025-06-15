@@ -341,10 +341,6 @@ function formatarDiaSemana($dia)
                 <div class="info-item"><strong>Quantidade HAE:</strong> <?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></div>
                 <div class="info-item"><strong>Curso:</strong> <?php echo htmlspecialchars($inscricao['curso']); ?></div>
                 <div class="info-item"><strong>Edital:</strong> <?php echo htmlspecialchars($inscricao['edital']); ?></div>
-                <div class="info-item"><strong>Início do Projeto:</strong> <?php echo date('d/m/Y', strtotime($inscricao['inicioProjeto'])); ?></div>
-                <div class="info-item"><strong>Fim do Projeto:</strong> <?php echo date('d/m/Y', strtotime($inscricao['fimProjeto'])); ?></div>
-            </div>
-
             <div class="secao">
                 <h4>Detalhes do Projeto</h4>
                 <div class="info-item">

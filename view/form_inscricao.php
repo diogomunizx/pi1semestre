@@ -27,6 +27,8 @@ try {
     // Busca os editais disponíveis
     $queryEditais = "SELECT id_edital, vigencia, dataInicioInscricao, dataFimInscricao, edital_status 
                     FROM tb_Editais 
+                    WHERE edital_status = 'ABERTO' 
+                    AND dataFimInscricao >= CURDATE()
                     ORDER BY dataFimInscricao DESC";
     $stmtEditais = $conn->prepare($queryEditais);
     $stmtEditais->execute();
@@ -54,6 +56,32 @@ try {
 function formatarData($data)
 {
     return date('d/m/Y', strtotime($data));
+}
+
+// Adicionar no início do arquivo, após o session_start()
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $quantidadeHAE = intval($_POST['hae_trabalho_gti']);
+    $totalHoras = 0;
+    $dias = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+
+    // Calcula o total de horas selecionadas
+    foreach ($dias as $dia) {
+        $inicio = $_POST["horario_inicio_{$dia}"] ?? '';
+        $fim = $_POST["horario_final_{$dia}"] ?? '';
+        
+        if ($inicio && $fim) {
+            $inicioHora = intval(explode(':', $inicio)[0]);
+            $fimHora = intval(explode(':', $fim)[0]);
+            $totalHoras += ($fimHora - $inicioHora);
+        }
+    }
+
+    // Valida se o total de horas corresponde à quantidade de HAE
+    if ($totalHoras !== $quantidadeHAE) {
+        $_SESSION['erro'] = "A quantidade de horas selecionadas ({$totalHoras}h) deve ser exatamente igual à quantidade de HAE solicitada ({$quantidadeHAE}h).";
+        header("Location: form_inscricao.php");
+        exit;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -148,10 +176,16 @@ function formatarData($data)
             cursor: pointer;
         }
 
-        .horario-select:focus {
-            border-color: #28a745;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+        .horario-select:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .horario-error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
         }
 
         .tabela-inscricao td {
@@ -334,12 +368,6 @@ function formatarData($data)
                     <label for="titulo_projeto">Título do projeto:</label>
                     <input type="text" id="titulo_projeto" name="titulo_projeto" required><br>
 
-                    <label for="inicio_projeto">Início:</label>
-                    <input type="date" id="inicio_projeto" name="inicio_projeto"><br>
-
-                    <label for="termino_projeto">Término previsto:</label>
-                    <input type="date" id="termino_projeto" name="termino_projeto"><br>
-
                     <h4>Horário de Execução do Projeto</h4>
                     <table class="tabela-inscricao" border="1">
                         <tr>
@@ -352,30 +380,15 @@ function formatarData($data)
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_inicio_segunda" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
+                                    <div id="horario-error-segunda" class="horario-error"></div>
                                 </div>
                             </td>
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_final_segunda" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
                                 </div>
                             </td>
@@ -385,30 +398,15 @@ function formatarData($data)
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_inicio_terca" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
+                                    <div id="horario-error-terca" class="horario-error"></div>
                                 </div>
                             </td>
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_final_terca" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
                                 </div>
                             </td>
@@ -418,30 +416,15 @@ function formatarData($data)
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_inicio_quarta" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
+                                    <div id="horario-error-quarta" class="horario-error"></div>
                                 </div>
                             </td>
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_final_quarta" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
                                 </div>
                             </td>
@@ -451,30 +434,15 @@ function formatarData($data)
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_inicio_quinta" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
+                                    <div id="horario-error-quinta" class="horario-error"></div>
                                 </div>
                             </td>
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_final_quinta" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
                                 </div>
                             </td>
@@ -484,30 +452,15 @@ function formatarData($data)
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_inicio_sexta" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
+                                    <div id="horario-error-sexta" class="horario-error"></div>
                                 </div>
                             </td>
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_final_sexta" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
                                 </div>
                             </td>
@@ -517,64 +470,20 @@ function formatarData($data)
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_inicio_sabado" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
+                                    <div id="horario-error-sabado" class="horario-error"></div>
                                 </div>
                             </td>
                             <td>
                                 <div class="horario-container">
                                     <select name="horario_final_sabado" class="horario-select">
-                                        <option value="">Selecione</option>
-                                        <?php
-                                        for ($hora = 7; $hora <= 22; $hora++) {
-                                            for ($minuto = 0; $minuto < 60; $minuto += 30) {
-                                                $time = sprintf("%02d:%02d", $hora, $minuto);
-                                                echo "<option value='$time'>$time</option>";
-                                            }
-                                        }
-                                        ?>
+                                        <?php echo gerarOpcoesHorario(); ?>
                                     </select>
                                 </div>
                             </td>
                         </tr>
                     </table>
-
-                    <script>
-                        // Função para validar os horários
-                        function validarHorarios() {
-                            const dias = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
-
-                            dias.forEach(dia => {
-                                const inicio = document.querySelector(`select[name="horario_inicio_${dia}"]`);
-                                const fim = document.querySelector(`select[name="horario_final_${dia}"]`);
-
-                                inicio.addEventListener('change', () => {
-                                    if (inicio.value && fim.value && inicio.value >= fim.value) {
-                                        alert(`O horário de início deve ser menor que o horário final para ${dia}-feira`);
-                                        inicio.value = '';
-                                    }
-                                });
-
-                                fim.addEventListener('change', () => {
-                                    if (inicio.value && fim.value && inicio.value >= fim.value) {
-                                        alert(`O horário final deve ser maior que o horário de início para ${dia}-feira`);
-                                        fim.value = '';
-                                    }
-                                });
-                            });
-                        }
-
-                        // Inicializa a validação quando o documento estiver carregado
-                        document.addEventListener('DOMContentLoaded', validarHorarios);
-                    </script>
                 </div>
 
                 <!-- Etapa 4: Detalhamento do Projeto -->
@@ -779,7 +688,171 @@ function formatarData($data)
             const coordenadorId = selectedOption.getAttribute('data-coordenador-id');
             document.getElementById('id_docenteCoordenador').value = coordenadorId;
         });
+
+        // Função para validar os horários com base na quantidade de HAE
+        function validarHorariosComHAE() {
+            const dias = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+            let totalHorasSelecionadas = 0;
+
+            // Função para calcular o total de horas selecionadas
+            function calcularTotalHoras() {
+                totalHorasSelecionadas = 0;
+                dias.forEach(dia => {
+                    const inicio = document.querySelector(`select[name="horario_inicio_${dia}"]`);
+                    const fim = document.querySelector(`select[name="horario_final_${dia}"]`);
+                    
+                    if (inicio.value && fim.value) {
+                        const inicioHora = parseInt(inicio.value.split(':')[0]);
+                        const fimHora = parseInt(fim.value.split(':')[0]);
+                        if (fimHora > inicioHora) {
+                            totalHorasSelecionadas += (fimHora - inicioHora);
+                        }
+                    }
+                });
+                return totalHorasSelecionadas;
+            }
+
+            // Função para validar e atualizar os selects
+            function validarHorario(dia, inicio, fim) {
+                const quantidadeHAE = parseInt(document.getElementById('gti').value) || 0;
+                
+                if (inicio.value && fim.value) {
+                    const inicioHora = parseInt(inicio.value.split(':')[0]);
+                    const fimHora = parseInt(fim.value.split(':')[0]);
+                    
+                    // Verifica se o horário final é maior que o inicial
+                    if (fimHora <= inicioHora) {
+                        alert(`O horário final deve ser maior que o horário de início para ${dia}-feira`);
+                        inicio.value = '';
+                        fim.value = '';
+                        return;
+                    }
+
+                    const horasDia = fimHora - inicioHora;
+                    
+                    // Calcula o novo total de horas
+                    const novoTotal = calcularTotalHoras();
+                    
+                    // Verifica se o novo total excede a quantidade de HAE
+                    if (novoTotal > quantidadeHAE) {
+                        alert(`Você solicitou ${quantidadeHAE} HAE (${quantidadeHAE} hora(s)). A soma total de horas não pode exceder este valor.`);
+                        inicio.value = '';
+                        fim.value = '';
+                        return;
+                    }
+
+                    // Mostra mensagem informativa sobre horas restantes
+                    const horasRestantes = quantidadeHAE - novoTotal;
+                    if (horasRestantes > 0) {
+                        console.log(`Você ainda pode selecionar ${horasRestantes} hora(s) de trabalho.`);
+                    } else if (horasRestantes === 0) {
+                        console.log('Você atingiu o limite de horas para a quantidade de HAE solicitada.');
+                    }
+                }
+            }
+
+            // Adiciona os event listeners para cada dia
+            dias.forEach(dia => {
+                const inicio = document.querySelector(`select[name="horario_inicio_${dia}"]`);
+                const fim = document.querySelector(`select[name="horario_final_${dia}"]`);
+
+                inicio.addEventListener('change', () => {
+                    validarHorario(dia, inicio, fim);
+                });
+
+                fim.addEventListener('change', () => {
+                    validarHorario(dia, inicio, fim);
+                });
+            });
+
+            // Adiciona listener para o campo de quantidade de HAE
+            document.getElementById('gti').addEventListener('change', function() {
+                const novaQuantidade = parseInt(this.value) || 0;
+                const totalAtual = calcularTotalHoras();
+
+                if (totalAtual > novaQuantidade) {
+                    alert(`Você já selecionou ${totalAtual}h de horários, mas reduziu a quantidade de HAE para ${novaQuantidade}h. Por favor, ajuste os horários.`);
+                    // Limpa todos os horários selecionados
+                    dias.forEach(dia => {
+                        document.querySelector(`select[name="horario_inicio_${dia}"]`).value = '';
+                        document.querySelector(`select[name="horario_final_${dia}"]`).value = '';
+                    });
+                    totalHorasSelecionadas = 0;
+                }
+            });
+        }
+
+        // Função para carregar os horários das aulas do professor
+        async function carregarHorariosAulas() {
+            try {
+                const response = await fetch('get_horarios_aulas.php');
+                const horariosAulas = await response.json();
+                return horariosAulas;
+            } catch (error) {
+                console.error('Erro ao carregar horários das aulas:', error);
+                return [];
+            }
+        }
+
+        // Função para validar conflitos com horários de aula
+        async function validarConflitosAulas() {
+            const horariosAulas = await carregarHorariosAulas();
+            const dias = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+
+            dias.forEach(dia => {
+                const inicio = document.querySelector(`select[name="horario_inicio_${dia}"]`);
+                const fim = document.querySelector(`select[name="horario_final_${dia}"]`);
+                const errorDiv = document.getElementById(`horario-error-${dia}`);
+
+                const validarConflito = () => {
+                    if (inicio.value && fim.value) {
+                        const inicioHora = parseInt(inicio.value.split(':')[0]);
+                        const fimHora = parseInt(fim.value.split(':')[0]);
+                        
+                        // Verifica conflito com horários de aula
+                        const conflito = horariosAulas.some(aula => {
+                            if (aula.dia_semana.toLowerCase() === dia) {
+                                const aulaInicio = parseInt(aula.hora_inicio.split(':')[0]);
+                                const aulaFim = parseInt(aula.hora_fim.split(':')[0]);
+                                return (inicioHora < aulaFim && fimHora > aulaInicio);
+                            }
+                            return false;
+                        });
+
+                        if (conflito) {
+                            errorDiv.textContent = 'Conflito com horário de aula!';
+                            errorDiv.style.display = 'block';
+                            inicio.value = '';
+                            fim.value = '';
+                        } else {
+                            errorDiv.style.display = 'none';
+                        }
+                    }
+                };
+
+                inicio.addEventListener('change', validarConflito);
+                fim.addEventListener('change', validarConflito);
+            });
+        }
+
+        // Inicializa as validações quando o documento estiver carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            validarHorariosComHAE();
+            validarConflitosAulas();
+        });
     </script>
+
+    <?php
+    // Modifica a geração dos horários para mostrar de 1h em 1h
+    function gerarOpcoesHorario() {
+        $options = '<option value="">Selecione</option>';
+        for ($hora = 7; $hora <= 22; $hora++) {
+            $time = sprintf("%02d:00", $hora);
+            $options .= "<option value='$time'>$time</option>";
+        }
+        return $options;
+    }
+    ?>
 </body>
 
 </html>

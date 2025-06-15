@@ -253,13 +253,6 @@ try {
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       color: white;
     }
-
-    .content-wrapper {
-      padding: 20px;
-      margin-left: 250px; /* Ajuste conforme a largura do seu menu lateral */
-      position: relative;
-      min-height: calc(100vh - 60px); /* Ajuste conforme a altura do seu header */
-    }
   </style>
 </head>
 
@@ -311,62 +304,60 @@ try {
   </nav>
 
   <main>
-    <div class="content-wrapper">
-      <h3 class="titulos">Suas Inscrições</h3>
-      <br>
-      <?php if (isset($_SESSION['mensagem'])): ?>
-        <div class="sucesso"><?php echo $_SESSION['mensagem']; unset($_SESSION['mensagem']); ?></div>
-      <?php endif; ?>
-      <?php if (isset($erro)): ?>
-        <div class="erro"><?php echo $erro; ?></div>
+    <h3 class="titulos">Suas Inscrições</h3>
+    <br>
+    <?php if (isset($_SESSION['mensagem'])): ?>
+      <div class="sucesso"><?php echo $_SESSION['mensagem']; unset($_SESSION['mensagem']); ?></div>
+    <?php endif; ?>
+    <?php if (isset($erro)): ?>
+      <div class="erro"><?php echo $erro; ?></div>
+    <?php else: ?>
+      <?php if (empty($inscricoes)): ?>
+        <p>Você ainda não possui nenhuma inscrição cadastrada.</p>
       <?php else: ?>
-        <?php if (empty($inscricoes)): ?>
-          <p>Você ainda não possui nenhuma inscrição cadastrada.</p>
-        <?php else: ?>
-          <table class="tbls">
-            <thead>
+        <table class="tbls">
+          <thead>
+            <tr>
+              <td>Inscrição</td>
+              <td>Coordenador</td>
+              <td>Tipo HAE</td>
+              <td>Quantidade HAE</td>
+              <td>Curso</td>
+              <td>Status</td>
+              <td>Ações</td>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($inscricoes as $inscricao): ?>
               <tr>
-                <td>Inscrição</td>
-                <td>Coordenador</td>
-                <td>Tipo HAE</td>
-                <td>Quantidade HAE</td>
-                <td>Curso</td>
-                <td>Status</td>
-                <td>Ações</td>
+                <td><?php echo htmlspecialchars($inscricao['id_frmInscricaoHae']); ?></td>
+                <td><?php echo htmlspecialchars($inscricao['coordenador']); ?></td>
+                <td><?php echo htmlspecialchars($inscricao['tipoHae']); ?></td>
+                <td><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></td>
+                <td><?php echo htmlspecialchars($inscricao['curso']); ?></td>
+                <td>
+                  <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
+                    <?php
+                    $status = strtoupper($inscricao['status']);
+                    if ($status === 'APROVADO') echo 'Deferido';
+                    elseif ($status === 'REPROVADO') echo 'Indeferido';
+                    else echo $inscricao['status'];
+                    ?>
+                  </span>
+                </td>
+                <td>
+                  <a href="ver_detalhes_inscricao_prof.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>"
+                    class="btn-ver">Ver Detalhes</a>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($inscricoes as $inscricao): ?>
-                <tr>
-                  <td><?php echo htmlspecialchars($inscricao['id_frmInscricaoHae']); ?></td>
-                  <td><?php echo htmlspecialchars($inscricao['coordenador']); ?></td>
-                  <td><?php echo htmlspecialchars($inscricao['tipoHae']); ?></td>
-                  <td><?php echo htmlspecialchars($inscricao['quantidadeHae']); ?></td>
-                  <td><?php echo htmlspecialchars($inscricao['curso']); ?></td>
-                  <td>
-                    <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
-                      <?php
-                      $status = strtoupper($inscricao['status']);
-                      if ($status === 'APROVADO') echo 'Deferido';
-                      elseif ($status === 'REPROVADO') echo 'Indeferido';
-                      else echo $inscricao['status'];
-                      ?>
-                    </span>
-                  </td>
-                  <td>
-                    <a href="ver_detalhes_inscricao_prof.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>"
-                      class="btn-ver">Ver Detalhes</a>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        <?php endif; ?>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
       <?php endif; ?>
-      
-      <div class="nova-inscricao">
-        <a href="form_inscricao.php" class="btn-nova-inscricao">Nova Inscrição</a>
-      </div>
+    <?php endif; ?>
+    
+    <div class="nova-inscricao">
+      <a href="form_inscricao.php" class="btn-nova-inscricao">Nova Inscrição</a>
     </div>
   </main>
 

@@ -287,11 +287,8 @@ try {
                     <textarea name="resultados_alcancados" id="resultados_alcancados" required><?php echo isset($relatorio) ? htmlspecialchars($relatorio['resultados_alcancados']) : ''; ?></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label for="data_entrega">Data de Entrega:</label>
-                    <input type="date" id="data_entrega" name="data_entrega" required
-                        value="<?php echo isset($relatorio) ? $relatorio['data_entrega'] : date('Y-m-d'); ?>">
-                </div>
+                <!-- Removido o campo de data visível e adicionado um campo hidden -->
+                <input type="hidden" name="data_entrega" value="<?php echo date('Y-m-d'); ?>">
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-enviar">
@@ -305,18 +302,13 @@ try {
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Define a data mínima como hoje
-            const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('data_entrega').min = hoje;
-
             // Validação do formulário
             const form = document.getElementById('formRelatorio');
             form.addEventListener('submit', function(e) {
                 const descricao = document.getElementById('descricao_atividades').value.trim();
                 const resultados = document.getElementById('resultados_alcancados').value.trim();
-                const data = document.getElementById('data_entrega').value;
 
-                if (!descricao || !resultados || !data) {
+                if (!descricao || !resultados) {
                     e.preventDefault();
                     alert('Por favor, preencha todos os campos obrigatórios.');
                     return false;
