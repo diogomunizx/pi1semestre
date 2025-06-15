@@ -19,7 +19,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
-    
+
     // Busca os detalhes do relatório
     $query = "SELECT r.id_relatorioHae, 
                      r.data_entrega as dataEntrega,
@@ -35,18 +35,17 @@ try {
               INNER JOIN tb_frm_inscricao_hae i ON r.id_frmInscricaoHae = i.id_frmInscricaoHae
               INNER JOIN tb_Usuario prof ON i.tb_Docentes_id_Docente = prof.id_Docente
               WHERE r.id_relatorioHae = :id_relatorio";
-              
+
     $stmt = $conn->prepare($query);
     $stmt->execute(['id_relatorio' => $_GET['id']]);
-    
+
     $relatorio = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$relatorio) {
         $_SESSION['erro'] = "Relatório não encontrado.";
         header("Location: relatorio_coord.php");
         exit;
     }
-    
 } catch (Exception $e) {
     error_log("Erro ao buscar detalhes do relatório: " . $e->getMessage());
     $_SESSION['erro'] = "Ocorreu um erro ao carregar os detalhes do relatório.";
@@ -70,7 +69,7 @@ try {
             padding: 25px;
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .avaliacao-header {
@@ -163,7 +162,7 @@ try {
 
         .btn-avaliar:hover {
             transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .btn-aprovar:hover {
@@ -204,7 +203,7 @@ try {
         .btn-ver-completa:hover {
             background-color: #0056b3;
             transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -215,7 +214,6 @@ try {
             <div class="user-profile" onclick="toggleDropdown()">
                 <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
                     <a href="perfil_cadastro.php">Ajustes</a>
                     <a href="perfil_Aulas.php">Minhas aulas</a>
                 </div>
@@ -253,6 +251,9 @@ try {
         <a href="relatorio_coord.php" class="active">
             <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
         </a>
+        <a href="dashboard_coordenador.php">
+            <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+        </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
         </a>
@@ -275,18 +276,18 @@ try {
 
             <div class="acoes-container">
                 <div class="acoes-icones">
-                    <a href="ver_detalhes_relatorio.php?id=<?php echo $relatorio['id_relatorioHae']; ?>" 
-                       class="btn-ver-completa">Ver Relatório Completo</a>
+                    <a href="ver_detalhes_relatorio.php?id=<?php echo $relatorio['id_relatorioHae']; ?>"
+                        class="btn-ver-completa">Ver Relatório Completo</a>
                 </div>
             </div>
 
             <form action="processa_avaliacao_relatorio.php" method="POST">
                 <input type="hidden" name="id_relatorio" value="<?php echo $relatorio['id_relatorioHae']; ?>">
-                
+
                 <div class="form-group">
                     <label for="justificativa">Justificativa da Avaliação:</label>
-                    <textarea id="justificativa" name="justificativa" required 
-                              placeholder="Digite aqui sua justificativa para a aprovação ou solicitação de correção deste relatório..."></textarea>
+                    <textarea id="justificativa" name="justificativa" required
+                        placeholder="Digite aqui sua justificativa para a aprovação ou solicitação de correção deste relatório..."></textarea>
                 </div>
 
                 <div class="avaliacao-actions">
@@ -300,4 +301,4 @@ try {
     <script src="../js/script.js" defer></script>
 </body>
 
-</html> 
+</html>

@@ -24,7 +24,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
-    
+
     // Busca os detalhes completos da inscrição
     $query = "SELECT i.*, 
                      prof.Nome as professor,
@@ -40,12 +40,12 @@ try {
               INNER JOIN tb_cursos c ON i.id_curso = c.id_curso
               LEFT JOIN tb_justificativaHae j ON i.id_frmInscricaoHae = j.id_frmInscricaoHae
               WHERE i.id_frmInscricaoHae = :id_inscricao";
-              
+
     $stmt = $conn->prepare($query);
     $stmt->execute(['id_inscricao' => $_GET['id']]);
-    
+
     $inscricao = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$inscricao) {
         $_SESSION['erro'] = "Inscrição não encontrada.";
         header("Location: aprovacao.php");
@@ -59,7 +59,6 @@ try {
     $stmtHorarios = $conn->prepare($queryHorarios);
     $stmtHorarios->execute(['id_inscricao' => $_GET['id']]);
     $horarios = $stmtHorarios->fetchAll(PDO::FETCH_ASSOC);
-    
 } catch (Exception $e) {
     error_log("Erro ao buscar detalhes da inscrição: " . $e->getMessage());
     $_SESSION['erro'] = "Ocorreu um erro ao carregar os detalhes da inscrição.";
@@ -67,7 +66,8 @@ try {
     exit;
 }
 
-function formatarDiaSemana($dia) {
+function formatarDiaSemana($dia)
+{
     $dias = [
         2 => 'Segunda-feira',
         3 => 'Terça-feira',
@@ -95,7 +95,7 @@ function formatarDiaSemana($dia) {
             padding: 25px;
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .detalhes-header {
@@ -184,9 +184,20 @@ function formatarDiaSemana($dia) {
             font-size: 14px;
         }
 
-        .status-pendente { background-color: #ffc107; color: #000; }
-        .status-aprovado { background-color: #28a745; color: #fff; }
-        .status-reprovado { background-color: #dc3545; color: #fff; }
+        .status-pendente {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .status-aprovado {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .status-reprovado {
+            background-color: #dc3545;
+            color: #fff;
+        }
 
         .texto-projeto {
             white-space: pre-wrap;
@@ -215,10 +226,13 @@ function formatarDiaSemana($dia) {
         }
 
         @media print {
-            header, .sidebar, .acoes-container {
+
+            header,
+            .sidebar,
+            .acoes-container {
                 display: none !important;
             }
-            
+
             body {
                 padding: 0;
                 margin: 0;
@@ -256,7 +270,6 @@ function formatarDiaSemana($dia) {
             <div class="user-profile" onclick="toggleDropdown()">
                 <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
                     <a href="perfil_cadastro.php">Ajustes</a>
                     <a href="perfil_Aulas.php">Minhas aulas</a>
                 </div>
@@ -294,6 +307,9 @@ function formatarDiaSemana($dia) {
         <a href="relatorio_coord.php">
             <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
         </a>
+        <a href="dashboard_coordenador.php">
+            <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+        </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
         </a>
@@ -304,10 +320,10 @@ function formatarDiaSemana($dia) {
             <div class="detalhes-header">
                 <h3>Detalhes da Inscrição HAE</h3>
                 <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
-                    <?php 
-                        if ($inscricao['status'] === 'APROVADO') echo 'Deferido';
-                        elseif ($inscricao['status'] === 'REPROVADO') echo 'Indeferido';
-                        else echo $inscricao['status'];
+                    <?php
+                    if ($inscricao['status'] === 'APROVADO') echo 'Deferido';
+                    elseif ($inscricao['status'] === 'REPROVADO') echo 'Indeferido';
+                    else echo $inscricao['status'];
                     ?>
                 </span>
             </div>
@@ -392,29 +408,29 @@ function formatarDiaSemana($dia) {
             </div>
 
             <?php if ($inscricao['status'] !== 'PENDENTE'): ?>
-            <div class="secao">
-                <h4>Avaliação do Coordenador</h4>
-                <div class="info-item">
-                    <strong>Status:</strong>
-                    <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
-                        <?php 
+                <div class="secao">
+                    <h4>Avaliação do Coordenador</h4>
+                    <div class="info-item">
+                        <strong>Status:</strong>
+                        <span class="status-badge status-<?php echo strtolower($inscricao['status']); ?>">
+                            <?php
                             if ($inscricao['status'] === 'APROVADO') echo 'Deferido';
                             elseif ($inscricao['status'] === 'REPROVADO') echo 'Indeferido';
                             else echo $inscricao['status'];
-                        ?>
-                    </span>
-                </div>
-                <div class="info-item">
-                    <strong>Data da Avaliação:</strong> 
-                    <?php echo date('d/m/Y', strtotime($inscricao['data_avaliacao'])); ?>
-                </div>
-                <div class="info-item">
-                    <strong>Justificativa:</strong><br>
-                    <div class="texto-projeto">
-                        <?php echo nl2br(htmlspecialchars($inscricao['justificativa'] ?? 'Nenhuma justificativa fornecida.')); ?>
+                            ?>
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Data da Avaliação:</strong>
+                        <?php echo date('d/m/Y', strtotime($inscricao['data_avaliacao'])); ?>
+                    </div>
+                    <div class="info-item">
+                        <strong>Justificativa:</strong><br>
+                        <div class="texto-projeto">
+                            <?php echo nl2br(htmlspecialchars($inscricao['justificativa'] ?? 'Nenhuma justificativa fornecida.')); ?>
+                        </div>
                     </div>
                 </div>
-            </div>
             <?php endif; ?>
 
             <div class="acoes-container">
@@ -431,4 +447,4 @@ function formatarDiaSemana($dia) {
     <script src="../js/script.js" defer></script>
 </body>
 
-</html> 
+</html>

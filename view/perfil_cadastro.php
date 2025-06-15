@@ -24,7 +24,6 @@ if (!isset($_SESSION['id_Docente'])) {
         <div class="user-profile" onclick="toggleDropdown()">
             <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
             <div class="dropdown-menu" id="dropdown-menu">
-                <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
                 <a href="perfil_cadastro.php">Ajustes</a>
                 <a href="perfil_Aulas.php">Minhas aulas</a>
             </div>

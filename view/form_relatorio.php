@@ -19,7 +19,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
-    
+
     // Busca os detalhes da inscrição
     $query = "SELECT i.*, 
                      prof.Nome as professor,
@@ -34,15 +34,15 @@ try {
               INNER JOIN tb_Usuario coord ON c.id_docenteCoordenador = coord.id_Docente
               WHERE i.id_frmInscricaoHae = :id_inscricao
               AND i.tb_Docentes_id_Docente = :id_docente";
-              
+
     $stmt = $conn->prepare($query);
     $stmt->execute([
         'id_inscricao' => $_GET['id'],
         'id_docente' => $_SESSION['id_Docente']
     ]);
-    
+
     $inscricao = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$inscricao) {
         $_SESSION['erro'] = "Inscrição não encontrada ou você não tem permissão para acessá-la.";
         header("Location: relatorio_prof.php");
@@ -57,7 +57,6 @@ try {
         $stmtRelatorio->execute(['id_inscricao' => $_GET['id']]);
         $relatorio = $stmtRelatorio->fetch(PDO::FETCH_ASSOC);
     }
-    
 } catch (Exception $e) {
     error_log("Erro ao buscar detalhes da inscrição: " . $e->getMessage());
     $_SESSION['erro'] = "Ocorreu um erro ao carregar os detalhes da inscrição.";
@@ -81,7 +80,7 @@ try {
             padding: 25px;
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .form-header {
@@ -184,7 +183,7 @@ try {
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .btn-enviar:hover {
@@ -210,7 +209,6 @@ try {
             <div class="user-profile" onclick="toggleDropdown()">
                 <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
                     <a href="perfil_cadastro.php">Ajustes</a>
                     <a href="perfil_Aulas.php">Minhas aulas</a>
                 </div>
@@ -247,6 +245,9 @@ try {
         </a>
         <a href="relatorio_prof.php" class="active">
             <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
+        </a>
+        <a href="dashboard_professor.php">
+            <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
         </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
@@ -288,8 +289,8 @@ try {
 
                 <div class="form-group">
                     <label for="data_entrega">Data de Entrega:</label>
-                    <input type="date" id="data_entrega" name="data_entrega" required 
-                           value="<?php echo isset($relatorio) ? $relatorio['data_entrega'] : date('Y-m-d'); ?>">
+                    <input type="date" id="data_entrega" name="data_entrega" required
+                        value="<?php echo isset($relatorio) ? $relatorio['data_entrega'] : date('Y-m-d'); ?>">
                 </div>
 
                 <div class="form-actions">
@@ -303,30 +304,30 @@ try {
     </main>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Define a data mínima como hoje
-        const hoje = new Date().toISOString().split('T')[0];
-        document.getElementById('data_entrega').min = hoje;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Define a data mínima como hoje
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('data_entrega').min = hoje;
 
-        // Validação do formulário
-        const form = document.getElementById('formRelatorio');
-        form.addEventListener('submit', function(e) {
-            const descricao = document.getElementById('descricao_atividades').value.trim();
-            const resultados = document.getElementById('resultados_alcancados').value.trim();
-            const data = document.getElementById('data_entrega').value;
+            // Validação do formulário
+            const form = document.getElementById('formRelatorio');
+            form.addEventListener('submit', function(e) {
+                const descricao = document.getElementById('descricao_atividades').value.trim();
+                const resultados = document.getElementById('resultados_alcancados').value.trim();
+                const data = document.getElementById('data_entrega').value;
 
-            if (!descricao || !resultados || !data) {
-                e.preventDefault();
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return false;
-            }
+                if (!descricao || !resultados || !data) {
+                    e.preventDefault();
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return false;
+                }
 
-            return true;
+                return true;
+            });
         });
-    });
     </script>
 
     <script src="../js/script.js" defer></script>
 </body>
 
-</html> 
+</html>

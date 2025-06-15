@@ -19,7 +19,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
-    
+
     // Busca os detalhes completos do relatório
     $query = "SELECT r.id_relatorioHae,
                      r.id_frmInscricaoHae,
@@ -39,18 +39,17 @@ try {
               INNER JOIN tb_frm_inscricao_hae i ON r.id_frmInscricaoHae = i.id_frmInscricaoHae
               INNER JOIN tb_Usuario prof ON i.tb_Docentes_id_Docente = prof.id_Docente
               WHERE r.id_relatorioHae = :id_relatorio";
-              
+
     $stmt = $conn->prepare($query);
     $stmt->execute(['id_relatorio' => $_GET['id']]);
-    
+
     $relatorio = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$relatorio) {
         $_SESSION['erro'] = "Relatório não encontrado.";
         header("Location: relatorio_coord.php");
         exit;
     }
-    
 } catch (Exception $e) {
     error_log("Erro ao buscar detalhes do relatório: " . $e->getMessage());
     $_SESSION['erro'] = "Ocorreu um erro ao carregar os detalhes do relatório.";
@@ -73,15 +72,18 @@ try {
             position: fixed !important;
             z-index: 999 !important;
         }
+
         .sidebar a {
             display: flex !important;
             align-items: center !important;
         }
+
         .sidebar a img {
             width: 30px !important;
             height: 30px !important;
             margin-right: 15px !important;
         }
+
         /* Estilos originais da página */
         .detalhes-container {
             max-width: 800px;
@@ -89,7 +91,7 @@ try {
             padding: 25px;
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .detalhes-header {
@@ -193,9 +195,20 @@ try {
             font-size: 14px;
         }
 
-        .status-pendente { background-color: #ffc107; color: #000; }
-        .status-aprovado { background-color: #28a745; color: #fff; }
-        .status-correcao { background-color: #dc3545; color: #fff; }
+        .status-pendente {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .status-aprovado {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .status-correcao {
+            background-color: #dc3545;
+            color: #fff;
+        }
 
         .texto-relatorio {
             white-space: pre-wrap;
@@ -205,10 +218,13 @@ try {
         }
 
         @media print {
-            header, .sidebar, .acoes-container {
+
+            header,
+            .sidebar,
+            .acoes-container {
                 display: none !important;
             }
-            
+
             body {
                 padding: 0;
                 margin: 0;
@@ -251,7 +267,6 @@ try {
             <div class="user-profile" onclick="toggleDropdown()">
                 <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
                     <a href="perfil_cadastro.php">Ajustes</a>
                     <a href="perfil_Aulas.php">Minhas aulas</a>
                 </div>
@@ -288,6 +303,9 @@ try {
         </a>
         <a href="relatorio_coord.php" class="active">
             <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
+        </a>
+        <a href="dashboard_coordenador.php">
+            <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
         </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
@@ -334,25 +352,25 @@ try {
             </div>
 
             <?php if ($relatorio['status'] !== 'PENDENTE'): ?>
-            <div class="secao">
-                <h4>Avaliação do Coordenador</h4>
-                <div class="info-item">
-                    <strong>Status:</strong>
-                    <span class="status-badge status-<?php echo strtolower($relatorio['status']); ?>">
-                        <?php echo $relatorio['status']; ?>
-                    </span>
-                </div>
-                <div class="info-item">
-                    <strong>Data da Avaliação:</strong> 
-                    <?php echo date('d/m/Y', strtotime($relatorio['dataAvaliacao'])); ?>
-                </div>
-                <div class="info-item">
-                    <strong>Justificativa:</strong><br>
-                    <div class="texto-relatorio">
-                        <?php echo nl2br(htmlspecialchars($relatorio['justificativa'] ?? 'Nenhuma justificativa fornecida.')); ?>
+                <div class="secao">
+                    <h4>Avaliação do Coordenador</h4>
+                    <div class="info-item">
+                        <strong>Status:</strong>
+                        <span class="status-badge status-<?php echo strtolower($relatorio['status']); ?>">
+                            <?php echo $relatorio['status']; ?>
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Data da Avaliação:</strong>
+                        <?php echo date('d/m/Y', strtotime($relatorio['dataAvaliacao'])); ?>
+                    </div>
+                    <div class="info-item">
+                        <strong>Justificativa:</strong><br>
+                        <div class="texto-relatorio">
+                            <?php echo nl2br(htmlspecialchars($relatorio['justificativa'] ?? 'Nenhuma justificativa fornecida.')); ?>
+                        </div>
                     </div>
                 </div>
-            </div>
             <?php endif; ?>
 
             <div class="acoes-container">
@@ -372,4 +390,4 @@ try {
     <script src="../js/script.js" defer></script>
 </body>
 
-</html> 
+</html>

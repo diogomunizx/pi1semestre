@@ -43,7 +43,6 @@ try {
     $stmtCursos = $conn->prepare($queryCursos);
     $stmtCursos->execute();
     $cursos = $stmtCursos->fetchAll();
-
 } catch (Exception $e) {
     error_log("Erro ao carregar dados: " . $e->getMessage());
     $_SESSION['erro'] = "Ocorreu um erro ao carregar os dados. Por favor, tente novamente mais tarde.";
@@ -52,7 +51,8 @@ try {
 }
 
 // Função auxiliar para formatar a data
-function formatarData($data) {
+function formatarData($data)
+{
     return date('d/m/Y', strtotime($data));
 }
 ?>
@@ -81,7 +81,7 @@ function formatarData($data) {
         }
 
         /* Ajuste do espaçamento entre as seções */
-        .form-steps > h4 {
+        .form-steps>h4 {
             margin-top: 20px;
             margin-bottom: 15px;
         }
@@ -178,7 +178,6 @@ function formatarData($data) {
             <div class="user-profile" onclick="toggleDropdown()">
                 <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
                     <a href="perfil_cadastro.php">Ajustes</a>
                     <a href="perfil_Aulas.php">Minhas aulas</a>
                 </div>
@@ -213,6 +212,9 @@ function formatarData($data) {
         <a href="relatorio_prof.php">
             <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
         </a>
+        <a href="dashboard_professor.php">
+            <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+        </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
         </a>
@@ -227,7 +229,8 @@ function formatarData($data) {
 
             <form class="form-inscricao" action="processa_inscricao.php" method="POST">
                 <?php if (isset($_SESSION['erro'])): ?>
-                    <div class="erro"><?php echo $_SESSION['erro']; unset($_SESSION['erro']); ?></div>
+                    <div class="erro"><?php echo $_SESSION['erro'];
+                                        unset($_SESSION['erro']); ?></div>
                 <?php endif; ?>
 
                 <!-- Seleção do Edital -->
@@ -239,10 +242,10 @@ function formatarData($data) {
                         <select id="edital" name="id_edital" required onchange="atualizarInfoEdital()">
                             <option value="">Selecione um edital</option>
                             <?php foreach ($editais as $edital): ?>
-                                <option value="<?php echo $edital['id_edital']; ?>" 
-                                        data-status="<?php echo $edital['edital_status']; ?>"
-                                        data-inicio="<?php echo formatarData($edital['dataInicioInscricao']); ?>"
-                                        data-fim="<?php echo formatarData($edital['dataFimInscricao']); ?>">
+                                <option value="<?php echo $edital['id_edital']; ?>"
+                                    data-status="<?php echo $edital['edital_status']; ?>"
+                                    data-inicio="<?php echo formatarData($edital['dataInicioInscricao']); ?>"
+                                    data-fim="<?php echo formatarData($edital['dataFimInscricao']); ?>">
                                     <?php echo htmlspecialchars($edital['vigencia'] . ' (ID: ' . $edital['id_edital'] . ')'); ?>
                                 </option>
                             <?php endforeach; ?>
@@ -311,8 +314,8 @@ function formatarData($data) {
                     <select id="curso" name="curso" required>
                         <option value="">Selecione um curso</option>
                         <?php foreach ($cursos as $curso): ?>
-                            <option value="<?php echo $curso['id_curso']; ?>" 
-                                    data-coordenador-id="<?php echo $curso['id_docenteCoordenador']; ?>">
+                            <option value="<?php echo $curso['id_curso']; ?>"
+                                data-coordenador-id="<?php echo $curso['id_docenteCoordenador']; ?>">
                                 <?php echo htmlspecialchars($curso['Materia'] . ' - Coord.: ' . $curso['coordenador']); ?>
                             </option>
                         <?php endforeach; ?>
@@ -548,18 +551,18 @@ function formatarData($data) {
                         // Função para validar os horários
                         function validarHorarios() {
                             const dias = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
-                            
+
                             dias.forEach(dia => {
                                 const inicio = document.querySelector(`select[name="horario_inicio_${dia}"]`);
                                 const fim = document.querySelector(`select[name="horario_final_${dia}"]`);
-                                
+
                                 inicio.addEventListener('change', () => {
                                     if (inicio.value && fim.value && inicio.value >= fim.value) {
                                         alert(`O horário de início deve ser menor que o horário final para ${dia}-feira`);
                                         inicio.value = '';
                                     }
                                 });
-                                
+
                                 fim.addEventListener('change', () => {
                                     if (inicio.value && fim.value && inicio.value >= fim.value) {
                                         alert(`O horário final deve ser maior que o horário de início para ${dia}-feira`);
@@ -703,7 +706,7 @@ function formatarData($data) {
                 const submitButton = document.querySelector('.nav-button.submit');
 
                 prevButton.disabled = currentStep === 1;
-                
+
                 if (currentStep === totalSteps) {
                     nextButton.style.display = 'none';
                     submitButton.style.display = 'block';
@@ -761,10 +764,10 @@ function formatarData($data) {
             if (select.value) {
                 const option = select.options[select.selectedIndex];
                 const editalStatus = option.dataset.status;
-                
+
                 status.innerHTML = `<span class="edital-status status-${editalStatus.toLowerCase()}">${editalStatus}</span>`;
                 periodo.textContent = `${option.dataset.inicio} a ${option.dataset.fim}`;
-                
+
                 detalhes.style.display = 'block';
             } else {
                 detalhes.style.display = 'none';
@@ -779,4 +782,4 @@ function formatarData($data) {
     </script>
 </body>
 
-</html> 
+</html>

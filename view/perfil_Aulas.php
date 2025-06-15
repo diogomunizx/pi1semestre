@@ -3,8 +3,8 @@ session_start();
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['id_Docente'])) {
-    header("Location: ../login.php");
-    exit;
+  header("Location: ../login.php");
+  exit;
 }
 ?>
 <!DOCTYPE html>
@@ -24,7 +24,6 @@ if (!isset($_SESSION['id_Docente'])) {
       <div class="user-profile" onclick="toggleDropdown()">
         <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
         <div class="dropdown-menu" id="dropdown-menu">
-          <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
           <a href="perfil_cadastro.php">Ajustes</a>
           <a href="perfil_Aulas.php">Minhas Aulas</a>
         </div>
@@ -47,37 +46,37 @@ if (!isset($_SESSION['id_Docente'])) {
       </a>
     </div>
     <?php if (strtolower($_SESSION['funcao']) === 'professor'): ?>
-    <a class="inicio" href="index_prof.php">
-      <img src="../imagens/home.png" alt="Início"> <span>Início</span>
-    </a>
-    <a href="inscricao.php" id="linkInscricao">
-      <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
-    </a>
-    <a href="editais.php">
-      <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
-    </a>
-    <a href="relatorio_prof.php">
-      <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
-    </a>
-    <a href="dashboard_professor.php">
+      <a class="inicio" href="index_prof.php">
+        <img src="../imagens/home.png" alt="Início"> <span>Início</span>
+      </a>
+      <a href="inscricao.php" id="linkInscricao">
+        <img src="../imagens/inscricao.png" alt="Inscrição"> <span>Inscrição</span>
+      </a>
+      <a href="editais.php">
+        <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
+      </a>
+      <a href="relatorio_prof.php">
+        <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
+      </a>
+      <a href="dashboard_professor.php">
         <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
-    </a>
+      </a>
     <?php else: ?>
-    <a class="inicio" href="index_coord.php">
-      <img src="../imagens/home.png" alt="Início"> <span>Início</span>
-    </a>
-    <a href="aprovacao.php" id="linkAprovacao">
-      <img src="../imagens/inscricoes.png" alt="Inscrições"> <span>Inscrições</span>
-    </a>
-    <a href="editais.php">
-      <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
-    </a>
-    <a href="relatorio_coord.php">
-      <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
-    </a>
-    <a href="dashboard_coordenador.php">
+      <a class="inicio" href="index_coord.php">
+        <img src="../imagens/home.png" alt="Início"> <span>Início</span>
+      </a>
+      <a href="aprovacao.php" id="linkAprovacao">
+        <img src="../imagens/inscricoes.png" alt="Inscrições"> <span>Inscrições</span>
+      </a>
+      <a href="editais.php">
+        <img src="../imagens/aprovacao.png" alt="Editais"> <span>Editais</span>
+      </a>
+      <a href="relatorio_coord.php">
+        <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
+      </a>
+      <a href="dashboard_coordenador.php">
         <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
-    </a>
+      </a>
     <?php endif; ?>
     <a href="../login.php">
       <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
@@ -133,52 +132,52 @@ if (!isset($_SESSION['id_Docente'])) {
   <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
 
   <script>
-document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
 
-  document.querySelectorAll('.botao-adicionar').forEach(btn => btn.style.display = 'none');
+      document.querySelectorAll('.botao-adicionar').forEach(btn => btn.style.display = 'none');
 
-  fetch("../controller/buscar_horarios.php")
-    .then(res => res.json())
-    .then(dados => {
-      // seu código atual para processar os dados
-    })
-    .catch(error => {
-      console.error("Erro ao carregar horários:", error);
-    });
+      fetch("../controller/buscar_horarios.php")
+        .then(res => res.json())
+        .then(dados => {
+          // seu código atual para processar os dados
+        })
+        .catch(error => {
+          console.error("Erro ao carregar horários:", error);
+        });
 
 
-  fetch("../controller/buscar_horarios.php")
-    .then(res => res.json())
-    .then(dados => {
-      const mapaDias = {
-        1: 'segunda',
-        2: 'terca',
-        3: 'quarta',
-        4: 'quinta',
-        5: 'sexta',
-        6: 'sabado'
-      };
+      fetch("../controller/buscar_horarios.php")
+        .then(res => res.json())
+        .then(dados => {
+          const mapaDias = {
+            1: 'segunda',
+            2: 'terca',
+            3: 'quarta',
+            4: 'quinta',
+            5: 'sexta',
+            6: 'sabado'
+          };
 
-      console.log("Horários recebidos:", dados);
-      dados.forEach(horario => {
-        const dia = mapaDias[horario.diaSemana];
-        const container = document.querySelector(`#linhas-${dia}`);
-        if (!container) return;
+          console.log("Horários recebidos:", dados);
+          dados.forEach(horario => {
+            const dia = mapaDias[horario.diaSemana];
+            const container = document.querySelector(`#linhas-${dia}`);
+            if (!container) return;
 
-        // Corrigir formato dos horários para "HH:mm"
-        const horarioInicio = (horario.horarioInicio && horario.horarioInicio !== '00:00:00')
-          ? horario.horarioInicio.substring(0, 5)
-          : '';
+            // Corrigir formato dos horários para "HH:mm"
+            const horarioInicio = (horario.horarioInicio && horario.horarioInicio !== '00:00:00') ?
+              horario.horarioInicio.substring(0, 5) :
+              '';
 
-        const horarioFim = (horario.horarioFim && horario.horarioFim !== '00:00:00')
-          ? horario.horarioFim.substring(0, 5)
-          : '';
+            const horarioFim = (horario.horarioFim && horario.horarioFim !== '00:00:00') ?
+              horario.horarioFim.substring(0, 5) :
+              '';
 
-        const linha = document.createElement("div");
-        linha.classList.add("linha-horario");
-        linha.setAttribute("data-dia", dia);
+            const linha = document.createElement("div");
+            linha.classList.add("linha-horario");
+            linha.setAttribute("data-dia", dia);
 
-        linha.innerHTML = `
+            linha.innerHTML = `
           <input type="time" value="${horarioInicio}" disabled>
           <input type="time" value="${horarioFim}" disabled>
           <select disabled>
@@ -189,16 +188,14 @@ document.addEventListener("DOMContentLoaded", () => {
           <button type="button" class="btn-remover" style="display:none;" onclick="removerLinha(this)">Remover</button>
         `;
 
-        container.appendChild(linha);
-      });
-    })
-    .catch(error => {
-      console.error("Erro ao carregar horários:", error);
+            container.appendChild(linha);
+          });
+        })
+        .catch(error => {
+          console.error("Erro ao carregar horários:", error);
+        });
     });
-});
-
-
-</script>
+  </script>
 </body>
 
-</html> 
+</html>

@@ -19,7 +19,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
-    
+
     // Busca os detalhes da inscrição
     $query = "SELECT i.*, 
                      prof.Nome as professor,
@@ -33,18 +33,17 @@ try {
               INNER JOIN tb_cursos c ON i.id_curso = c.id_curso
               LEFT JOIN tb_justificativaHae j ON i.id_frmInscricaoHae = j.id_frmInscricaoHae
               WHERE i.id_frmInscricaoHae = :id_inscricao";
-              
+
     $stmt = $conn->prepare($query);
     $stmt->execute(['id_inscricao' => $_GET['id']]);
-    
+
     $inscricao = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$inscricao) {
         $_SESSION['erro'] = "Inscrição não encontrada.";
         header("Location: aprovacao.php");
         exit;
     }
-    
 } catch (Exception $e) {
     error_log("Erro ao buscar detalhes da inscrição: " . $e->getMessage());
     $_SESSION['erro'] = "Ocorreu um erro ao carregar os detalhes da inscrição.";
@@ -68,7 +67,7 @@ try {
             padding: 25px;
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .avaliacao-header {
@@ -161,7 +160,7 @@ try {
 
         .btn-avaliar:hover {
             transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .btn-aprovar:hover {
@@ -202,7 +201,7 @@ try {
         .btn-ver-completa:hover {
             background-color: #0056b3;
             transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -213,7 +212,6 @@ try {
             <div class="user-profile" onclick="toggleDropdown()">
                 <span><?php echo htmlspecialchars($_SESSION['Nome'][0]); ?></span>
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="#" onclick="alterarVisualizacao()">Alterar Visualização</a>
                     <a href="perfil_cadastro.php">Ajustes</a>
                     <a href="perfil_Aulas.php">Minhas aulas</a>
                 </div>
@@ -251,6 +249,9 @@ try {
         <a href="relatorio_coord.php">
             <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
         </a>
+        <a href="dashboard_coordenador.php">
+            <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+        </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
         </a>
@@ -274,18 +275,18 @@ try {
 
             <div class="acoes-container">
                 <div class="acoes-icones">
-                    <a href="ver_detalhes_inscricao.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>" 
-                       class="btn-ver-completa">Ver Inscrição Completa</a>
+                    <a href="ver_detalhes_inscricao.php?id=<?php echo $inscricao['id_frmInscricaoHae']; ?>"
+                        class="btn-ver-completa">Ver Inscrição Completa</a>
                 </div>
             </div>
 
             <form action="processa_aprovacao.php" method="POST" id="formAvaliacao">
                 <input type="hidden" name="id_inscricao" value="<?php echo $inscricao['id_frmInscricaoHae']; ?>">
-                
+
                 <div class="form-group">
                     <label for="justificativa">Justificativa da Avaliação:</label>
-                    <textarea id="justificativa" name="justificativa" required 
-                              placeholder="Digite aqui sua justificativa para a aprovação ou reprovação desta inscrição..."></textarea>
+                    <textarea id="justificativa" name="justificativa" required
+                        placeholder="Digite aqui sua justificativa para a aprovação ou reprovação desta inscrição..."></textarea>
                 </div>
 
                 <div class="avaliacao-actions">
@@ -298,19 +299,19 @@ try {
 
     <script src="../js/script.js" defer></script>
     <script>
-    // Adiciona validação do formulário
-    document.getElementById('formAvaliacao').addEventListener('submit', function(e) {
-        const justificativa = document.getElementById('justificativa').value.trim();
-        
-        if (!justificativa) {
-            e.preventDefault();
-            alert('Por favor, preencha a justificativa antes de aprovar ou reprovar a inscrição.');
-            return false;
-        }
-        
-        return true;
-    });
+        // Adiciona validação do formulário
+        document.getElementById('formAvaliacao').addEventListener('submit', function(e) {
+            const justificativa = document.getElementById('justificativa').value.trim();
+
+            if (!justificativa) {
+                e.preventDefault();
+                alert('Por favor, preencha a justificativa antes de aprovar ou reprovar a inscrição.');
+                return false;
+            }
+
+            return true;
+        });
     </script>
 </body>
 
-</html> 
+</html>
