@@ -6,7 +6,7 @@
 // Esta função deve ser chamada ANTES de qualquer saída HTML ser enviada ao navegador.
 session_start();
 
-require_once '../config/session_config.php';
+//require_once '../config/session_config.php'; //tirar para acessar local
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['id_Docente'])) {
@@ -124,7 +124,7 @@ function formatarData($data) {
             <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
         </a>
         <a href="dashboard_professor.php">
-        <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+        <img src="../imagens/grafico-de-barras.png" alt="Dashboard"> <span>Dashboard</span>
     </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>

@@ -20,9 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $conn->prepare("INSERT INTO tokens_redefinicao (email, token, expira_em) VALUES (?, ?, ?)");
         $stmt->execute([$email, $token, $expira_em]);
-        //Acessar Local
-        $link = "http://localhost/pi1semestre1/view/redefinir_senha.php?token=$token";
-        //$link = "https://http://horusdsm.lovestoblog.com/view/redefinir_senha.php?token=$token";
+        //Acessar Local (altere o nome da pasta se necessario)
+        //$link = "http://localhost/pi1semestre/view/redefinir_senha.php?token=$token";
+        $link = "https://http://horusdsm.lovestoblog.com/view/redefinir_senha.php?token=$token";
 
         echo "Link de redefinição: <a href='$link'>$link</a>";
     } else {
