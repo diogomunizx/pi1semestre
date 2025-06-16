@@ -307,7 +307,7 @@ function formatarDiaSemana($dia)
             <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
         </a>
         <a href="dashboard_professor.php">
-            <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+            <img src="../imagens/grafico-de-barras.png" alt="Dashboard"> <span>Dashboard</span>
         </a>
         <a href="../login.php">
             <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>

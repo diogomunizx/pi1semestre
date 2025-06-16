@@ -59,7 +59,7 @@ if (!isset($_SESSION['id_Docente'])) {
         <img src="../imagens/relat.png" alt="Relatório"> <span>Relatório</span>
     </a>
     <a href="dashboard_professor.php">
-        <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+        <img src="../imagens/grafico-de-barras.png" alt="Dashboard"> <span>Dashboard</span>
     </a>
     <?php else: ?>
     <a class="inicio" href="index_coord.php">
@@ -75,7 +75,7 @@ if (!isset($_SESSION['id_Docente'])) {
         <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
     </a>
     <a href="dashboard_coordenador.php">
-        <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+        <img src="../imagens/grafico-de-barras.png" alt="Dashboard"> <span>Dashboard</span>
     </a>
     <?php endif; ?>
     <a href="../login.php">

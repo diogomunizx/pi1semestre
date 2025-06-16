@@ -1,5 +1,7 @@
 <?php
-require_once '../config/session_config.php';
+session_start();
+
+//require_once '../config/session_config.php'; //tirar para acessar local
 
 // Verifica se o usuário está logado e é coordenador
 if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'coordenador') {
@@ -8,7 +10,64 @@ if (!isset($_SESSION['id_Docente']) || strtolower($_SESSION['funcao']) !== 'coor
 }
 
 require_once '../model/Database.php';
+require_once '../config/database.php';
 
+$stmt = $conn->prepare("
+    SELECT u.Nome, f.tituloProjeto, f.tipoHae, j.status 
+    FROM tb_frm_inscricao_hae AS f
+    INNER JOIN tb_justificativaHae AS j ON f.id_frmInscricaoHae = j.id_frmInscricaoHae
+    INNER JOIN tb_Usuario AS u ON f.tb_Docentes_id_Docente = u.id_Docente
+");
+$stmt->execute();
+$inscricoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stmtProfessores = $conn->prepare("
+    SELECT COUNT(DISTINCT tb_Docentes_id_Docente) AS total
+    FROM tb_frm_inscricao_hae AS f
+    INNER JOIN tb_justificativaHae AS j
+    ON f.id_frmInscricaoHae = j.id_frmInscricaoHae
+    WHERE j.status = 'APROVADO'
+");
+$stmtProfessores->execute();
+$professores = $stmtProfessores->fetch(PDO::FETCH_ASSOC);
+$totalProfessores = $professores['total'] ?? 0;
+
+// Soma total de horas de HAE aprovadas
+$stmtHoras = $conn->prepare("
+    SELECT SUM(f.quantidadeHae) AS total_horas
+    FROM tb_frm_inscricao_hae AS f
+    INNER JOIN tb_justificativaHae AS j
+    ON f.id_frmInscricaoHae = j.id_frmInscricaoHae
+    WHERE j.status = 'APROVADO'
+");
+$stmtHoras->execute();
+$horas = $stmtHoras->fetch(PDO::FETCH_ASSOC);
+$totalHoras = $horas['total_horas'] ?? 0;
+
+// Distribuição por tipo de HAE
+$stmtDistribuicao = $conn->prepare("
+    SELECT f.tipoHae, SUM(f.quantidadeHae) AS horas
+    FROM tb_frm_inscricao_hae AS f
+    INNER JOIN tb_justificativaHae AS j
+    ON f.id_frmInscricaoHae = j.id_frmInscricaoHae
+    WHERE j.status = 'APROVADO'
+    GROUP BY f.tipoHae
+");
+$stmtDistribuicao->execute();
+$distribuicao = $stmtDistribuicao->fetchAll(PDO::FETCH_ASSOC);
+
+$dadosDistribuicao = [
+    'Coordenação' => 0,
+    'Projetos' => 0,
+    'Orientação' => 0
+];
+
+foreach ($distribuicao as $d) {
+    $tipo = $d['tipoHae'];
+    if (isset($dadosDistribuicao[$tipo])) {
+        $dadosDistribuicao[$tipo] = $d['horas'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -21,6 +80,29 @@ require_once '../model/Database.php';
     <link rel="icon" type="image/png" href="../imagens/logo-horus.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>HORUS - Dashboard Coordenador</title>
+
+    <style>
+.chart-wrapper {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto; /* margem pra dar espaço em cima e embaixo */
+    height: 400px;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* sombra leve */
+    border-radius: 8px;
+    background-color: #fff; /* fundo branco para destacar */
+    padding: 15px; /* espaçamento interno */
+}
+
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+    border-radius: 8px; /* cantos arredondados no canvas */
+}
+
+    </style>
+
 </head>
 
 <body>
@@ -67,7 +149,7 @@ require_once '../model/Database.php';
       <img src="../imagens/relat.png" alt="Relatórios"> <span>Relatórios</span>
     </a>
     <a href="dashboard_coordenador.php">
-      <img src="../imagens/dashboard2.png" alt="Dashboard"> <span>Dashboard</span>
+        <img src="../imagens/grafico-de-barras.png" alt="Dashboard"> <span>Dashboard</span>
     </a>
     <a href="../login.php">
       <img src="../imagens/logout.png" alt="Logout"> <span>Logout</span>
@@ -75,155 +157,129 @@ require_once '../model/Database.php';
   </nav>
 
     <main>
-        <div class="dashboard-container">
-            <div class="chart-container">
-                <div class="chart-header">
-                    <h2>Distribuição de HAE - 1º Semestre 2024</h2>
-                    <div class="chart-legend">
-                        <span class="legend-item">
-                            <span class="legend-color coordenacao"></span>
-                            Coordenação
-                        </span>
-                        <span class="legend-item">
-                            <span class="legend-color projetos"></span>
-                            Projetos
-                        </span>
-                        <span class="legend-item">
-                            <span class="legend-color orientacao"></span>
-                            Orientação
-                        </span>
-                    </div>
+    <div class="dashboard-container">
+        <div class="chart-container">
+            <div class="chart-header">
+                <h2>Distribuição de HAE - 1º Semestre 2024</h2>
+
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="graficoHaeBarra"></canvas>
+            </div>
+            <div class="chart-summary">
+                <div class="summary-item">
+                    <h3>Professores com HAE</h3>
+                    <p><?= $totalProfessores ?> professores</p>
                 </div>
-                <div class="chart-wrapper">
-                    <canvas id="haeChart"></canvas>
-                </div>
-                <div class="chart-summary">
-                    <div class="summary-item">
-                        <h3>Professores com HAE</h3>
-                        <p>8 professores</p>
-                    </div>
-                    <div class="summary-item">
-                        <h3>Total de HAE</h3>
-                        <p>48 horas</p>
-                    </div>
+                <div class="summary-item">
+                    <h3>Total de HAE</h3>
+                    <p><?= $totalHoras ?> horas</p>
                 </div>
             </div>
+        </div>
+        
+    </div>  
 
             <div class="professors-table">
                 <h3>Professores e Projetos</h3>
                 <table>
-                    <thead>
-                        <tr>
-                            <th>Professor</th>
-                            <th>Tipo de HAE</th>
-                            <th>Projeto</th>
-                            <th>Horas</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Ana Celia</td>
-                            <td><span class="hae-type hae-orientacao">Estágio</span></td>
-                            <td>Estágio DSM</td>
-                            <td class="horas-column">6h</td>
-                            <td><span class="status status-active">Ativo</span></td>
-                        </tr>
-                        <tr>
-                            <td>João Silva</td>
-                            <td><span class="hae-type hae-projetos">Projetos</span></td>
-                            <td>Iniciação Científica</td>
-                            <td class="horas-column">8h</td>
-                            <td><span class="status status-active">Ativo</span></td>
-                        </tr>
-                        <tr>
-                            <td>Maria Santos</td>
-                            <td><span class="hae-type hae-coordenacao">Coordenação</span></td>
-                            <td>Coordenação GE</td>
-                            <td class="horas-column">10h</td>
-                            <td><span class="status status-active">Ativo</span></td>
-                        </tr>
-                        <tr>
-                            <td>Pedro Oliveira</td>
-                            <td><span class="hae-type hae-orientacao">Orientação</span></td>
-                            <td>TCC DSM</td>
-                            <td class="horas-column">4h</td>
-                            <td><span class="status status-active">Ativo</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <tr>
+                        <th>Professor</th>
+                        <th>Título</th>
+                        <th>Tipo</th>
+                        <th>Status</th>
+                    </tr>
+                <?php foreach ($inscricoes as $i): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($i['Nome']) ?></td>
+                        <td><?= htmlspecialchars($i['tituloProjeto']) ?></td>
+                        <td><?= htmlspecialchars($i['tipoHae']) ?></td>
+                        <td><?= htmlspecialchars($i['status']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
             </div>
         </div>
     </main>
 
-    <script>
-        // Dados do gráfico
-        const ctx = document.getElementById('haeChart').getContext('2d');
-        const data = {
-            labels: ['Ana Celia', 'João Silva', 'Maria Santos', 'Pedro Oliveira'],
-            datasets: [
-                {
-                    label: 'Coordenação',
-                    data: [0, 0, 10, 0],
-                    backgroundColor: '#AE0C0D',
-                    borderRadius: 5,
-                },
-                {
-                    label: 'Projetos',
-                    data: [0, 8, 0, 0],
-                    backgroundColor: '#0b8948',
-                    borderRadius: 5,
-                },
-                {
-                    label: 'Orientação',
-                    data: [6, 0, 0, 4],
-                    backgroundColor: '#f39c12',
-                    borderRadius: 5,
-                }
-            ]
-        };
 
-        // Configuração do gráfico
-        const config = {
-            type: 'bar',
-            data: data,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        stacked: true,
-                        grid: {
-                            display: false
-                        }
-                    },
-                    y: {
-                        stacked: true,
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 2
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.dataset.label}: ${context.raw} horas`;
-                            }
-                        }
-                    }
-                }
-            }
-        };
-
-        // Criar o gráfico
-        new Chart(ctx, config);
-    </script>
     <script src="../js/script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+<script>
+  Chart.register(ChartDataLabels);
+
+  const ctx = document.getElementById('graficoHaeBarra').getContext('2d');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Coordenação', 'Projetos', 'Orientação'],
+      datasets: [{
+        data: [
+          <?= $dadosDistribuicao['Coordenação'] ?>,
+          <?= $dadosDistribuicao['Projetos'] ?>,
+          <?= $dadosDistribuicao['Orientação'] ?>
+        ],
+        backgroundColor: ['#AE0C0D', '#0b8948', '#f39c12'],
+        borderColor: ['#7C090A', '#066636', '#c87f0d'],
+        borderWidth: 2,
+        borderRadius: 6,
+        maxBarThickness: 60
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        duration: 1500,
+        easing: 'easeOutBounce'
+      },
+      plugins: {
+        legend: {
+          display: false
+        },
+        datalabels: {
+          color: '#444',
+          font: {
+            weight: 'bold',
+            size: 14
+          },
+          anchor: 'end',
+          align: 'top',
+          formatter: value => value
+        },
+        tooltip: {
+          enabled: true,
+          backgroundColor: '#333',
+          titleFont: { size: 14, weight: 'bold' },
+          bodyFont: { size: 13 },
+          cornerRadius: 4
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1,
+            font: { size: 14 }
+          },
+          grid: { color: '#eee' }
+        },
+        x: {
+          ticks: { font: { size: 14 } },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+</script>
+
 </body>
 
 </html>
