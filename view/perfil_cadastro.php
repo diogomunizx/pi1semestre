@@ -170,7 +170,7 @@ fetch('../controller/usuario_perfil.php')
         document.getElementById('professor').value = data.Nome;
         document.getElementById('email').value = data.email;
         document.getElementById('telefone').value = data.telefone;
-        document.getElementById('matricula').value = data.id_Docente;
+        document.getElementById('matricula').value = data.matricula;
     })
     .catch(error => console.error(error));
 });</script>
