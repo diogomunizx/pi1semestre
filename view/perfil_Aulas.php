@@ -125,7 +125,9 @@ if (!isset($_SESSION['id_Docente'])) {
     <div class="botoes-controle">
       <button id="retornar-dia" style="display: none;" onclick="retornarDia()">Retornar</button>
       <button id="alterar-dados" onclick="habilitarEdicao()">Alterar dados</button>
+      <button id="salvar-dados" style="display: none;" onclick="salvarAlteracoes()">Salvar alterações</button>
     </div>
+    
   </main>
 
   <script src="../js/script.js" defer></script>

@@ -737,8 +737,8 @@ function habilitarEdicao() {
   const botaoAlterar = document.getElementById('alterar-dados');
   botaoAlterar.textContent = 'Avançar';
   botaoAlterar.onclick = avancarDia;
-  document.getElementById('retornar-dia').style.display = 'none';
-  
+  document.getElementById('retornar-dia').style.display = 'none';  
+  document.getElementById('salvar-dados').style.display = 'block';
   aplicarEstiloCentralizado();
 }
 
@@ -773,11 +773,16 @@ function avancarDia() {
   // Atualiza botão principal
   if (diaAtualIndex === diasDaSemana.length - 1) {
     document.getElementById('alterar-dados').textContent = 'Salvar alterações';
+     document.getElementById('salvar-dados').style.display = 'none';
   }
 
   if (diaAtualIndex === diasDaSemana.length) {
     salvarAlteracoes();
   }
+  if (diaAtualIndex < diasDaSemana.length - 1) {
+    document.getElementById('salvar-dados').style.display = 'inline-block';
+  }
+
 }
 
 function retornarDia() {

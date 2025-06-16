@@ -937,8 +937,8 @@ body.modal-active {
 /* Estilos para a Grade de Horários */
 .grade-semanal {
     display: grid;
-   
-    width: 45%;
+    width: 100%;
+    margin-top: auto;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 20px;
@@ -983,7 +983,7 @@ body.modal-active {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
-    width: 90%;
+    width: auto;
     text-align: center;
     grid-column: span 1;
 }
@@ -993,7 +993,7 @@ body.modal-active {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
-    width: 115%;
+    width: auto;
     background-color: white;
     grid-column: span 1;
 }
@@ -1039,7 +1039,7 @@ body.modal-active {
         gap: 20px;
     }
 
-#alterar-dados {
+#alterar-dados ,#salvar-dados{
     display: block;
     margin: 30px auto;
     padding: 12px 24px;
@@ -1052,11 +1052,11 @@ body.modal-active {
     transition: all 0.3s ease;
 }
 
-#alterar-dados:hover {
+#alterar-dados:hover ,  #salvar-dados:hover {
     background-color: #8a0a0b;
     transform: translateY(-2px);
 }
-
+ 
 #retornar-dia {
     display: block;
     margin: 30px auto;
@@ -1074,6 +1074,8 @@ body.modal-active {
     background-color: #8a0a0b;
     transform: translateY(-2px);
 }
+
+
 
 /* Responsividade */
 @media screen and (max-width: 1200px) {
